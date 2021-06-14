@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  space-hosting:
+    build:
+      context: .
+    ports:
+    - "8080:8080"
+    volumes:
+    - ./.data:/data
+    environment:
+    - SH_INDEX_ALGORITHM=FaissIndex.Flat.L2
+    - SH_VECTORS_FILENAME=/data/vectors.json

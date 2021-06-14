@@ -1,0 +1,7 @@
+# directories
+**/bin/
+**/obj/
+.vs/
+
+# files
+**/*.*proj.user

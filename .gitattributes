@@ -1,0 +1,21 @@
+# see https://stackoverflow.com/a/10855862/84693
+
+# auto detect text files and perform LF normalization
+*             text=auto
+
+*.cs          text
+*.csproj      text
+*.props       text
+*.targets     text
+*.config      text
+*.sln         text
+*.json        text
+*.xml         text
+*.yml         text
+*.yaml        text
+*.cmd         text
+*.bat         text
+*.md          text
+
+# explicitly use LF
+*.sh          text eol=lf
