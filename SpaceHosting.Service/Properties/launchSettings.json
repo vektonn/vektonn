@@ -3,7 +3,7 @@
     "SpaceHosting.Service": {
       "commandName": "Project",
       "environmentVariables": {
-        "SH_VECTORS_FILENAME": "/data/vectors.json",
+        "SH_VECTORS_FILE_NAME": "/data/vectors.json",
         "SH_INDEX_ALGORITHM": "FaissIndex.Flat.L2",
         "SH_INDEX_BATCH_SIZE": "100"
       }

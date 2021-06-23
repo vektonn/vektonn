@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,10 @@ namespace SpaceHosting.Service
                                 services.AddSingleton<ILog>(new SynchronousConsoleLog());
                                 services.AddSingleton<IndexStoreBuilder>();
                                 services.AddSingleton(s => s.GetRequiredService<IndexStoreBuilder>().BuildIndexStore());
-                                services.AddControllers();
+
+                                services
+                                    .AddControllers()
+                                    .AddJsonOptions(options => options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull);
                             })
                         .Configure(
                             app =>

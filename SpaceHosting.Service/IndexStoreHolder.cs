@@ -5,14 +5,14 @@ namespace SpaceHosting.Service
 {
     public class IndexStoreHolder : IDisposable
     {
-        public IndexStoreHolder(IIndexStore<int, string, DenseVector> indexStore, int vectorDimension, string indexDescription)
+        public IndexStoreHolder(IIndexStore<int, object, DenseVector> indexStore, int vectorDimension, string indexDescription)
         {
             IndexStore = indexStore;
             VectorDimension = vectorDimension;
             IndexDescription = indexDescription;
         }
 
-        public IIndexStore<int, string, DenseVector> IndexStore { get; }
+        public IIndexStore<int, object, DenseVector> IndexStore { get; }
 
         public int VectorDimension { get; }
 

@@ -1,6 +1,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using SpaceHosting.Index;
+using SpaceHosting.Service.Models;
 
 namespace SpaceHosting.Service.Controllers
 {
@@ -25,13 +26,21 @@ namespace SpaceHosting.Service.Controllers
         }
 
         [HttpGet("search")]
-        public IndexFoundDataPoint<int, string, DenseVector>[] Search(int? k)
+        public SearchResultDto[] Search(int? k)
         {
             var queryDataPoint = new IndexQueryDataPoint<DenseVector> {Vector = new DenseVector(new double[indexStoreHolder.VectorDimension])};
 
             var queryResults = indexStoreHolder.IndexStore.FindNearest(new[] {queryDataPoint}, limitPerQuery: k ?? 1);
 
-            return queryResults.Single().Nearest;
+            var nearest = queryResults.Single().Nearest;
+            return nearest.Select(
+                    x => new SearchResultDto
+                    {
+                        Distance = x.Distance,
+                        Vector = x.Vector,
+                        Data = x.Data
+                    })
+                .ToArray();
         }
     }
 }
