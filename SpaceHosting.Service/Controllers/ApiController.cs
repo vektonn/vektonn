@@ -1,11 +1,11 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using SpaceHosting.ApiModels;
 using SpaceHosting.Index;
-using SpaceHosting.Service.Models;
 
 namespace SpaceHosting.Service.Controllers
 {
-    [Route("/")]
+    [Route("api/[action]")]
     [ApiController]
     public class ApiController : ControllerBase
     {
@@ -16,30 +16,55 @@ namespace SpaceHosting.Service.Controllers
             this.indexStoreHolder = indexStoreHolder;
         }
 
-        public ActionResult<object> Index()
+        public ActionResult<IndexInfoDto> Info()
         {
-            return new
+            return new IndexInfoDto
             {
                 Description = indexStoreHolder.IndexDescription,
-                VectorCount = indexStoreHolder.IndexStore.Count
+                VectorDimension = indexStoreHolder.VectorDimension,
+                VectorCount = (int)indexStoreHolder.IndexStore.Count,
             };
         }
 
-        [HttpGet("search")]
-        public SearchResultDto[] Search(int? k)
+        [HttpGet]
+        public SearchResultDto[] Probe(int? k)
         {
-            var queryDataPoint = new IndexQueryDataPoint<DenseVector> {Vector = new DenseVector(new double[indexStoreHolder.VectorDimension])};
+            var zeroVector = new DenseVector(new double[indexStoreHolder.VectorDimension]);
+            var searchQuery = new SearchQueryDto
+            {
+                QueryVectors = new IVector[] {zeroVector},
+                K = k ?? 1
+            };
 
-            var queryResults = indexStoreHolder.IndexStore.FindNearest(new[] {queryDataPoint}, limitPerQuery: k ?? 1);
+            return DoSearch(searchQuery).Single();
+        }
 
-            var nearest = queryResults.Single().Nearest;
-            return nearest.Select(
-                    x => new SearchResultDto
-                    {
-                        Distance = x.Distance,
-                        Vector = x.Vector,
-                        Data = x.Data
-                    })
+        [HttpGet]
+        [HttpPost]
+        public SearchResultDto[][] Search([FromBody] SearchQueryDto searchQuery)
+        {
+            return DoSearch(searchQuery);
+        }
+
+        private SearchResultDto[][] DoSearch(SearchQueryDto searchQuery)
+        {
+            var queryDataPoints = searchQuery
+                .QueryVectors
+                .Cast<DenseVector>()
+                .Select(vector => new IndexQueryDataPoint<DenseVector> {Vector = vector})
+                .ToArray();
+
+            var queryResults = indexStoreHolder.IndexStore.FindNearest(queryDataPoints, limitPerQuery: searchQuery.K);
+
+            return queryResults.Select(
+                    queryResult => queryResult.Nearest.Select(
+                            foundDataPoint => new SearchResultDto
+                            {
+                                Distance = foundDataPoint.Distance,
+                                Vector = foundDataPoint.Vector,
+                                Data = foundDataPoint.Data
+                            })
+                        .ToArray())
                 .ToArray();
         }
     }

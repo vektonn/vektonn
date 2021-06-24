@@ -12,16 +12,19 @@ FROM $DOTNET_REPO/sdk:$DOTNET_VERSION_TAG AS build
 
 ARG DOTNET_RID=linux-x64
 ARG PUBLISH_TRIMMED=false
+ARG SHARED_LIB=SpaceHosting
 ARG PROJECT=SpaceHosting.Service
 
 WORKDIR /src
 
 # copy csproj and restore as distinct layer
 COPY nuget.config .
+COPY $SHARED_LIB/$SHARED_LIB.csproj $SHARED_LIB/
 COPY $PROJECT/$PROJECT.csproj $PROJECT/
 RUN dotnet restore --runtime $DOTNET_RID $PROJECT/$PROJECT.csproj
 
 # copy app sources and publish
+COPY $SHARED_LIB/ $SHARED_LIB/
 COPY $PROJECT/ $PROJECT/
 RUN dotnet publish \
     --no-restore \

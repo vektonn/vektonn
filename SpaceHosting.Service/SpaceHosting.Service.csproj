@@ -11,8 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SpaceHosting.Index" Version="0.1.5" />
     <PackageReference Include="Vostok.Logging.Console" Version="1.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SpaceHosting\SpaceHosting.csproj" />
   </ItemGroup>
 
 </Project>

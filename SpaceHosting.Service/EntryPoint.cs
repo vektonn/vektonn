@@ -1,8 +1,8 @@
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SpaceHosting.Json;
 using Vostok.Logging.Abstractions;
 using Vostok.Logging.Console;
 
@@ -25,7 +25,7 @@ namespace SpaceHosting.Service
 
                                 services
                                     .AddControllers()
-                                    .AddJsonOptions(options => options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull);
+                                    .AddJsonOptions(options => HttpJson.Configure(options.JsonSerializerOptions));
                             })
                         .Configure(
                             app =>
