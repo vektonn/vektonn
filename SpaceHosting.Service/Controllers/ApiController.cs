@@ -1,71 +1,65 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using SpaceHosting.ApiModels;
-using SpaceHosting.Index;
+using SpaceHosting.Service.IndexStore;
 
 namespace SpaceHosting.Service.Controllers
 {
-    [Route("api/[action]")]
     [ApiController]
+    [Route("api/[action]")]
     public class ApiController : ControllerBase
     {
-        private readonly IndexStoreHolder indexStoreHolder;
+        private readonly IIndexStoreAccessor indexStoreAccessor;
 
-        public ApiController(IndexStoreHolder indexStoreHolder)
+        public ApiController(IIndexStoreAccessor indexStoreAccessor)
         {
-            this.indexStoreHolder = indexStoreHolder;
+            this.indexStoreAccessor = indexStoreAccessor;
         }
 
         public ActionResult<IndexInfoDto> Info()
         {
             return new IndexInfoDto
             {
-                Description = indexStoreHolder.IndexDescription,
-                VectorDimension = indexStoreHolder.VectorDimension,
-                VectorCount = (int)indexStoreHolder.IndexStore.Count,
+                IndexAlgorithm = indexStoreAccessor.IndexAlgorithm,
+                VectorType = indexStoreAccessor.ZeroVector.GetType().Name,
+                VectorDimension = indexStoreAccessor.VectorDimension,
+                VectorCount = indexStoreAccessor.VectorCount,
             };
         }
 
         [HttpGet]
-        public SearchResultDto[] Probe(int? k)
+        public ActionResult<SearchResultDto[]> Probe(int? k)
         {
-            var zeroVector = new DenseVector(new double[indexStoreHolder.VectorDimension]);
             var searchQuery = new SearchQueryDto
             {
-                QueryVectors = new IVector[] {zeroVector},
+                Vectors = new[] {indexStoreAccessor.ZeroVector},
                 K = k ?? 1
             };
 
-            return DoSearch(searchQuery).Single();
+            if (searchQuery.K <= 0)
+                return BadRequest(new {message = "searchQuery.K must be greater than 0"});
+
+            return indexStoreAccessor.Search(searchQuery).Single();
         }
 
         [HttpGet]
         [HttpPost]
-        public SearchResultDto[][] Search([FromBody] SearchQueryDto searchQuery)
+        public ActionResult<SearchResultDto[][]> Search([FromBody] SearchQueryDto searchQuery)
         {
-            return DoSearch(searchQuery);
-        }
+            if (searchQuery.K <= 0)
+                return BadRequest(new {message = "searchQuery.K must be greater than 0"});
 
-        private SearchResultDto[][] DoSearch(SearchQueryDto searchQuery)
-        {
-            var queryDataPoints = searchQuery
-                .QueryVectors
-                .Cast<DenseVector>()
-                .Select(vector => new IndexQueryDataPoint<DenseVector> {Vector = vector})
-                .ToArray();
+            if (!searchQuery.Vectors.Any())
+                return BadRequest(new {message = "searchQuery.Vectors is empty"});
 
-            var queryResults = indexStoreHolder.IndexStore.FindNearest(queryDataPoints, limitPerQuery: searchQuery.K);
+            if (searchQuery.Vectors.Any(queryVector => queryVector.Dimension != indexStoreAccessor.VectorDimension))
+                return BadRequest(new {message = $"All searchQuery.Vectors must have the same dimension as index vectors: {indexStoreAccessor.VectorDimension}"});
 
-            return queryResults.Select(
-                    queryResult => queryResult.Nearest.Select(
-                            foundDataPoint => new SearchResultDto
-                            {
-                                Distance = foundDataPoint.Distance,
-                                Vector = foundDataPoint.Vector,
-                                Data = foundDataPoint.Data
-                            })
-                        .ToArray())
-                .ToArray();
+            var indexVectorType = indexStoreAccessor.ZeroVector.GetType();
+            if (searchQuery.Vectors.Any(queryVector => queryVector.GetType() != indexVectorType))
+                return BadRequest(new {message = $"All searchQuery.Vectors must have the same type as index vectors: {indexVectorType}"});
+
+            return indexStoreAccessor.Search(searchQuery);
         }
     }
 }

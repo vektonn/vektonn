@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SpaceHosting.Json;
+using SpaceHosting.Service.IndexStore;
 using Vostok.Logging.Abstractions;
 using Vostok.Logging.Console;
 

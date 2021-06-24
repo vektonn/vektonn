@@ -9,7 +9,9 @@ services:
     volumes:
     - ./.data:/data
     environment:
-    - SH_INDEX_ALGORITHM=FaissIndex.Flat.L2
-    - SH_VECTORS_FILE_NAME=/data/vectors-df.csv
+#    - SH_INDEX_ALGORITHM=FaissIndex.Flat.L2
+#    - SH_VECTORS_FILE_NAME=/data/vectors-df.csv
+    - SH_INDEX_ALGORITHM=SparnnIndex.Cosine
+    - SH_VECTORS_FILE_NAME=/data/sparse-vectors-df.csv
     - SH_VECTORS_FILE_FORMAT=PandasDataFrameCsv
     - SH_VECTORS_METADATA_FILE_NAME=/data/vectors-metadata.json

@@ -52,7 +52,7 @@ namespace SpaceHosting.Service.Tests
             var searchQuery = new SearchQueryDto
             {
                 K = k,
-                QueryVectors = queryVectors
+                Vectors = queryVectors
             };
 
             var searchResult = await httpClient.SearchAsync(searchQuery);

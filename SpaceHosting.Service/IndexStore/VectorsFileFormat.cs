@@ -1,4 +1,4 @@
-namespace SpaceHosting.Service
+namespace SpaceHosting.Service.IndexStore
 {
     public enum VectorsFileFormat
     {
