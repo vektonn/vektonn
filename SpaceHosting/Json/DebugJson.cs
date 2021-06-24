@@ -1,7 +1,6 @@
 using System.Text.Json;
-using SpaceHosting.Json;
 
-namespace SpaceHosting.Service.Tests
+namespace SpaceHosting.Json
 {
     public static class DebugJson
     {

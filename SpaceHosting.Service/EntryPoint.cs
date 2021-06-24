@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,8 @@ namespace SpaceHosting.Service
     {
         public static void Main(string[] args)
         {
+            Console.Out.WriteLine($"EnvironmentVariables:{Environment.GetEnvironmentVariables().ToPrettyJson()}");
+
             var hostBuilder = Host
                 .CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(
