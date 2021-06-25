@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -139,7 +140,7 @@ namespace SpaceHosting.Service.IndexStore
         {
             return File
                 .ReadAllLines(vectorsFileName)
-                .Select(line => line.Split(',').Select(x => string.IsNullOrEmpty(x) ? (double?)null : double.Parse(x)).ToArray())
+                .Select(line => line.Split(',').Select(x => string.IsNullOrEmpty(x) ? (double?)null : double.Parse(x, CultureInfo.InvariantCulture)).ToArray())
                 .ToList();
         }
 
