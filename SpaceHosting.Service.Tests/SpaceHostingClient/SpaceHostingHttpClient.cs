@@ -18,7 +18,7 @@ namespace SpaceHosting.Service.Tests.SpaceHostingClient
 
         public async Task<IndexInfoDto> GetIndexInfoAsync()
         {
-            var responseMessage = await httpClient.GetAsync("api/info");
+            var responseMessage = await httpClient.GetAsync("api/v1/info");
             responseMessage.EnsureSuccessStatusCode();
 
             return await responseMessage.DeserializeJsonResponseAsync<IndexInfoDto>();
@@ -26,7 +26,7 @@ namespace SpaceHosting.Service.Tests.SpaceHostingClient
 
         public async Task<SearchResultDto[][]> SearchAsync(SearchQueryDto searchQuery)
         {
-            var requestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri: "api/search")
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri: "api/v1/search")
             {
                 Content = JsonContent.Create(searchQuery, options: HttpJson.Options)
             };

@@ -6,7 +6,7 @@ using SpaceHosting.Service.IndexStore;
 namespace SpaceHosting.Service.Controllers
 {
     [ApiController]
-    [Route("api/[action]")]
+    [Route("api/v1/[action]")]
     public class ApiController : ControllerBase
     {
         private readonly IIndexStoreAccessor indexStoreAccessor;

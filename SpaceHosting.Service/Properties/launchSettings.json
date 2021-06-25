@@ -8,7 +8,8 @@
         "SH_VECTORS_FILE_FORMAT": "PandasDataFrameCsv",
         "SH_INDEX_ALGORITHM": "SparnnIndex.Cosine",
         "SH_INDEX_BATCH_SIZE": "100"
-      }
+      },
+      "applicationUrl": "http://localhost:8081"
     }
   }
 }
