@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace SpaceHosting.Service
 {
@@ -15,7 +17,7 @@ namespace SpaceHosting.Service
         }
 
         public static T Get<T>(string varName, Func<string, T> parse)
-            where T: notnull
+            where T : notnull
         {
             return parse(Get(varName));
         }
@@ -25,6 +27,20 @@ namespace SpaceHosting.Service
         {
             var valueStr = TryGet(varName);
             return valueStr == null ? defaultValue : parse(valueStr);
+        }
+
+        public static Dictionary<string, string?> GetAll(Func<string, bool>? nameFilter = null)
+        {
+            nameFilter ??= _ => true;
+            var results = new Dictionary<string, string?>();
+            foreach (DictionaryEntry entry in Environment.GetEnvironmentVariables())
+            {
+                var varName = (string)entry.Key;
+                if (nameFilter(varName))
+                    results.Add(varName, (string?)entry.Value);
+            }
+
+            return results;
         }
     }
 }

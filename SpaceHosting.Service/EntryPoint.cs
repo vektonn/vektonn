@@ -14,7 +14,7 @@ namespace SpaceHosting.Service
     {
         public static void Main(string[] args)
         {
-            Console.Out.WriteLine($"EnvironmentVariables:{Environment.GetEnvironmentVariables().ToPrettyJson()}");
+            Console.Out.WriteLine($"EnvironmentVariables:{EnvironmentVariables.GetAll(name => name.StartsWith("SH_")).ToPrettyJson()}");
 
             var hostBuilder = Host
                 .CreateDefaultBuilder(args)
@@ -30,12 +30,22 @@ namespace SpaceHosting.Service
                                 services
                                     .AddControllers()
                                     .AddJsonOptions(options => HttpJson.Configure(options.JsonSerializerOptions));
+
+                                services.AddSwaggerGen();
                             })
                         .Configure(
                             app =>
                             {
                                 app.UseRouting();
                                 app.UseEndpoints(routeBuilder => routeBuilder.MapControllers());
+
+                                app.UseSwagger();
+                                app.UseSwaggerUI(
+                                    swaggerUiOptions =>
+                                    {
+                                        swaggerUiOptions.SwaggerEndpoint("/swagger/v1/swagger.json", "SpaceHosting API V1");
+                                        swaggerUiOptions.RoutePrefix = string.Empty;
+                                    });
                             }));
 
             hostBuilder.Build().Run();

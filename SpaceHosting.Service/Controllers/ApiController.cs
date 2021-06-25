@@ -16,6 +16,7 @@ namespace SpaceHosting.Service.Controllers
             this.indexStoreAccessor = indexStoreAccessor;
         }
 
+        [HttpGet]
         public ActionResult<IndexInfoDto> Info()
         {
             return new IndexInfoDto

@@ -3,8 +3,10 @@
     "SpaceHosting.Service": {
       "commandName": "Project",
       "environmentVariables": {
-        "SH_VECTORS_FILE_NAME": "/data/vectors.json",
-        "SH_INDEX_ALGORITHM": "FaissIndex.Flat.L2",
+        "SH_VECTORS_METADATA_FILE_NAME": "../.data/vectors-metadata.json",
+        "SH_VECTORS_FILE_NAME": "../.data/sparse-vectors-df.csv",
+        "SH_VECTORS_FILE_FORMAT": "PandasDataFrameCsv",
+        "SH_INDEX_ALGORITHM": "SparnnIndex.Cosine",
         "SH_INDEX_BATCH_SIZE": "100"
       }
     }
