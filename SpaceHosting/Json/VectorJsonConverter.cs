@@ -23,18 +23,17 @@ namespace SpaceHosting.Json
                 throw new JsonException();
 
             var isSparse = ReadIsSparseFlag(ref reader);
+            var dimension = ReadDimension(ref reader);
+            var coordinates = ReadCoordinates(ref reader, options);
 
             IVector vector;
             if (isSparse)
             {
-                var dimension = ReadDimension(ref reader);
-                var coordinates = ReadCoordinates(ref reader, options);
                 var coordinateIndices = ReadCoordinateIndices(ref reader, options);
                 vector = new SparseVector(dimension, coordinateIndices, coordinates);
             }
             else
             {
-                var coordinates = ReadCoordinates(ref reader, options);
                 vector = new DenseVector(coordinates);
             }
 
@@ -53,6 +52,7 @@ namespace SpaceHosting.Json
             {
                 case DenseVector denseVector:
                     writer.WriteBoolean(IsSparseVectorPropName, false);
+                    writer.WriteNumber(DimensionPropName, denseVector.Dimension);
                     WriteCoordinates(writer, denseVector.Coordinates);
                     break;
                 case SparseVector sparseVector:

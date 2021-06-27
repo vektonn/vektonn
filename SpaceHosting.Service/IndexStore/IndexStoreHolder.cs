@@ -18,7 +18,7 @@ namespace SpaceHosting.Service.IndexStore
         {
             IndexAlgorithm = indexAlgorithm;
             VectorDimension = vectorDimension;
-            ZeroVector = zeroVector;
+            ZeroVector = zeroVector.ToVectorDto();
             this.indexStore = indexStore;
         }
 
@@ -26,7 +26,7 @@ namespace SpaceHosting.Service.IndexStore
 
         public int VectorDimension { get; }
 
-        public IVector ZeroVector { get; }
+        public VectorDto ZeroVector { get; }
 
         public int VectorCount => (int)indexStore.Count;
 
@@ -39,8 +39,7 @@ namespace SpaceHosting.Service.IndexStore
         {
             var queryDataPoints = searchQuery
                 .Vectors
-                .Cast<TVector>()
-                .Select(vector => new IndexQueryDataPoint<TVector> {Vector = vector})
+                .Select(vector => new IndexQueryDataPoint<TVector> {Vector = (TVector)vector.ToVector()})
                 .ToArray();
 
             var queryResults = indexStore.FindNearest(queryDataPoints, limitPerQuery: searchQuery.K);
@@ -50,7 +49,7 @@ namespace SpaceHosting.Service.IndexStore
                             foundDataPoint => new SearchResultDto
                             {
                                 Distance = foundDataPoint.Distance,
-                                Vector = foundDataPoint.Vector,
+                                Vector = foundDataPoint.Vector.ToVectorDto(),
                                 Data = foundDataPoint.Data
                             })
                         .ToArray())

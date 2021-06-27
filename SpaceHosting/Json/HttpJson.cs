@@ -18,6 +18,7 @@ namespace SpaceHosting.Json
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             };
             Options.Converters.Add(new VectorJsonConverter());
+            Options.Converters.Add(new VectorDtoJsonConverter());
         }
 
         public static void Configure(JsonSerializerOptions options)
@@ -28,6 +29,7 @@ namespace SpaceHosting.Json
             options.PropertyNameCaseInsensitive = Options.PropertyNameCaseInsensitive;
             options.DefaultIgnoreCondition = Options.DefaultIgnoreCondition;
             options.Converters.Add(new VectorJsonConverter());
+            options.Converters.Add(new VectorDtoJsonConverter());
         }
     }
 }

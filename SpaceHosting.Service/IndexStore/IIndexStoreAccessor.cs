@@ -1,5 +1,4 @@
 using SpaceHosting.ApiModels;
-using SpaceHosting.Index;
 
 namespace SpaceHosting.Service.IndexStore
 {
@@ -8,7 +7,7 @@ namespace SpaceHosting.Service.IndexStore
         string IndexAlgorithm { get; }
         int VectorDimension { get; }
         int VectorCount { get; }
-        IVector ZeroVector { get; }
+        VectorDto ZeroVector { get; }
         SearchResultDto[][] Search(SearchQueryDto searchQuery);
     }
 }

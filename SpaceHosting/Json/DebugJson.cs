@@ -14,6 +14,7 @@ namespace SpaceHosting.Json
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
             Options.Converters.Add(new VectorJsonConverter());
+            Options.Converters.Add(new VectorDtoJsonConverter());
         }
 
         public static string ToPrettyJson<T>(this T obj)
