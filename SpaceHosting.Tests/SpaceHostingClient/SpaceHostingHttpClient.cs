@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using SpaceHosting.ApiModels;
 using SpaceHosting.Json;
 
-namespace SpaceHosting.Service.Tests.SpaceHostingClient
+namespace SpaceHosting.Tests.SpaceHostingClient
 {
     public class SpaceHostingHttpClient
     {

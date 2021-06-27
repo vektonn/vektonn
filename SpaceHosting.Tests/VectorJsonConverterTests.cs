@@ -5,7 +5,7 @@ using NUnit.Framework;
 using SpaceHosting.Index;
 using SpaceHosting.Json;
 
-namespace SpaceHosting.Service.Tests
+namespace SpaceHosting.Tests
 {
     public class VectorJsonConverterTests
     {

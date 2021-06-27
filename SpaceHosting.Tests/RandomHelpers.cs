@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SpaceHosting.Index;
 
-namespace SpaceHosting.Service.Tests
+namespace SpaceHosting.Tests
 {
     public static class RandomHelpers
     {

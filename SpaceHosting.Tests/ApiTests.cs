@@ -5,9 +5,9 @@ using NUnit.Framework;
 using SpaceHosting.ApiModels;
 using SpaceHosting.Index;
 using SpaceHosting.Json;
-using SpaceHosting.Service.Tests.SpaceHostingClient;
+using SpaceHosting.Tests.SpaceHostingClient;
 
-namespace SpaceHosting.Service.Tests
+namespace SpaceHosting.Tests
 {
     public class ApiTests
     {
