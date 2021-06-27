@@ -18,7 +18,9 @@ ARG PROJECT=SpaceHosting.Service
 WORKDIR /src
 
 # copy csproj and restore as distinct layer
+COPY global.json .
 COPY nuget.config .
+COPY Directory.Build.props .
 COPY $SHARED_LIB/$SHARED_LIB.csproj $SHARED_LIB/
 COPY $PROJECT/$PROJECT.csproj $PROJECT/
 RUN dotnet restore --runtime $DOTNET_RID $PROJECT/$PROJECT.csproj

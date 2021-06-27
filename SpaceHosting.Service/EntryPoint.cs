@@ -15,7 +15,7 @@ namespace SpaceHosting.Service
     {
         public static void Main(string[] args)
         {
-            Console.Out.WriteLine($"EnvironmentVariables:{EnvironmentVariables.GetAll(name => name.StartsWith("SH_")).ToPrettyJson()}");
+            Console.Out.WriteLine($"SpaceHosting environment variables:{EnvironmentVariables.GetAll(name => name.StartsWith("SH_")).ToPrettyJson()}");
 
             var hostBuilder = Host
                 .CreateDefaultBuilder(args)
@@ -35,11 +35,8 @@ namespace SpaceHosting.Service
                                 services.AddSwaggerGen(
                                     swaggerGenOptions =>
                                     {
+                                        swaggerGenOptions.SupportNonNullableReferenceTypes();
                                         swaggerGenOptions.UseOneOfForPolymorphism();
-
-                                        swaggerGenOptions.IgnoreObsoleteActions();
-                                        swaggerGenOptions.IgnoreObsoleteProperties();
-
                                         swaggerGenOptions.SwaggerDoc(
                                             "v1",
                                             new OpenApiInfo
@@ -64,9 +61,10 @@ namespace SpaceHosting.Service
                                 app.UseSwaggerUI(
                                     swaggerUiOptions =>
                                     {
-                                        swaggerUiOptions.DocumentTitle = "SpaceHosting API";
                                         swaggerUiOptions.SwaggerEndpoint("/swagger/v1/swagger.json", "SpaceHosting API V1");
                                         swaggerUiOptions.RoutePrefix = string.Empty;
+                                        swaggerUiOptions.DocumentTitle = "SpaceHosting API";
+                                        swaggerUiOptions.DefaultModelsExpandDepth(2);
                                     });
                             }));
 
