@@ -7,9 +7,11 @@ services:
     ports:
     - "8080:8080"
     volumes:
-    - ./.data:/data
+    - .data-samples:/data
     environment:
+    # supported index algorithms: FaissIndex.Flat.L2, FaissIndex.Flat.IP, SparnnIndex.Cosine, SparnnIndex.JaccardBinary
     - SH_INDEX_ALGORITHM=FaissIndex.Flat.L2
     - SH_VECTORS_FILE_NAME=/data/vectors-df.csv
+    # supported vector file formats: VectorArrayJson, PandasDataFrameCsv, PandasDataFrameJson
     - SH_VECTORS_FILE_FORMAT=PandasDataFrameCsv
     - SH_VECTORS_METADATA_FILE_NAME=/data/vectors-metadata.json
