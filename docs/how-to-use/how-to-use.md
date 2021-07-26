@@ -39,13 +39,13 @@ The file with vectors (SH_VECTORS_FILE_NAME) must contain a list of vectors. Dep
 
 * VectorArrayJson - a list of vectors serialized to JSON. Each vector is an array of numbers of the same length specifying the coordinates of the vector. [File sample](https://github.com/kontur-model-ops/space-hosting/blob/master/.data-samples/vectors.json).
 
-* PandasDataFrameCsv - the list of vectors is specified in CSV format, in the same form as [pandas.DataFrame.to_csv](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html) serializes it. One vector is one line, coordinates are separated by commas. [File sample](https://github.com/kontur-model-ops/space-hosting/blob/master/.data-samples/vectors-df.csv).
+* PandasDataFrameCsv - the list of vectors, specified in CSV format, in the same form as [pandas.DataFrame.to_csv](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html) serializes it. One vector is one line, coordinates are separated by commas. [File sample](https://github.com/kontur-model-ops/space-hosting/blob/master/.data-samples/vectors-df.csv).
 
-* PandasDataFrameJson - the list of vectors is specified in JSON format, in the same form as pandas.DataFrame.to_json serializes it. [File sample](https://github.com/kontur-model-ops/space-hosting/blob/master/.data-samples/vectors-df.json). 
+* PandasDataFrameJson - the list of vectors, specified in JSON format, in the same form as pandas.DataFrame.to_json serializes it. [File sample](https://github.com/kontur-model-ops/space-hosting/blob/master/.data-samples/vectors-df.json). 
 
 ### Metadata <a name="metadata"></a>
 
-A metadata file is a set of arbitrary key-value pairs. File format is JSON. See an example file [here](https://github.com/kontur-model-ops/space-hosting/blob/master/.data-samples/vectors-metadata.json). The correspondence between vectors and metadata from the input files is built by the index: the first vector from the file with vectors corresponds to the first record in the file with metadata. 
+A metadata file is a set of arbitrary key-value pairs. File format is JSON. See an example file [here](https://github.com/kontur-model-ops/space-hosting/blob/master/.data-samples/vectors-metadata.json). The correspondence between vectors and metadata from the input files is built by the index. The first vector from the file with vectors corresponds to the first record in the file with metadata. 
 
 ## SH_INDEX_ALGORITHM possible values <a name="ALGORITHM"></a>
 
