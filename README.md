@@ -8,22 +8,21 @@
 
 SpaceHosting is a service for finding k-nearest neighbors (kNN) using a .NET library [SpaceHosting.Index](https://github.com/kontur-model-ops/space-hosting-index#spacehostingindex). 
 
-Dense and sparse vectors are supported. For dense vectors we use [Faiss](https://github.com/facebookresearch/faiss) native library. For sparse vectors we have ported [PySparNN](https://github.com/facebookresearch/pysparnn) library to C#. 
+Dense and sparse vectors are supported. [Faiss](https://github.com/facebookresearch/faiss) library is used for dense vectors. [PySparNN](https://github.com/facebookresearch/pysparnn) is being ported to C# and used for sparse vectors. 
 
-### Why SpaceHosting? 
+### Reasons to use SpaceHosting 
 
-SpaceHosting advantages: 
-* Supports dense and sparse vectors.
-* Uses search algorithms:
-  * Faiss.
-  * Ported PySparNN.
-* Supports Approximate kNN (AkNN).
+SpaceHosting advantages are: 
+* Support dense and sparse vectors.
+* Faiss support.
+* PySparNN support.
+* Approximate kNN (AkNN) support.
 
 ### SpaceHosting.Index library
 
 SpaceHosting.Index keeps a mapping between vectors and a set of keys. При поиске kNN/AkNN eturns keys instead of vector numbers. A key is a set of parameters that identifies a vector. 
 
-The library also allows to keep any metadata alongside corresponding vectors. kNN/AkNN search results contain metadata as well as vectors. 
+The library also allows you to keep any metadata alongside corresponding vectors. kNN/AkNN search results contain metadata as well as vectors. 
 
 [Read more about SpaceHosting.Index](https://github.com/kontur-model-ops/space-hosting-index#spacehostingindex).
 
@@ -33,7 +32,7 @@ git clone https://github.com/kontur-model-ops/space-hosting.git
 cd space-hosting 
 ./docker-compose-up.sh
 ```
-After that Swagger-specification for SpaceHosting API will be available at <http://localhost:8080>.
+After, a Swagger-specification for SpaceHosting API will be available at <http://localhost:8080>.
 
 ### Next Step 
 
@@ -42,7 +41,7 @@ After that Swagger-specification for SpaceHosting API will be available at <http
 
 ## Support
 
-If you have questions or need help with SpaceHosting service please contact us on Slack channel … .
+If you have any questions or need help with SpaceHosting service please contact us on Slack channel … .
 
 
 ## License
