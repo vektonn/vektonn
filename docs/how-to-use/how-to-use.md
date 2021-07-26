@@ -55,10 +55,10 @@ A metadata file is a set of arbitrary key-value pairs. File format is JSON. See 
 * SparnnIndex.JaccardBinary – sparse binary vectors, jaccard metric.
 
 # Examples <a name="examples"></a>
-1. [Search for hotels by user request](https://github.com/kontur-model-ops/space-hosting/blob/master/samples/spacehosting_hotels_example.ipynb).
+1. [Search for hotels by user request](https://github.com/kontur-model-ops/space-hosting/blob/master/samples/spacehosting_hotels_example.ipynb).  
 Task: to save the user's time while searching for hotels. 
 This example uses vectorized user reviews to find hotels.
 
-2. [Price Match Guarantee](https://github.com/kontur-model-ops/space-hosting/blob/master/samples/spacehosting_cv_example.ipynb).
+2. [Price Match Guarantee](https://github.com/kontur-model-ops/space-hosting/blob/master/samples/spacehosting_cv_example.ipynb).  
 Task: to help the seller establish a competitive price for their product on the marketplace. 
 This example uses data from [Shopee kaggle Competiton](https://www.kaggle.com/c/shopee-product-matching/overview/description).
