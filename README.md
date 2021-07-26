@@ -32,7 +32,7 @@ git clone https://github.com/kontur-model-ops/space-hosting.git
 cd space-hosting 
 ./docker-compose-up.sh
 ```
-After, a Swagger-specification for SpaceHosting API will be available at <http://localhost:8080>.
+After, a Swagger-specification for [SpaceHosting API](https://kontur-model-ops.github.io/space-hosting/swagger/index.html) will be available at <http://localhost:8080>.
 
 ### Next Step 
 
