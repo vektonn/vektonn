@@ -32,7 +32,7 @@ SpaceHosting advantages:
 
 ## SpaceHosting.Index library
 
-SpaceHosting.Index keeps a mapping between vectors and a set of keys. При поиске kNN/AkNN eturns keys instead of vector numbers. A key is a set of parameters that identifies a vector. 
+SpaceHosting.Index stores a mapping between vectors and a set of keys. При поиске kNN/AkNN eturns keys instead of vector numbers. A key is a set of parameters that identifies a vector. 
 
 The library also allows to keep any metadata alongside corresponding vectors. kNN/AkNN search results contain metadata as well as vectors. 
 
