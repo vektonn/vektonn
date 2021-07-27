@@ -47,7 +47,7 @@ After, a Swagger-specification for [SpaceHosting API](https://kontur-model-ops.g
 
 ## Next Step 
 
-* [See how to use SpaceHosting](/Testdoc/how-to-use).
+* [See how to use SpaceHosting](https://kontur-model-ops.github.io/space-hosting/how-to-use/how-to-use.html).
 
 ---
 
