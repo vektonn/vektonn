@@ -53,7 +53,7 @@ After, a Swagger-specification for [SpaceHosting API](https://kontur-model-ops.g
 
 ## Support
 
-If you have any questions or need help with SpaceHosting service please contact us on Slack channel … .
+If you have any questions or need help with SpaceHosting service please contact us on Slack channel [spacehostingworkspace.slack.com](http://spacehostingworkspace.slack.com/).
 
 ## License
 
