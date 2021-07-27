@@ -6,6 +6,8 @@ nav_order: 3
 
 # Backlog
 
+If you want some feature, tell us by [email](info@spacehosting.io) or [slack](spacehostingworkspace.slack.com). We will add it to our backlog.
+
 1. Splitting (several sub-indices within a single process)
     1. Split-key schema
     2. Search API
