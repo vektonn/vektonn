@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using System.Runtime;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +28,14 @@ namespace SpaceHosting.Service
                             {
                                 services.AddSingleton<ILog>(new SynchronousConsoleLog());
                                 services.AddSingleton<IndexStoreBuilder>();
-                                services.AddSingleton(s => s.GetRequiredService<IndexStoreBuilder>().BuildIndexStore());
+                                services.AddSingleton(
+                                    s =>
+                                    {
+                                        LogMemoryUsage("Before BuildIndexStore()");
+                                        var indexStoreAccessor = s.GetRequiredService<IndexStoreBuilder>().BuildIndexStore();
+                                        LogMemoryUsage("After BuildIndexStore()");
+                                        return indexStoreAccessor;
+                                    });
 
                                 services
                                     .AddControllers()
@@ -69,6 +78,22 @@ namespace SpaceHosting.Service
                             }));
 
             hostBuilder.Build().Run();
+        }
+
+        private static void LogMemoryUsage(string message)
+        {
+            CollectGarbageWithLohCompaction();
+
+            var currentProcess = Process.GetCurrentProcess();
+            var privateMb = currentProcess.PrivateMemorySize64 / (1024 * 1024);
+            var workingSetMb = currentProcess.WorkingSet64 / (1024 * 1024);
+            Console.Out.WriteLine($"{message} privateMb: {privateMb}, workingSetMb: {workingSetMb}");
+        }
+
+        private static void CollectGarbageWithLohCompaction()
+        {
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+            GC.Collect(generation: 2, GCCollectionMode.Forced, blocking: true, compacting: true);
         }
     }
 }
