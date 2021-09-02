@@ -9,6 +9,7 @@ using SpaceHosting.Tests.SpaceHostingClient;
 
 namespace SpaceHosting.Tests
 {
+    [Explicit]
     public class ApiTests
     {
         private const int Dimension = 32;
