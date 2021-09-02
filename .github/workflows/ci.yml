@@ -63,5 +63,5 @@ jobs:
         name: nuget-packages
         path: ${{ env.NUGET_PACKAGES_DIR }}
 
-    - name: Publish to GitHub registry
-      run: dotnet nuget push ${{ env.NUGET_PACKAGES_DIR }}/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+    - name: Publish to nuget.org
+      run: dotnet nuget push ${{ env.NUGET_PACKAGES_DIR }}/*.nupkg --api-key ${{ secrets.NUGET_ORG_API_KEY }} --source https://api.nuget.org/v3/index.json
