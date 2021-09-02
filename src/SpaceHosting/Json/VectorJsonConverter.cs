@@ -30,7 +30,7 @@ namespace SpaceHosting.Json
             if (isSparse)
             {
                 var coordinateIndices = ReadCoordinateIndices(ref reader, options);
-                vector = new SparseVector(dimension, coordinateIndices, coordinates);
+                vector = new SparseVector(dimension, coordinates, coordinateIndices);
             }
             else
             {
@@ -59,7 +59,7 @@ namespace SpaceHosting.Json
                     writer.WriteBoolean(IsSparseVectorPropName, true);
                     writer.WriteNumber(DimensionPropName, sparseVector.Dimension);
                     WriteCoordinates(writer, sparseVector.Coordinates);
-                    WriteCoordinateIndices(writer, sparseVector.ColumnIndices);
+                    WriteCoordinateIndices(writer, sparseVector.CoordinateIndices);
                     break;
                 default:
                     throw new InvalidOperationException($"Invalid vector type: {vector.GetType()}");

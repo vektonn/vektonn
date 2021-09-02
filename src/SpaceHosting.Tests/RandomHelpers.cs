@@ -16,7 +16,7 @@ namespace SpaceHosting.Tests
 
         public static SparseVector NextSparseVector(int dimension, int coordinatesCount)
         {
-            return new SparseVector(dimension, NextDistinctIndices(coordinatesCount, dimension), NextCoordinates(coordinatesCount));
+            return new SparseVector(dimension, NextCoordinates(coordinatesCount), NextDistinctIndices(coordinatesCount, dimension));
         }
 
         public static double[] NextCoordinates(int count)

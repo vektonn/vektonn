@@ -66,7 +66,7 @@ namespace SpaceHosting.Service.IndexStore
                 j++;
             }
 
-            return new SparseVector(dimension, indices, coords);
+            return new SparseVector(dimension, coords, indices);
         }
 
         private IIndexStoreAccessor BuildIndexStore<TVector>(
@@ -79,16 +79,15 @@ namespace SpaceHosting.Service.IndexStore
         {
             var indexDataPoints = vectors
                 .Select(
-                    (v, i) => new IndexDataPoint<int, object, TVector>
-                    {
-                        Id = i,
-                        Vector = createVector(v),
-                        Data = metadata?[i],
-                        IsDeleted = false
-                    })
+                    (v, i) => new IndexDataPointOrTombstone<int, object, TVector>(
+                        new IndexDataPoint<int, object, TVector>(
+                            Id: i,
+                            Vector: createVector(v),
+                            Data: metadata?[i]))
+                )
                 .ToArray();
 
-            var vectorDimension = indexDataPoints.First().Vector.Dimension;
+            var vectorDimension = indexDataPoints.First().DataPoint!.Vector.Dimension;
             var indexStore = new IndexStoreFactory<int, object>(log).Create<TVector>(
                 indexAlgorithm,
                 vectorDimension,
@@ -96,7 +95,7 @@ namespace SpaceHosting.Service.IndexStore
                 idComparer: EqualityComparer<int>.Default);
 
             foreach (var batch in indexDataPoints.Batch(indexBatchSize, b => b.ToArray()))
-                indexStore.AddBatch(batch);
+                indexStore.UpdateIndex(batch);
 
             var zeroVector = createVector(new double?[vectorDimension]);
             return new IndexStoreHolder<TVector>(indexAlgorithm, vectorDimension, zeroVector, indexStore);

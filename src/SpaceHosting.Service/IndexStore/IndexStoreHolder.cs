@@ -37,15 +37,15 @@ namespace SpaceHosting.Service.IndexStore
 
         public SearchResultDto[][] Search(SearchQueryDto searchQuery)
         {
-            var queryDataPoints = searchQuery
+            var queryVectors = searchQuery
                 .Vectors
-                .Select(vector => new IndexQueryDataPoint<TVector> {Vector = (TVector)vector.ToVector()})
+                .Select(vector => (TVector)vector.ToVector())
                 .ToArray();
 
-            var queryResults = indexStore.FindNearest(queryDataPoints, limitPerQuery: searchQuery.K);
+            var queryResults = indexStore.FindNearest(queryVectors, limitPerQuery: searchQuery.K);
 
             return queryResults.Select(
-                    queryResult => queryResult.Nearest.Select(
+                    queryResult => queryResult.NearestDataPoints.Select(
                             foundDataPoint => new SearchResultDto
                             {
                                 Distance = foundDataPoint.Distance,
