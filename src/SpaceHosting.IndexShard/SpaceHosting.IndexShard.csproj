@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>SpaceHosting.IndexShard</PackageId>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="protobuf-net" Version="3.0.101" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SpaceHosting.Contracts\SpaceHosting.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

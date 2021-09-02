@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using SpaceHosting.Json;
-using SpaceHosting.Service.IndexStore;
+using SpaceHosting.Contracts.Json;
+using SpaceHosting.Service.IndexShard;
 using Vostok.Logging.Abstractions;
 using Vostok.Logging.Console;
 
@@ -27,14 +27,14 @@ namespace SpaceHosting.Service
                             services =>
                             {
                                 services.AddSingleton<ILog>(new SynchronousConsoleLog());
-                                services.AddSingleton<IndexStoreBuilder>();
+                                services.AddSingleton<IndexShardBuilder>();
                                 services.AddSingleton(
                                     s =>
                                     {
-                                        LogMemoryUsage("Before BuildIndexStore()");
-                                        var indexStoreAccessor = s.GetRequiredService<IndexStoreBuilder>().BuildIndexStore();
-                                        LogMemoryUsage("After BuildIndexStore()");
-                                        return indexStoreAccessor;
+                                        LogMemoryUsage("Before BuildIndexShard()");
+                                        var indexShardAccessor = s.GetRequiredService<IndexShardBuilder>().BuildIndexShard();
+                                        LogMemoryUsage("After BuildIndexShard()");
+                                        return indexShardAccessor;
                                     });
 
                                 services

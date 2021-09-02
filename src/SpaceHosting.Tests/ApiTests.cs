@@ -2,13 +2,13 @@ using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
-using SpaceHosting.ApiModels;
-using SpaceHosting.Index;
-using SpaceHosting.Json;
+using SpaceHosting.Contracts.ApiModels;
+using SpaceHosting.Contracts.Json;
 using SpaceHosting.Tests.SpaceHostingClient;
 
 namespace SpaceHosting.Tests
 {
+    [Explicit]
     public class ApiTests
     {
         private const int Dimension = 32;
@@ -21,16 +21,16 @@ namespace SpaceHosting.Tests
             await Console.Out.WriteLineAsync(indexInfo.ToPrettyJson());
 
             indexInfo.VectorDimension.Should().Be(Dimension);
-            indexInfo.VectorCount.Should().Be(11530);
+            indexInfo.DataPointsCount.Should().Be(32);
         }
 
         [Test]
         public async Task SearchDense()
         {
-            var queryVectors = new IVector[]
+            var queryVectors = new[]
             {
-                RandomHelpers.NextDenseVector(Dimension),
-                RandomHelpers.NextDenseVector(Dimension)
+                RandomHelpers.NextDenseVector(Dimension).ToVectorDto(),
+                RandomHelpers.NextDenseVector(Dimension).ToVectorDto()
             };
 
             await TestSearchAsync(k: 3, queryVectors);
@@ -39,29 +39,30 @@ namespace SpaceHosting.Tests
         [Test]
         public async Task SearchSparse()
         {
-            var queryVectors = new IVector[]
+            var queryVectors = new[]
             {
-                RandomHelpers.NextSparseVector(Dimension, 5),
-                RandomHelpers.NextSparseVector(Dimension, 7)
+                RandomHelpers.NextSparseVector(Dimension, 5).ToVectorDto(),
+                RandomHelpers.NextSparseVector(Dimension, 7).ToVectorDto()
             };
 
             await TestSearchAsync(k: 3, queryVectors);
         }
 
-        private async Task TestSearchAsync(int k, IVector[] queryVectors)
+        private async Task TestSearchAsync(int k, VectorDto[] queryVectors)
         {
-            var searchQuery = new SearchQueryDto
-            {
-                K = k,
-                Vectors = queryVectors.ToVectorDto()
-            };
+            var searchQuery = new SearchQueryDto(
+                SplitFilter: null,
+                QueryVectors: queryVectors,
+                K: k);
 
             var searchResult = await httpClient.SearchAsync(searchQuery);
             await Console.Out.WriteLineAsync(searchResult.ToPrettyJson());
 
             searchResult.Length.Should().Be(queryVectors.Length);
-            searchResult[0].Length.Should().Be(k);
-            searchResult[1].Length.Should().Be(k);
+            searchResult[0].QueryVector.Should().BeEquivalentTo(queryVectors[0]);
+            searchResult[0].NearestDataPoints.Length.Should().Be(k);
+            searchResult[1].QueryVector.Should().BeEquivalentTo(queryVectors[1]);
+            searchResult[1].NearestDataPoints.Length.Should().Be(k);
         }
     }
 }

@@ -2,8 +2,8 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using SpaceHosting.ApiModels;
-using SpaceHosting.Json;
+using SpaceHosting.Contracts.ApiModels;
+using SpaceHosting.Contracts.Json;
 
 namespace SpaceHosting.Tests.SpaceHostingClient
 {
@@ -24,7 +24,7 @@ namespace SpaceHosting.Tests.SpaceHostingClient
             return await responseMessage.DeserializeJsonResponseAsync<IndexInfoDto>();
         }
 
-        public async Task<SearchResultDto[][]> SearchAsync(SearchQueryDto searchQuery)
+        public async Task<SearchResultDto[]> SearchAsync(SearchQueryDto searchQuery)
         {
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri: "api/v1/search")
             {
@@ -34,7 +34,7 @@ namespace SpaceHosting.Tests.SpaceHostingClient
             var responseMessage = await httpClient.SendAsync(requestMessage);
             responseMessage.EnsureSuccessStatusCode();
 
-            return await responseMessage.DeserializeJsonResponseAsync<SearchResultDto[][]>();
+            return await responseMessage.DeserializeJsonResponseAsync<SearchResultDto[]>();
         }
     }
 }
