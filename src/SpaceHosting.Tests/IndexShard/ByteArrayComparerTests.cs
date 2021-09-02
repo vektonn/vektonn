@@ -83,7 +83,7 @@ namespace SpaceHosting.Tests.IndexShard
         }
 
         [Test]
-        [Timeout(10_000)]
+        [Timeout(15_000)]
         public void GetHashCode_Perf()
         {
             const int iterations = 10_000_000;
