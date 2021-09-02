@@ -18,14 +18,13 @@ on:
 env:
   NUGET_PACKAGES_DIR: ${{ github.workspace }}/nuget-packages
 
-defaults:
-  run:
-    working-directory: ./src
-
 jobs:
   build-pack-and-test:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: ./src
     steps:
     - name: Checkout
       uses: actions/checkout@v2
