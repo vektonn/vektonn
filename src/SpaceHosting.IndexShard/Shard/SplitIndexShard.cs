@@ -36,6 +36,8 @@ namespace SpaceHosting.IndexShard.Shard
             allSplitAttributesAreInIdAttributes = !indexMeta.SplitAttributes.Except(indexMeta.IdAttributes).Any();
         }
 
+        public long DataPointsCount => indexesBySplitKey.Values.Sum(x => x.DataPointsCount);
+
         public void UpdateIndex(DataPointOrTombstone<TVector>[] batch)
         {
             if (!batch.Any())
@@ -51,7 +53,7 @@ namespace SpaceHosting.IndexShard.Shard
                 "Added batch to index: " +
                 $"processedDataPoints = {batch.Length}, " +
                 $"indexesCount = {indexesBySplitKey.Count}, " +
-                $"indexPointsTotalCount = {indexesBySplitKey.Values.Sum(x => x.DataPointsCount)}, " +
+                $"indexPointsTotalCount = {DataPointsCount}, " +
                 $"processedDataPointsTotalCount = {processedDataPointsTotalCount}");
         }
 

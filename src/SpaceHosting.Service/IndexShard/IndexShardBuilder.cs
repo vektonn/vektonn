@@ -5,21 +5,27 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using MoreLinq;
+using SpaceHosting.Contracts;
+using SpaceHosting.Contracts.Sharding.DataSource;
+using SpaceHosting.Contracts.Sharding.Index;
 using SpaceHosting.Index;
+using SpaceHosting.IndexShard.Shard;
 using Vostok.Logging.Abstractions;
 
-namespace SpaceHosting.Service.IndexStore
+namespace SpaceHosting.Service.IndexShard
 {
-    public class IndexStoreBuilder
+    public class IndexShardBuilder
     {
+        private const string IdAttributeKey = "Id";
+
         private readonly ILog log;
 
-        public IndexStoreBuilder(ILog log)
+        public IndexShardBuilder(ILog log)
         {
             this.log = log;
         }
 
-        public IIndexStoreAccessor BuildIndexStore()
+        public IIndexShardAccessor BuildIndexShard()
         {
             var vectorsFileName = EnvironmentVariables.Get("SH_VECTORS_FILE_NAME");
             var vectorsFileFormat = EnvironmentVariables.TryGet("SH_VECTORS_FILE_FORMAT", Enum.Parse<VectorsFileFormat>, defaultValue: VectorsFileFormat.VectorArrayJson);
@@ -31,12 +37,12 @@ namespace SpaceHosting.Service.IndexStore
             var metadata = metadataFileName == null ? null : ReadMetadata(metadataFileName, vectors.Count);
 
             if (indexAlgorithm.StartsWith(Algorithms.FaissIndex))
-                return BuildIndexStore(vectors, metadata, indexAlgorithm, indexBatchSize, CreateDenseVector);
+                return BuildIndexShard(vectors, metadata, indexAlgorithm, indexBatchSize, CreateDenseVector);
 
             if (indexAlgorithm.StartsWith(Algorithms.SparnnIndex))
-                return BuildIndexStore(vectors, metadata, indexAlgorithm, indexBatchSize, CreateSparseVector);
+                return BuildIndexShard(vectors, metadata, indexAlgorithm, indexBatchSize, CreateSparseVector);
 
-            throw new ArgumentException($"Invalid indexAlgorithm: {indexAlgorithm}");
+            throw new InvalidOperationException($"Invalid indexAlgorithm: {indexAlgorithm}");
         }
 
         private static DenseVector CreateDenseVector(double?[] coordinates)
@@ -69,36 +75,60 @@ namespace SpaceHosting.Service.IndexStore
             return new SparseVector(dimension, coords, indices);
         }
 
-        private IIndexStoreAccessor BuildIndexStore<TVector>(
-            List<double?[]> vectors,
+        private IIndexShardAccessor BuildIndexShard<TVector>(
+            List<double?[]> rawVectors,
             object[]? metadata,
             string indexAlgorithm,
             int indexBatchSize,
             Func<double?[], TVector> createVector)
             where TVector : IVector
         {
-            var indexDataPoints = vectors
+            var vectors = rawVectors.Select(createVector).ToArray();
+            var vectorDimension = vectors.First().Dimension;
+
+            var indexMeta = BuildIndexMeta<TVector>(indexAlgorithm, vectorDimension);
+            var indexShardHolder = new IndexShardHolder<TVector>(log, indexMeta);
+
+            var dataPoints = vectors
                 .Select(
-                    (v, i) => new IndexDataPointOrTombstone<int, object, TVector>(
-                        new IndexDataPoint<int, object, TVector>(
-                            Id: i,
-                            Vector: createVector(v),
-                            Data: metadata?[i]))
+                    (v, i) => new DataPointOrTombstone<TVector>(
+                        new DataPoint<TVector>(
+                            Vector: v,
+                            Attributes: new Dictionary<string, AttributeValue>
+                            {
+                                {IdAttributeKey, new AttributeValue(Int64: i)}
+                            }))
                 )
                 .ToArray();
 
-            var vectorDimension = indexDataPoints.First().DataPoint!.Vector.Dimension;
-            var indexStore = new IndexStoreFactory<int, object>(log).Create<TVector>(
-                indexAlgorithm,
-                vectorDimension,
-                withDataStorage: metadata != null,
-                idComparer: EqualityComparer<int>.Default);
+            foreach (var batch in dataPoints.Batch(indexBatchSize, b => b.ToArray()))
+                indexShardHolder.UpdateIndexShard(batch);
 
-            foreach (var batch in indexDataPoints.Batch(indexBatchSize, b => b.ToArray()))
-                indexStore.UpdateIndex(batch);
+            var zeroVector = createVector(new double?[indexMeta.VectorDimension]);
+            return new IndexShardAccessor<TVector>(indexShardHolder, zeroVector);
+        }
 
-            var zeroVector = createVector(new double?[vectorDimension]);
-            return new IndexStoreHolder<TVector>(indexAlgorithm, vectorDimension, zeroVector, indexStore);
+        private static IndexMeta BuildIndexMeta<TVector>(string indexAlgorithm, int vectorDimension)
+            where TVector : IVector
+        {
+            var indexMeta = new IndexMeta(
+                DataSourceMeta: new DataSourceMeta(
+                    vectorDimension,
+                    VectorsAreSparse: typeof(TVector) == typeof(SparseVector),
+                    IdAttributes: new HashSet<string> {IdAttributeKey},
+                    DataSourceShardingMeta: new DataSourceShardingMeta(new Dictionary<string, IDataSourceAttributeValueSharder>()),
+                    AttributeValueTypes: new Dictionary<string, AttributeValueTypeCode>
+                    {
+                        {IdAttributeKey, AttributeValueTypeCode.Int64}
+                    }),
+                IndexAlgorithm: indexAlgorithm,
+                SplitAttributes: new HashSet<string>(),
+                IndexShardsMap: new IndexShardsMapMeta(new Dictionary<string, IndexShardMeta>())
+            );
+
+            indexMeta.ValidateConsistency();
+
+            return indexMeta;
         }
 
         private static object[] ReadMetadata(string metadataFileName, int vectorCount)
@@ -119,7 +149,7 @@ namespace SpaceHosting.Service.IndexStore
                 VectorsFileFormat.VectorArrayJson => ReadVectorArrayFile(vectorsFileName),
                 VectorsFileFormat.PandasDataFrameCsv => ReadPandasDataFrameCsvFile(vectorsFileName),
                 VectorsFileFormat.PandasDataFrameJson => ReadPandasDataFrameJsonFile(vectorsFileName),
-                _ => throw new ArgumentException($"Invalid vectorsFileFormat: {vectorsFileFormat}")
+                _ => throw new InvalidOperationException($"Invalid vectorsFileFormat: {vectorsFileFormat}")
             };
 
             var vectorDimension = vectors.First().Length;

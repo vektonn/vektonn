@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace SpaceHosting.Json
+namespace SpaceHosting.Contracts.Json
 {
     public static class HttpJson
     {
@@ -17,7 +17,6 @@ namespace SpaceHosting.Json
                 PropertyNameCaseInsensitive = true,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             };
-            Options.Converters.Add(new VectorJsonConverter());
             Options.Converters.Add(new VectorDtoJsonConverter());
         }
 
@@ -28,7 +27,6 @@ namespace SpaceHosting.Json
             options.PropertyNamingPolicy = Options.PropertyNamingPolicy;
             options.PropertyNameCaseInsensitive = Options.PropertyNameCaseInsensitive;
             options.DefaultIgnoreCondition = Options.DefaultIgnoreCondition;
-            options.Converters.Add(new VectorJsonConverter());
             options.Converters.Add(new VectorDtoJsonConverter());
         }
     }

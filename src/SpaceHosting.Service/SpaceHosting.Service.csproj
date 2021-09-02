@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SpaceHosting\SpaceHosting.csproj" />
+    <ProjectReference Include="..\SpaceHosting.IndexShard\SpaceHosting.IndexShard.csproj" />
   </ItemGroup>
 
 </Project>

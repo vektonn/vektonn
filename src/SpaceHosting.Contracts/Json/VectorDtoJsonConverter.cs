@@ -1,68 +1,64 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using SpaceHosting.Index;
+using SpaceHosting.Contracts.ApiModels;
 
-namespace SpaceHosting.Json
+namespace SpaceHosting.Contracts.Json
 {
-    public class VectorJsonConverter : JsonConverter<IVector>
+    public class VectorDtoJsonConverter : JsonConverter<VectorDto>
     {
         private const string IsSparseVectorPropName = "isSparse";
-        private const string DimensionPropName = "dimension";
         private const string CoordinatesPropName = "coordinates";
         private const string CoordinateIndicesPropName = "coordinateIndices";
 
         public override bool CanConvert(Type typeToConvert)
         {
-            return typeof(IVector).IsAssignableFrom(typeToConvert);
+            return typeof(VectorDto).IsAssignableFrom(typeToConvert);
         }
 
-        public override IVector Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override VectorDto Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if (reader.TokenType != JsonTokenType.StartObject)
                 throw new JsonException();
 
             var isSparse = ReadIsSparseFlag(ref reader);
-            var dimension = ReadDimension(ref reader);
             var coordinates = ReadCoordinates(ref reader, options);
 
-            IVector vector;
+            VectorDto vectorDto;
             if (isSparse)
             {
                 var coordinateIndices = ReadCoordinateIndices(ref reader, options);
-                vector = new SparseVector(dimension, coordinates, coordinateIndices);
+                vectorDto = new SparseVectorDto(coordinates, coordinateIndices);
             }
             else
             {
-                vector = new DenseVector(coordinates);
+                vectorDto = new DenseVectorDto(coordinates);
             }
 
             reader.Read();
             if (reader.TokenType != JsonTokenType.EndObject)
                 throw new JsonException();
 
-            return vector;
+            return vectorDto;
         }
 
-        public sealed override void Write(Utf8JsonWriter writer, IVector vector, JsonSerializerOptions options)
+        public sealed override void Write(Utf8JsonWriter writer, VectorDto vectorDto, JsonSerializerOptions options)
         {
             writer.WriteStartObject();
 
-            switch (vector)
+            switch (vectorDto)
             {
-                case DenseVector denseVector:
+                case DenseVectorDto denseVectorDto:
                     writer.WriteBoolean(IsSparseVectorPropName, false);
-                    writer.WriteNumber(DimensionPropName, denseVector.Dimension);
-                    WriteCoordinates(writer, denseVector.Coordinates);
+                    WriteCoordinates(writer, denseVectorDto.Coordinates);
                     break;
-                case SparseVector sparseVector:
+                case SparseVectorDto sparseVectorDto:
                     writer.WriteBoolean(IsSparseVectorPropName, true);
-                    writer.WriteNumber(DimensionPropName, sparseVector.Dimension);
-                    WriteCoordinates(writer, sparseVector.Coordinates);
-                    WriteCoordinateIndices(writer, sparseVector.CoordinateIndices);
+                    WriteCoordinates(writer, sparseVectorDto.Coordinates);
+                    WriteCoordinateIndices(writer, sparseVectorDto.CoordinateIndices);
                     break;
                 default:
-                    throw new InvalidOperationException($"Invalid vector type: {vector.GetType()}");
+                    throw new InvalidOperationException($"Invalid vector type: {vectorDto.GetType()}");
             }
 
             writer.WriteEndObject();
@@ -73,13 +69,6 @@ namespace SpaceHosting.Json
             ReadPropertyName(ref reader, IsSparseVectorPropName);
             reader.Read();
             return reader.GetBoolean();
-        }
-
-        private static int ReadDimension(ref Utf8JsonReader reader)
-        {
-            ReadPropertyName(ref reader, DimensionPropName);
-            reader.Read();
-            return reader.GetInt32();
         }
 
         private static double[] ReadCoordinates(ref Utf8JsonReader reader, JsonSerializerOptions options)

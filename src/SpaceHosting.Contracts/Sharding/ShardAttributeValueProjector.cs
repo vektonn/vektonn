@@ -10,7 +10,7 @@ namespace SpaceHosting.Contracts.Sharding
         public ShardAttributeValueProjector(ushort numberOfShards, IAttributeValueHasher attributeValueHasher)
         {
             if (numberOfShards == 0)
-                throw new ArgumentException($"{nameof(numberOfShards)} == 0");
+                throw new InvalidOperationException($"{nameof(numberOfShards)} == 0");
 
             this.numberOfShards = numberOfShards;
             this.attributeValueHasher = attributeValueHasher;

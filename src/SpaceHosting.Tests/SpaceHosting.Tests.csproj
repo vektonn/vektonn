@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SpaceHosting.IndexShard\SpaceHosting.IndexShard.csproj" />
-    <ProjectReference Include="..\SpaceHosting\SpaceHosting.csproj" />
   </ItemGroup>
 
 </Project>

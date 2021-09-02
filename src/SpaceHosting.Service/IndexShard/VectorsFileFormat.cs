@@ -1,4 +1,4 @@
-namespace SpaceHosting.Service.IndexStore
+namespace SpaceHosting.Service.IndexShard
 {
     public enum VectorsFileFormat
     {

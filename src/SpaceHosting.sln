@@ -12,8 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{66E4
 		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceHosting", "SpaceHosting\SpaceHosting.csproj", "{20D799F6-A299-4071-B41D-1BF972F0D332}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceHosting.Tests", "SpaceHosting.Tests\SpaceHosting.Tests.csproj", "{B3760941-CACB-46DD-AA0F-628C438839DB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceHosting.Contracts", "SpaceHosting.Contracts\SpaceHosting.Contracts.csproj", "{182C7AB7-D415-4E12-A169-305062BA4B4B}"
@@ -30,10 +28,6 @@ Global
 		{CDF47CAB-F284-43B3-BDCB-5A44701A9375}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDF47CAB-F284-43B3-BDCB-5A44701A9375}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDF47CAB-F284-43B3-BDCB-5A44701A9375}.Release|Any CPU.Build.0 = Release|Any CPU
-		{20D799F6-A299-4071-B41D-1BF972F0D332}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{20D799F6-A299-4071-B41D-1BF972F0D332}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{20D799F6-A299-4071-B41D-1BF972F0D332}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{20D799F6-A299-4071-B41D-1BF972F0D332}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B3760941-CACB-46DD-AA0F-628C438839DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B3760941-CACB-46DD-AA0F-628C438839DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3760941-CACB-46DD-AA0F-628C438839DB}.Release|Any CPU.ActiveCfg = Release|Any CPU

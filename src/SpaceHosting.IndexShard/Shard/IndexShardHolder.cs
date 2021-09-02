@@ -13,14 +13,14 @@ namespace SpaceHosting.IndexShard.Shard
         where TVector : IVector
     {
         private readonly ILog log;
-        private readonly IndexMeta indexMeta;
         private readonly SearchQueryValidator searchQueryValidator;
         private readonly IIndexShard<TVector> indexShard;
 
         public IndexShardHolder(ILog log, IndexMeta indexMeta)
         {
             this.log = log.ForContext("SpaceHostingIndexShard");
-            this.indexMeta = indexMeta;
+
+            IndexMeta = indexMeta;
 
             searchQueryValidator = new SearchQueryValidator(indexMeta);
 
@@ -30,6 +30,10 @@ namespace SpaceHosting.IndexShard.Shard
                 ? new SplitIndexShard<TVector>(this.log, indexMeta, indexStoreFactory)
                 : new IndexShard<TVector>(this.log, indexMeta, indexStoreFactory);
         }
+
+        public IndexMeta IndexMeta { get; }
+
+        public long DataPointsCount => indexShard.DataPointsCount;
 
         public void Dispose()
         {
@@ -50,7 +54,7 @@ namespace SpaceHosting.IndexShard.Shard
         {
             var searchQuery = new SearchQuery<TVector>(
                 query.SplitFilter?.ToDictionary(x => x.Key, x => x.Value),
-                query.QueryVectors.Select(x => (TVector)x.ToVector(indexMeta.VectorDimension)).ToArray(),
+                query.QueryVectors.Select(x => (TVector)x.ToVector(IndexMeta.VectorDimension)).ToArray(),
                 query.K);
 
             log.Info($"Executing search query: {searchQuery}");

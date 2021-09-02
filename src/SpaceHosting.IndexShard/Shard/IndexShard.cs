@@ -27,6 +27,8 @@ namespace SpaceHosting.IndexShard.Shard
                     ByteArrayComparer.Instance));
         }
 
+        public long DataPointsCount => indexWithLocker.DataPointsCount;
+
         public void UpdateIndex(DataPointOrTombstone<TVector>[] batch)
         {
             var indexDataPointOrTombstones = batch.ToIndexDataPointOrTombstones(attributesAccessor);

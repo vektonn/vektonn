@@ -1,7 +1,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using SpaceHosting.ApiModels;
-using SpaceHosting.Service.IndexStore;
+using SpaceHosting.Contracts.ApiModels;
+using SpaceHosting.Service.IndexShard;
 
 namespace SpaceHosting.Service.Controllers
 {
@@ -9,58 +9,47 @@ namespace SpaceHosting.Service.Controllers
     [Route("api/v1/[action]")]
     public class ApiController : ControllerBase
     {
-        private readonly IIndexStoreAccessor indexStoreAccessor;
+        private readonly IIndexShardAccessor indexShardAccessor;
 
-        public ApiController(IIndexStoreAccessor indexStoreAccessor)
+        public ApiController(IIndexShardAccessor indexShardAccessor)
         {
-            this.indexStoreAccessor = indexStoreAccessor;
+            this.indexShardAccessor = indexShardAccessor;
         }
 
         [HttpGet]
         public ActionResult<IndexInfoDto> Info()
         {
-            return new IndexInfoDto
-            {
-                IndexAlgorithm = indexStoreAccessor.IndexAlgorithm,
-                VectorType = indexStoreAccessor.ZeroVector.GetType().Name,
-                VectorDimension = indexStoreAccessor.VectorDimension,
-                VectorCount = indexStoreAccessor.VectorCount,
-            };
+            return new IndexInfoDto(
+                IndexAlgorithm: indexShardAccessor.IndexMeta.IndexAlgorithm,
+                VectorType: indexShardAccessor.ZeroVector.GetType().Name,
+                VectorDimension: indexShardAccessor.IndexMeta.VectorDimension,
+                DataPointsCount: indexShardAccessor.DataPointsCount
+            );
         }
 
         [HttpGet]
-        public ActionResult<SearchResultDto[]> Probe(int? k)
+        public ActionResult<SearchResultDto> Probe(int? k)
         {
-            var searchQuery = new SearchQueryDto
-            {
-                Vectors = new[] {indexStoreAccessor.ZeroVector},
-                K = k ?? 1
-            };
+            var searchQuery = new SearchQueryDto(
+                SplitFilter: null,
+                QueryVectors: new[] {indexShardAccessor.ZeroVector},
+                K: k ?? 1);
 
             if (searchQuery.K <= 0)
-                return BadRequest(new {message = "searchQuery.K must be greater than 0"});
+                return BadRequest(new {errorMessages = new[] {"searchQuery.K must be greater than 0"}});
 
-            return indexStoreAccessor.Search(searchQuery).Single();
+            return indexShardAccessor.SearchQueryExecutor.ExecuteSearchQuery(searchQuery).Single();
         }
 
         [HttpGet]
         [HttpPost]
-        public ActionResult<SearchResultDto[][]> Search([FromBody] SearchQueryDto searchQuery)
+        public ActionResult<SearchResultDto[]> Search([FromBody] SearchQueryDto searchQuery)
         {
-            if (searchQuery.K <= 0)
-                return BadRequest(new {message = "searchQuery.K must be greater than 0"});
+            var validationResult = indexShardAccessor.SearchQueryExecutor.ValidateSearchQuery(searchQuery);
+            if (!validationResult.IsValid)
+                return BadRequest(new {errorMessages = validationResult.Errors.Select(x => x.ErrorMessage).ToArray()});
 
-            if (!searchQuery.Vectors.Any())
-                return BadRequest(new {message = "searchQuery.Vectors is empty"});
-
-            if (searchQuery.Vectors.Any(queryVector => queryVector.Dimension != indexStoreAccessor.VectorDimension))
-                return BadRequest(new {message = $"All searchQuery.Vectors must have the same dimension as index vectors: {indexStoreAccessor.VectorDimension}"});
-
-            var indexVectorType = indexStoreAccessor.ZeroVector.GetType();
-            if (searchQuery.Vectors.Any(queryVector => queryVector.GetType() != indexVectorType))
-                return BadRequest(new {message = $"All searchQuery.Vectors must have the same type as index vectors: {indexVectorType}"});
-
-            return indexStoreAccessor.Search(searchQuery);
+            return indexShardAccessor.SearchQueryExecutor.ExecuteSearchQuery(searchQuery);
         }
     }
 }
