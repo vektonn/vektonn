@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
 using SpaceHosting.Contracts;
-using SpaceHosting.IndexShard.Shard;
+using SpaceHosting.IndexShard;
 
 namespace SpaceHosting.Tests.IndexShard
 {

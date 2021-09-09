@@ -7,7 +7,7 @@ using SpaceHosting.Contracts;
 using SpaceHosting.Contracts.Sharding.DataSource;
 using SpaceHosting.Contracts.Sharding.Index;
 using SpaceHosting.Index;
-using SpaceHosting.IndexShard.Shard;
+using SpaceHosting.IndexShard;
 using Vostok.Logging.Abstractions;
 using static SpaceHosting.Tests.IndexShard.AttributeValueTestHelpers;
 

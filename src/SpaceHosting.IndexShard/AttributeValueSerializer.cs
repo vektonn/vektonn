@@ -4,9 +4,9 @@ using ProtoBuf;
 using ProtoBuf.Meta;
 using SpaceHosting.Contracts;
 
-namespace SpaceHosting.IndexShard.Shard
+namespace SpaceHosting.IndexShard
 {
-    public static class AttributeValueSerializer
+    internal static class AttributeValueSerializer
     {
         static AttributeValueSerializer()
         {

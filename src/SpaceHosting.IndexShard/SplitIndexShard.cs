@@ -7,9 +7,9 @@ using SpaceHosting.Contracts.ResultsMerging;
 using SpaceHosting.Index;
 using Vostok.Logging.Abstractions;
 
-namespace SpaceHosting.IndexShard.Shard
+namespace SpaceHosting.IndexShard
 {
-    public class SplitIndexShard<TVector> : IIndexShard<TVector>
+    internal class SplitIndexShard<TVector> : IIndexShard<TVector>
         where TVector : IVector
     {
         private readonly ConcurrentDictionary<byte[], IndexWithLocker<TVector>> indexesBySplitKey = new(ByteArrayComparer.Instance);

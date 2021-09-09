@@ -9,7 +9,7 @@ using SpaceHosting.Contracts;
 using SpaceHosting.Contracts.Sharding.DataSource;
 using SpaceHosting.Contracts.Sharding.Index;
 using SpaceHosting.Index;
-using SpaceHosting.IndexShard.Shard;
+using SpaceHosting.IndexShard;
 using Vostok.Logging.Abstractions;
 
 namespace SpaceHosting.Service.IndexShard

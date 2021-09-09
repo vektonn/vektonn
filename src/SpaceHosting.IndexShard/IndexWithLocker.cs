@@ -4,9 +4,9 @@ using System.Threading;
 using SpaceHosting.Contracts;
 using SpaceHosting.Index;
 
-namespace SpaceHosting.IndexShard.Shard
+namespace SpaceHosting.IndexShard
 {
-    public class IndexWithLocker<TVector> : IDisposable
+    internal class IndexWithLocker<TVector> : IDisposable
         where TVector : IVector
     {
         private readonly IIndexStore<byte[], byte[], TVector> indexStore;

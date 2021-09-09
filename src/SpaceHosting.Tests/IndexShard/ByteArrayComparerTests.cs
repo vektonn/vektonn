@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using FluentAssertions;
 using NUnit.Framework;
-using SpaceHosting.IndexShard.Shard;
+using SpaceHosting.IndexShard;
 
 namespace SpaceHosting.Tests.IndexShard
 {

@@ -3,16 +3,16 @@ using SpaceHosting.Contracts;
 using SpaceHosting.Index;
 using Vostok.Logging.Abstractions;
 
-namespace SpaceHosting.IndexShard.Shard
+namespace SpaceHosting.IndexShard
 {
-    public class IndexShard<TVector> : IIndexShard<TVector>
+    internal class WholeIndexShard<TVector> : IIndexShard<TVector>
         where TVector : IVector
     {
         private readonly ILog log;
         private readonly AttributesAccessor attributesAccessor;
         private readonly IndexWithLocker<TVector> indexWithLocker;
 
-        public IndexShard(
+        public WholeIndexShard(
             ILog log,
             IndexMeta indexMeta,
             IIndexStoreFactory<byte[], byte[]> indexStoreFactory)

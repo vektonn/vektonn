@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace SpaceHosting.IndexShard.Shard
+namespace SpaceHosting.IndexShard
 {
-    public class ByteArrayComparer : IEqualityComparer<byte[]>, IComparer<byte[]>
+    internal class ByteArrayComparer : IEqualityComparer<byte[]>, IComparer<byte[]>
     {
         public static readonly ByteArrayComparer Instance = new ByteArrayComparer();
 

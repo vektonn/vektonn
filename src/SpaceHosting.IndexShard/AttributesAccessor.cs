@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using SpaceHosting.Contracts;
 
-namespace SpaceHosting.IndexShard.Shard
+namespace SpaceHosting.IndexShard
 {
-    public class AttributesAccessor
+    internal class AttributesAccessor
     {
         private readonly string[] indexIdAttributes;
         private readonly string[] splitAttributes;

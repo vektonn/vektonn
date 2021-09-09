@@ -7,7 +7,7 @@ using SpaceHosting.Contracts.ApiModels.Validation;
 using SpaceHosting.Index;
 using Vostok.Logging.Abstractions;
 
-namespace SpaceHosting.IndexShard.Shard
+namespace SpaceHosting.IndexShard
 {
     public class IndexShardHolder<TVector> : IDisposable, IIndexShardUpdater<TVector>, ISearchQueryExecutor
         where TVector : IVector
@@ -28,7 +28,7 @@ namespace SpaceHosting.IndexShard.Shard
 
             indexShard = indexMeta.HasSplits
                 ? new SplitIndexShard<TVector>(this.log, indexMeta, indexStoreFactory)
-                : new IndexShard<TVector>(this.log, indexMeta, indexStoreFactory);
+                : new WholeIndexShard<TVector>(this.log, indexMeta, indexStoreFactory);
         }
 
         public IndexMeta IndexMeta { get; }

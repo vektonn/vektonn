@@ -3,7 +3,6 @@ using SpaceHosting.Contracts;
 using SpaceHosting.Contracts.ApiModels;
 using SpaceHosting.Index;
 using SpaceHosting.IndexShard;
-using SpaceHosting.IndexShard.Shard;
 
 namespace SpaceHosting.Service.IndexShard
 {

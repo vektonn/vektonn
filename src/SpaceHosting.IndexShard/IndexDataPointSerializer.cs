@@ -3,9 +3,9 @@ using System.Linq;
 using SpaceHosting.Contracts;
 using SpaceHosting.Index;
 
-namespace SpaceHosting.IndexShard.Shard
+namespace SpaceHosting.IndexShard
 {
-    public static class IndexDataPointSerializer
+    internal static class IndexDataPointSerializer
     {
         public static IndexDataPointOrTombstone<byte[], byte[], TVector>[] ToIndexDataPointOrTombstones<TVector>(
             this IEnumerable<DataPointOrTombstone<TVector>> batch,
