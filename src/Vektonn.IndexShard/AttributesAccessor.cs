@@ -13,9 +13,9 @@ namespace Vektonn.IndexShard
 
         public AttributesAccessor(IndexMeta indexMeta)
         {
-            indexIdAttributes = indexMeta.IndexIdAttributes.OrderBy(x => x).ToArray();
-            splitAttributes = indexMeta.SplitAttributes.OrderBy(x => x).ToArray();
-            indexPayloadAttributes = indexMeta.IndexPayloadAttributes.OrderBy(x => x).ToArray();
+            indexIdAttributes = indexMeta.IndexIdAttributes.OrderBy(x => x, StringComparer.InvariantCulture).ToArray();
+            splitAttributes = indexMeta.SplitAttributes.OrderBy(x => x, StringComparer.InvariantCulture).ToArray();
+            indexPayloadAttributes = indexMeta.IndexPayloadAttributes.OrderBy(x => x, StringComparer.InvariantCulture).ToArray();
         }
 
         public AttributeValue[] GetIndexId(Dictionary<string, AttributeValue> attributes)

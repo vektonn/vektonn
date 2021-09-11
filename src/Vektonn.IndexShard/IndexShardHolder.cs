@@ -40,9 +40,9 @@ namespace Vektonn.IndexShard
             indexShard.Dispose();
         }
 
-        public void UpdateIndexShard(DataPointOrTombstone<TVector>[] batch)
+        public void UpdateIndexShard(DataPointOrTombstone<TVector>[] dataPointOrTombstones)
         {
-            indexShard.UpdateIndex(batch);
+            indexShard.UpdateIndex(dataPointOrTombstones);
         }
 
         public ValidationResult ValidateSearchQuery(SearchQueryDto query)

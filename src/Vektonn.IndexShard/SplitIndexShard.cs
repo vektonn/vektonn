@@ -38,20 +38,20 @@ namespace Vektonn.IndexShard
 
         public long DataPointsCount => indexesBySplitKey.Values.Sum(x => x.DataPointsCount);
 
-        public void UpdateIndex(DataPointOrTombstone<TVector>[] batch)
+        public void UpdateIndex(DataPointOrTombstone<TVector>[] dataPointOrTombstones)
         {
-            if (!batch.Any())
+            if (!dataPointOrTombstones.Any())
                 return;
 
-            if (allSplitAttributesAreInIdAttributes || batch.All(x => x.Tombstone == null))
-                UpdateSplitBySplit(batch);
+            if (allSplitAttributesAreInIdAttributes || dataPointOrTombstones.All(x => x.Tombstone == null))
+                UpdateSplitBySplit(dataPointOrTombstones);
             else
-                UpdateForInefficientIndexSchema(batch);
+                UpdateForInefficientIndexSchema(dataPointOrTombstones);
 
-            processedDataPointsTotalCount += batch.Length;
+            processedDataPointsTotalCount += dataPointOrTombstones.Length;
             log.Info(
                 "Added batch to index: " +
-                $"processedDataPoints = {batch.Length}, " +
+                $"processedDataPoints = {dataPointOrTombstones.Length}, " +
                 $"indexesCount = {indexesBySplitKey.Count}, " +
                 $"indexPointsTotalCount = {DataPointsCount}, " +
                 $"processedDataPointsTotalCount = {processedDataPointsTotalCount}");

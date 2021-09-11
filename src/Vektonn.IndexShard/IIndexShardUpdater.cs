@@ -6,6 +6,6 @@ namespace Vektonn.IndexShard
     public interface IIndexShardUpdater<TVector>
         where TVector : IVector
     {
-        void UpdateIndexShard(DataPointOrTombstone<TVector>[] batch);
+        void UpdateIndexShard(DataPointOrTombstone<TVector>[] dataPointOrTombstones);
     }
 }
