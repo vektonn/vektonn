@@ -34,11 +34,11 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release
 
-    - name: Pack SpaceHosting.Contracts
-      run: dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./SpaceHosting.Contracts/SpaceHosting.Contracts.csproj
+    - name: Pack Vektonn.Contracts
+      run: dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./Vektonn.Contracts/Vektonn.Contracts.csproj
 
-    - name: Pack SpaceHosting.IndexShard
-      run: dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./SpaceHosting.IndexShard/SpaceHosting.IndexShard.csproj
+    - name: Pack Vektonn.IndexShard
+      run: dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./Vektonn.IndexShard/Vektonn.IndexShard.csproj
 
     - name: Store nuget packages as artifacts
       uses: actions/upload-artifact@v2

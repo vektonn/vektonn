@@ -6,7 +6,7 @@ nav_order: 3
 
 # Backlog
 
-If you want some feature, tell us by [email](mailto:info@spacehosting.io) or [slack](spacehostingworkspace.slack.com). We will add it to our backlog.
+If you wish some feature to be added please contact us on [Slack channel](http://vektonn.slack.com/).
 
 1. Splitting (several sub-indices within a single process)
     1. Split-key schema
@@ -23,7 +23,7 @@ If you want some feature, tell us by [email](mailto:info@spacehosting.io) or [sl
     3. DataSource abstraction 
         1. SQL Connector
         2. ... (If you have your own datastore, please contact us, we will add a new task to our inbox)
-4. Deploy to k8s
+4. Deploy to Kubernetes
     1. Static helm charts (If you use it, please, tell us, cause we don't know, how popular is this case)
     2. Dynamic Index Scheduler
         1. Index Management API
