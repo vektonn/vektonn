@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Vektonn.Contracts.ApiModels;
 
-namespace Vektonn.Contracts.Json
+namespace Vektonn.SharedImpl.Json
 {
     public class VectorDtoJsonConverter : JsonConverter<VectorDto>
     {

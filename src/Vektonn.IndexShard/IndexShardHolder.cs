@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
 using Vektonn.Contracts;
@@ -40,7 +41,7 @@ namespace Vektonn.IndexShard
             indexShard.Dispose();
         }
 
-        public void UpdateIndexShard(DataPointOrTombstone<TVector>[] dataPointOrTombstones)
+        public void UpdateIndexShard(IReadOnlyList<DataPointOrTombstone<TVector>> dataPointOrTombstones)
         {
             indexShard.UpdateIndex(dataPointOrTombstones);
         }

@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Vektonn.Contracts.ApiModels;
-using Vektonn.Contracts.Json;
+using Vektonn.SharedImpl.Json;
 
 namespace Vektonn.Tests.VektonnClient
 {

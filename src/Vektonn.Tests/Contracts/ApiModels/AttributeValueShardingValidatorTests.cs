@@ -36,7 +36,7 @@ namespace Vektonn.Tests.Contracts.ApiModels
         {
             var shardersByAttributeKey = shardingMeta.ToDictionary(
                 t => t.Key,
-                t => (IDataSourceAttributeValueSharder)new ValueBasedDataSourceAttributeValueSharder(possibleValues: t.PossibleValues.ToHashSet())
+                t => (IDataSourceAttributeValueSharder)new ValueBasedDataSourceAttributeValueSharder(new AttributeValueHasher(), possibleValues: t.PossibleValues.ToHashSet())
             );
 
             var sut = new AttributeValueShardingValidator(shardersByAttributeKey, errorMessagePrefix: "Test");

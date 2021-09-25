@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Vektonn.Contracts.Json
+namespace Vektonn.SharedImpl.Json
 {
     public static class HttpJson
     {

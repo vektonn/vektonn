@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
 using Vektonn.Contracts;
-using Vektonn.IndexShard;
+using Vektonn.SharedImpl.BinarySerialization;
 
-namespace Vektonn.Tests.IndexShard
+namespace Vektonn.Tests.SharedImpl.BinarySerialization
 {
     public class AttributeValueSerializerTests
     {

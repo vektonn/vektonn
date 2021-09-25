@@ -1,12 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using ProtoBuf;
 using ProtoBuf.Meta;
 using Vektonn.Contracts;
 
-namespace Vektonn.IndexShard
+namespace Vektonn.SharedImpl.BinarySerialization
 {
-    internal static class AttributeValueSerializer
+    public static class AttributeValueSerializer
     {
         static AttributeValueSerializer()
         {
@@ -23,6 +24,7 @@ namespace Vektonn.IndexShard
             meta[2].DataFormat = DataFormat.FixedSize;
 
             Serializer.PrepareSerializer<AttributeValue[]>();
+            Serializer.PrepareSerializer<Dictionary<string, AttributeValue>>();
         }
 
         public static byte[] Serialize(AttributeValue[] values)
@@ -35,6 +37,10 @@ namespace Vektonn.IndexShard
         public static AttributeValue[] Deserialize(byte[] bytes)
         {
             return Serializer.Deserialize<AttributeValue[]>((ReadOnlySpan<byte>)bytes);
+        }
+
+        internal static void Touch()
+        {
         }
     }
 }

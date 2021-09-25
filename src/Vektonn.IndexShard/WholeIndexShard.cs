@@ -29,7 +29,7 @@ namespace Vektonn.IndexShard
 
         public long DataPointsCount => indexWithLocker.DataPointsCount;
 
-        public void UpdateIndex(DataPointOrTombstone<TVector>[] dataPointOrTombstones)
+        public void UpdateIndex(IReadOnlyList<DataPointOrTombstone<TVector>> dataPointOrTombstones)
         {
             var indexDataPointOrTombstones = dataPointOrTombstones.ToIndexDataPointOrTombstones(attributesAccessor);
             var dataPointsCount = indexWithLocker.UpdateIndex(indexDataPointOrTombstones);

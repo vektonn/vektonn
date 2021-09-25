@@ -27,9 +27,13 @@ namespace Vektonn.Contracts
 
         public void ValidateConsistency()
         {
-            var untypedAttributes = PermanentAttributes.Union(DataAttributes).Except(DataSourceMeta.AttributeValueTypes.Keys).ToArray();
+            var untypedAttributes = PermanentAttributes
+                .Union(DataAttributes)
+                .Union(DataSourceMeta.DataSourceShardingMeta.ShardAttributes)
+                .Except(DataSourceMeta.AttributeValueTypes.Keys)
+                .ToArray();
             if (untypedAttributes.Any())
-                throw new InvalidOperationException($"({nameof(PermanentAttributes)} \\/ {nameof(DataAttributes)}) \\ AttributeValueTypes.Keys != 0 ({string.Join(", ", untypedAttributes)}) for: {this}");
+                throw new InvalidOperationException($"There are attributes with unspecified value type ({string.Join(", ", untypedAttributes)}) for: {this}");
 
             var vectorsAreSparse = AlgorithmTraits.VectorsAreSparse(IndexAlgorithm);
             if (vectorsAreSparse ^ DataSourceMeta.VectorsAreSparse)

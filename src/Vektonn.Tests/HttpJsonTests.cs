@@ -4,7 +4,7 @@ using System.Text.Json;
 using FluentAssertions;
 using NUnit.Framework;
 using Vektonn.Contracts.ApiModels;
-using Vektonn.Contracts.Json;
+using Vektonn.SharedImpl.Json;
 
 namespace Vektonn.Tests
 {

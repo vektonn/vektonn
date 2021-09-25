@@ -2,14 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>Vektonn.IndexShard</PackageId>
+    <PackageId>Vektonn.DataSource</PackageId>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Confluent.Kafka" Version="1.8.1" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Vektonn.SharedImpl\Vektonn.SharedImpl.csproj" />

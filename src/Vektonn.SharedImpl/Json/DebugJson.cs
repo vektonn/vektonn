@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace Vektonn.Contracts.Json
+namespace Vektonn.SharedImpl.Json
 {
     public static class DebugJson
     {

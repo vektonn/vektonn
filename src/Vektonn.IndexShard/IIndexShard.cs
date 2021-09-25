@@ -10,7 +10,7 @@ namespace Vektonn.IndexShard
     {
         long DataPointsCount { get; }
 
-        void UpdateIndex(DataPointOrTombstone<TVector>[] dataPointOrTombstones);
+        void UpdateIndex(IReadOnlyList<DataPointOrTombstone<TVector>> dataPointOrTombstones);
 
         IReadOnlyList<SearchResultItem<TVector>> FindNearest(SearchQuery<TVector> query);
     }
