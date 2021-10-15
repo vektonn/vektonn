@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using MoreLinq;
 
-namespace Vektonn.Contracts.ResultsMerging
+namespace Vektonn.Contracts.SearchResultsMerging
 {
     public static class FoundDataPointsMerger
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Vektonn.Contracts.ResultsMerging
+namespace Vektonn.Contracts.SearchResultsMerging
 {
     public class ByPropertyComparer<T, TProperty> : IComparer, IComparer<T>
         where T : class

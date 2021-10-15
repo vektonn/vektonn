@@ -1,8 +1,8 @@
 using FluentAssertions;
 using NUnit.Framework;
-using Vektonn.Contracts.ResultsMerging;
+using Vektonn.Contracts.SearchResultsMerging;
 
-namespace Vektonn.Tests.Contracts.ResultsMerging
+namespace Vektonn.Tests.Contracts.SearchResultsMerging
 {
     public class ByPropertyComparerTests
     {

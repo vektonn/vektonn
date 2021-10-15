@@ -18,6 +18,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.Contracts", "Vekton
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.IndexShard", "Vektonn.IndexShard\Vektonn.IndexShard.csproj", "{47A6FB77-CC44-4DF3-A02A-879A70BCD2B4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.DataSource", "Vektonn.DataSource\Vektonn.DataSource.csproj", "{D83618A5-22FD-4496-BD2C-BF4D407FC549}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.SharedImpl", "Vektonn.SharedImpl\Vektonn.SharedImpl.csproj", "{422615C3-8700-4F71-A7E6-6794FDBFA83E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +44,14 @@ Global
 		{47A6FB77-CC44-4DF3-A02A-879A70BCD2B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47A6FB77-CC44-4DF3-A02A-879A70BCD2B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47A6FB77-CC44-4DF3-A02A-879A70BCD2B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D83618A5-22FD-4496-BD2C-BF4D407FC549}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D83618A5-22FD-4496-BD2C-BF4D407FC549}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D83618A5-22FD-4496-BD2C-BF4D407FC549}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D83618A5-22FD-4496-BD2C-BF4D407FC549}.Release|Any CPU.Build.0 = Release|Any CPU
+		{422615C3-8700-4F71-A7E6-6794FDBFA83E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{422615C3-8700-4F71-A7E6-6794FDBFA83E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{422615C3-8700-4F71-A7E6-6794FDBFA83E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{422615C3-8700-4F71-A7E6-6794FDBFA83E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

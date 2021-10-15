@@ -3,8 +3,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Vektonn.Contracts;
-using Vektonn.Contracts.ResultsMerging;
+using Vektonn.Contracts.SearchResultsMerging;
 using Vektonn.Index;
+using Vektonn.SharedImpl.BinarySerialization;
 using Vostok.Logging.Abstractions;
 
 namespace Vektonn.IndexShard
@@ -38,20 +39,20 @@ namespace Vektonn.IndexShard
 
         public long DataPointsCount => indexesBySplitKey.Values.Sum(x => x.DataPointsCount);
 
-        public void UpdateIndex(DataPointOrTombstone<TVector>[] batch)
+        public void UpdateIndex(IReadOnlyList<DataPointOrTombstone<TVector>> dataPointOrTombstones)
         {
-            if (!batch.Any())
+            if (!dataPointOrTombstones.Any())
                 return;
 
-            if (allSplitAttributesAreInIdAttributes || batch.All(x => x.Tombstone == null))
-                UpdateSplitBySplit(batch);
+            if (allSplitAttributesAreInIdAttributes || dataPointOrTombstones.All(x => x.Tombstone == null))
+                UpdateSplitBySplit(dataPointOrTombstones);
             else
-                UpdateForInefficientIndexSchema(batch);
+                UpdateForInefficientIndexSchema(dataPointOrTombstones);
 
-            processedDataPointsTotalCount += batch.Length;
+            processedDataPointsTotalCount += dataPointOrTombstones.Count;
             log.Info(
                 "Added batch to index: " +
-                $"processedDataPoints = {batch.Length}, " +
+                $"processedDataPoints = {dataPointOrTombstones.Count}, " +
                 $"indexesCount = {indexesBySplitKey.Count}, " +
                 $"indexPointsTotalCount = {DataPointsCount}, " +
                 $"processedDataPointsTotalCount = {processedDataPointsTotalCount}");
@@ -77,14 +78,14 @@ namespace Vektonn.IndexShard
                 indexWithLocker.Dispose();
         }
 
-        private void UpdateForInefficientIndexSchema(DataPointOrTombstone<TVector>[] batch)
+        private void UpdateForInefficientIndexSchema(IReadOnlyList<DataPointOrTombstone<TVector>> batch)
         {
             var homogeneousBatch = new List<DataPointOrTombstone<TVector>>();
-            for (var i = 0; i < batch.Length; i++)
+            for (var i = 0; i < batch.Count; i++)
             {
                 homogeneousBatch.Add(batch[i]);
 
-                if (i + 1 == batch.Length ||
+                if (i + 1 == batch.Count ||
                     batch[i].Tombstone == null && batch[i + 1].Tombstone != null ||
                     batch[i].Tombstone != null && batch[i + 1].Tombstone == null)
                 {
@@ -107,7 +108,7 @@ namespace Vektonn.IndexShard
             }
         }
 
-        private void UpdateSplitBySplit(DataPointOrTombstone<TVector>[] batch)
+        private void UpdateSplitBySplit(IReadOnlyList<DataPointOrTombstone<TVector>> batch)
         {
             foreach (var dataPointsBySplitKey in batch.GroupBy(GetSplitKey, ByteArrayComparer.Instance))
             {

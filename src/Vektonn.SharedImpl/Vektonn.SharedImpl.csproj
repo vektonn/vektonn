@@ -2,17 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>Vektonn.IndexShard</PackageId>
+    <PackageId>Vektonn.SharedImpl</PackageId>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Vektonn.SharedImpl\Vektonn.SharedImpl.csproj" />
+    <PackageReference Include="protobuf-net" Version="3.0.101" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vektonn.Contracts\Vektonn.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>

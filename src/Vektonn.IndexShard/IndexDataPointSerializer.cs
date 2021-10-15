@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Vektonn.Contracts;
 using Vektonn.Index;
+using Vektonn.SharedImpl.BinarySerialization;
 
 namespace Vektonn.IndexShard
 {

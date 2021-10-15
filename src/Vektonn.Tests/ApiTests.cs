@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using Vektonn.Contracts.ApiModels;
-using Vektonn.Contracts.Json;
+using Vektonn.SharedImpl.Json;
 using Vektonn.Tests.VektonnClient;
 
 namespace Vektonn.Tests

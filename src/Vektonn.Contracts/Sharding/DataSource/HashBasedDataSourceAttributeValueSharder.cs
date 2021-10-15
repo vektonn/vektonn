@@ -20,5 +20,10 @@ namespace Vektonn.Contracts.Sharding.DataSource
         {
             return true;
         }
+
+        public ulong GetShardingCoordinate(AttributeValue attributeValue)
+        {
+            return shardAttributeValueProjector.GetProjection(attributeValue);
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FakeItEasy;
@@ -44,8 +45,8 @@ namespace Vektonn.Tests.Contracts.Sharding
             var sut = new IndexShardsMapMeta(
                 new Dictionary<string, IndexShardMeta>
                 {
-                    {"0", new IndexShardMeta(new Dictionary<string, IIndexAttributeValueShard>())},
-                    {"42-id", new IndexShardMeta(new Dictionary<string, IIndexAttributeValueShard>())},
+                    {"0", new IndexShardMeta(new Dictionary<string, IIndexAttributeValueShard>(), Array.Empty<DataSourceShardSubscription>())},
+                    {"42-id", new IndexShardMeta(new Dictionary<string, IIndexAttributeValueShard>(), Array.Empty<DataSourceShardSubscription>())},
                 });
 
             sut.GetShardIdsForQuery(SplitFilter(splitFilterKeys)).Should().BeEquivalentTo("42-id", "0");
@@ -95,7 +96,9 @@ namespace Vektonn.Tests.Contracts.Sharding
 
         private static IndexShardMeta ShardsByAttributeKey(params (string AttributeKey, IIndexAttributeValueShard Shard)[] shards)
         {
-            return new IndexShardMeta(shards.ToDictionary(t => t.AttributeKey, t => t.Shard));
+            return new IndexShardMeta(
+                ShardsByAttributeKey: shards.ToDictionary(t => t.AttributeKey, t => t.Shard),
+                DataSourceShardsToConsume: Array.Empty<DataSourceShardSubscription>());
         }
     }
 }

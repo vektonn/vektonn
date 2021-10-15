@@ -29,9 +29,9 @@ namespace Vektonn.IndexShard
 
         public long DataPointsCount => indexWithLocker.DataPointsCount;
 
-        public void UpdateIndex(DataPointOrTombstone<TVector>[] batch)
+        public void UpdateIndex(IReadOnlyList<DataPointOrTombstone<TVector>> dataPointOrTombstones)
         {
-            var indexDataPointOrTombstones = batch.ToIndexDataPointOrTombstones(attributesAccessor);
+            var indexDataPointOrTombstones = dataPointOrTombstones.ToIndexDataPointOrTombstones(attributesAccessor);
             var dataPointsCount = indexWithLocker.UpdateIndex(indexDataPointOrTombstones);
             log.Info($"Added batch to index. Index total count now = {dataPointsCount}");
         }

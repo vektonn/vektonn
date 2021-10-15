@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Vektonn.Contracts;
 using Vektonn.Contracts.ApiModels;
 using Vektonn.Contracts.ApiModels.Validation;
+using Vektonn.Contracts.Sharding;
 using Vektonn.Contracts.Sharding.DataSource;
 using static Vektonn.Tests.Contracts.ApiModels.AttributeDtoTestHelpers;
 using static Vektonn.Tests.Contracts.ApiModels.VectorDtoTestHelpers;
@@ -120,6 +121,7 @@ namespace Vektonn.Tests.Contracts.ApiModels
             var attributeValueSharders = (shardingMeta ?? Array.Empty<(string Key, string[] PossibleValues)>()).ToDictionary(
                 t => t.Key,
                 t => (IDataSourceAttributeValueSharder)new ValueBasedDataSourceAttributeValueSharder(
+                    new AttributeValueHasher(),
                     possibleValues: t.PossibleValues.Select(x => new AttributeValue(String: x)).ToHashSet())
             );
 

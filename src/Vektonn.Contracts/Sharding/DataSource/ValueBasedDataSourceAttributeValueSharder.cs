@@ -5,8 +5,11 @@ namespace Vektonn.Contracts.Sharding.DataSource
 {
     public class ValueBasedDataSourceAttributeValueSharder : IDataSourceAttributeValueSharder
     {
-        public ValueBasedDataSourceAttributeValueSharder(HashSet<AttributeValue> possibleValues)
+        private readonly IAttributeValueHasher attributeValueHasher;
+
+        public ValueBasedDataSourceAttributeValueSharder(IAttributeValueHasher attributeValueHasher, HashSet<AttributeValue> possibleValues)
         {
+            this.attributeValueHasher = attributeValueHasher;
             PossibleValues = possibleValues;
         }
 
@@ -16,6 +19,11 @@ namespace Vektonn.Contracts.Sharding.DataSource
         public bool IsValueAcceptable(AttributeValue attributeValue)
         {
             return PossibleValues.Contains(attributeValue);
+        }
+
+        public ulong GetShardingCoordinate(AttributeValue attributeValue)
+        {
+            return attributeValueHasher.ComputeHash(attributeValue);
         }
     }
 }

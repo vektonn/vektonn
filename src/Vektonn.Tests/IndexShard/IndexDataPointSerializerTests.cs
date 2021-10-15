@@ -7,6 +7,7 @@ using Vektonn.Contracts.Sharding.DataSource;
 using Vektonn.Contracts.Sharding.Index;
 using Vektonn.Index;
 using Vektonn.IndexShard;
+using Vektonn.SharedImpl.BinarySerialization;
 using static Vektonn.Tests.IndexShard.AttributeValueTestHelpers;
 
 namespace Vektonn.Tests.IndexShard
