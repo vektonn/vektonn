@@ -23,6 +23,7 @@ namespace Vektonn.DataSource.Kafka
         private readonly IConsumer<byte[], byte[]> consumer;
         private readonly ManualResetEventSlim firstAssignmentSignal = new();
         private Thread? consumerLoopThread;
+        private int unknownTopicErrors;
 
         public KafkaConsumer(
             ILog log,
@@ -96,16 +97,31 @@ namespace Vektonn.DataSource.Kafka
         {
             try
             {
+                var warmupIsNeeded = true;
                 while (!firstAssignmentSignal.IsSet)
+                {
                     await ConsumeBatchAsync(cancellationToken);
 
-                var watermarkOffsets = GetWatermarkOffsets();
-                log.Info($"Got watermark offsets: {watermarkOffsets}");
+                    // todo (andrew, 15.10.2021): handle topic subscriptions by pattern
+                    if (unknownTopicErrors == topicsToConsume.Length)
+                    {
+                        warmupIsNeeded = false;
+                        log.Warn("Seems like there is no data to consume, skipping warmup phase");
+                        break;
+                    }
+                }
 
-                while (!committedOffsets.HasReached(watermarkOffsets))
-                    await ConsumeBatchAsync(cancellationToken);
+                if (warmupIsNeeded)
+                {
+                    var watermarkOffsets = GetWatermarkOffsets();
+                    log.Info($"Got watermark offsets: {watermarkOffsets}");
 
-                CollectGarbageWithLohCompaction();
+                    while (!committedOffsets.HasReached(watermarkOffsets))
+                        await ConsumeBatchAsync(cancellationToken);
+
+                    CollectGarbageWithLohCompaction();
+                }
+
                 log.Info("Initialization completed");
                 initializationTcs.SetResult();
 
@@ -182,6 +198,9 @@ namespace Vektonn.DataSource.Kafka
                     }
 
                     log.Warn(e, $"ConfluentConsumer transient error for TopicPartitionOffset {e.ConsumerRecord?.TopicPartitionOffset}: {e.Error.ToPrettyJson()}");
+
+                    if (e.Error.Code == ErrorCode.UnknownTopicOrPart && e.Error.IsBrokerError)
+                        ++unknownTopicErrors;
 
                     if (retryDelay < kafkaConsumerConfig.MaxRetryDelay)
                         retryDelay *= 2;
