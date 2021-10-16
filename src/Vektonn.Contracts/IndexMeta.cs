@@ -35,6 +35,10 @@ namespace Vektonn.Contracts
             if (untypedAttributes.Any())
                 throw new InvalidOperationException($"There are attributes with unspecified value type ({string.Join(", ", untypedAttributes)}) for: {this}");
 
+            var nonIdDataSourceShardingAttributes = DataSourceMeta.DataSourceShardingMeta.ShardAttributes.Except(DataSourceMeta.IdAttributes).ToArray();
+            if (nonIdDataSourceShardingAttributes.Any())
+                throw new InvalidOperationException($"There are non-id data source sharding attributes ({string.Join(", ", nonIdDataSourceShardingAttributes)}) for: {this}");
+
             var vectorsAreSparse = AlgorithmTraits.VectorsAreSparse(IndexAlgorithm);
             if (vectorsAreSparse ^ DataSourceMeta.VectorsAreSparse)
                 throw new InvalidOperationException($"IndexMeta.VectorsAreSparse ({vectorsAreSparse}) and DataSourceMeta.VectorsAreSparse ({DataSourceMeta.VectorsAreSparse}) are inconsistent");
