@@ -584,6 +584,8 @@ namespace Vektonn.Tests.IndexShard
                             IdAttributes: new Dictionary<string, AttributeValue>
                             {
                                 {"Id", AttributeValue(0)},
+                                {"SplitA", AttributeValue(false)},
+                                {"SplitZ", AttributeValue(false)},
                             })),
                 });
 
@@ -616,10 +618,11 @@ namespace Vektonn.Tests.IndexShard
                 new DataSourceMeta(
                     VectorDimension,
                     VectorsAreSparse: true,
-                    IdAttributes: indexIdAttributes.Select(t => t.Key).ToHashSet(),
+                    PermanentAttributes: indexIdAttributes.Select(t => t.Key).Concat(splitAttributes.Select(t => t.Key)).ToHashSet(),
                     DataSourceShardingMeta: new DataSourceShardingMeta(new Dictionary<string, IDataSourceAttributeValueSharder>()),
                     AttributeValueTypes: indexIdAttributes.Concat(splitAttributes).Concat(indexPayloadAttributes).ToDictionary(t => t.Key, t => t.Type)),
                 IndexAlgorithm: Algorithms.SparnnIndexCosine,
+                IdAttributes: indexIdAttributes.Select(t => t.Key).ToHashSet(),
                 SplitAttributes: splitAttributes.Select(t => t.Key).ToHashSet(),
                 IndexShardsMap: new IndexShardsMapMeta(new Dictionary<string, IndexShardMeta>()));
         }

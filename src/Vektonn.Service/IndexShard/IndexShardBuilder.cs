@@ -115,13 +115,14 @@ namespace Vektonn.Service.IndexShard
                 DataSourceMeta: new DataSourceMeta(
                     vectorDimension,
                     VectorsAreSparse: typeof(TVector) == typeof(SparseVector),
-                    IdAttributes: new HashSet<string> {IdAttributeKey},
+                    PermanentAttributes: new HashSet<string> {IdAttributeKey},
                     DataSourceShardingMeta: new DataSourceShardingMeta(new Dictionary<string, IDataSourceAttributeValueSharder>()),
                     AttributeValueTypes: new Dictionary<string, AttributeValueTypeCode>
                     {
                         {IdAttributeKey, AttributeValueTypeCode.Int64}
                     }),
                 IndexAlgorithm: indexAlgorithm,
+                IdAttributes: new HashSet<string> {IdAttributeKey},
                 SplitAttributes: new HashSet<string>(),
                 IndexShardsMap: new IndexShardsMapMeta(new Dictionary<string, IndexShardMeta>())
             );

@@ -14,7 +14,7 @@ namespace Vektonn.DataSource.Kafka
     // todo (andrew, 25.09.2021): test
     public class KafkaDataSourceProducer : IDisposable, IDataSourceProducer
     {
-        private readonly ConcurrentDictionary<DataSourceId, string[]> idAttributeKeysByDataSourceId = new();
+        private readonly ConcurrentDictionary<DataSourceId, string[]> permanentAttributeKeysByDataSourceId = new();
         private readonly KafkaProducer kafkaProducer;
 
         public KafkaDataSourceProducer(ILog log, KafkaProducerConfig kafkaProducerConfig)
@@ -47,11 +47,11 @@ namespace Vektonn.DataSource.Kafka
 
         private Message<byte[], byte[]> SerializeToKafkaMessage(DataSourceDescriptor dataSource, InputDataPointOrTombstone dataPointOrTombstone)
         {
-            var dataPointId = GetDataPointId(dataSource, dataPointOrTombstone);
+            var permanentAttributes = GetPermanentAttributes(dataSource, dataPointOrTombstone);
 
             var kafkaMessage = new Message<byte[], byte[]>
             {
-                Key = AttributeValueSerializer.Serialize(dataPointId),
+                Key = AttributeValueSerializer.Serialize(permanentAttributes),
                 Timestamp = Timestamp.Default
             };
 
@@ -61,22 +61,22 @@ namespace Vektonn.DataSource.Kafka
             return kafkaMessage;
         }
 
-        private AttributeValue[] GetDataPointId(DataSourceDescriptor dataSource, InputDataPointOrTombstone dataPointOrTombstone)
+        private AttributeValue[] GetPermanentAttributes(DataSourceDescriptor dataSource, InputDataPointOrTombstone dataPointOrTombstone)
         {
-            var idAttributeKeys = idAttributeKeysByDataSourceId.GetOrAdd(
+            var permanentAttributeKeys = permanentAttributeKeysByDataSourceId.GetOrAdd(
                 dataSource.Id,
                 _ =>
                 {
-                    var idAttributes = dataSource.Meta.IdAttributes.OrderBy(x => x, StringComparer.InvariantCulture).ToArray();
-                    if (!idAttributes.Any())
-                        throw new InvalidOperationException($"{nameof(idAttributes)} is empty for dataSource: {dataSource.ToPrettyJson()}");
+                    var permanentAttributes = dataSource.Meta.PermanentAttributes.OrderBy(x => x, StringComparer.InvariantCulture).ToArray();
+                    if (!permanentAttributes.Any())
+                        throw new InvalidOperationException($"{nameof(permanentAttributes)} is empty for dataSource: {dataSource.ToPrettyJson()}");
 
-                    return idAttributes;
+                    return permanentAttributes;
                 });
 
             var attributeValues = dataPointOrTombstone.GetAttributes();
 
-            return idAttributeKeys.Select(key => attributeValues[key]).ToArray();
+            return permanentAttributeKeys.Select(key => attributeValues[key]).ToArray();
         }
     }
 }

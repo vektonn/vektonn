@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Vektonn.Contracts.Sharding.DataSource
 {
     public record DataSourceShardingMeta(Dictionary<string, IDataSourceAttributeValueSharder> ShardersByAttributeKey)
     {
-        public HashSet<string> ShardAttributes => ShardersByAttributeKey.Keys.ToHashSet();
-
         // todo (andrew, 09.09.2021): test
         public Dictionary<string, ulong> GetDataSourceShardingCoordinates(Dictionary<string, AttributeValue> attributes)
         {

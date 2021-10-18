@@ -183,10 +183,11 @@ namespace Vektonn.Tests.IndexShard
                 new DataSourceMeta(
                     VectorDimension,
                     VectorsAreSparse: true,
-                    IdAttributes: indexIdAttributes.Select(t => t.Key).ToHashSet(),
+                    PermanentAttributes: indexIdAttributes.Select(t => t.Key).ToHashSet(),
                     DataSourceShardingMeta: new DataSourceShardingMeta(new Dictionary<string, IDataSourceAttributeValueSharder>()),
                     AttributeValueTypes: indexIdAttributes.Concat(indexPayloadAttributes).ToDictionary(t => t.Key, t => t.Type)),
                 IndexAlgorithm: Algorithms.SparnnIndexCosine,
+                IdAttributes: indexIdAttributes.Select(t => t.Key).ToHashSet(),
                 SplitAttributes: new HashSet<string>(),
                 IndexShardsMap: new IndexShardsMapMeta(new Dictionary<string, IndexShardMeta>()));
         }

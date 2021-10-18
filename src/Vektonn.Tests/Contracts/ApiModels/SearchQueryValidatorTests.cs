@@ -78,6 +78,7 @@ namespace Vektonn.Tests.Contracts.ApiModels
             return new IndexMeta(
                 DataSourceMeta(vectorsAreSparse: false, attributeValueTypes),
                 Algorithms.FaissIndexFlatIP,
+                IdAttributes: new HashSet<string>(),
                 SplitAttributes: attributeValueTypes.Keys.ToHashSet(),
                 IndexShardsMap: new IndexShardsMapMeta(new Dictionary<string, IndexShardMeta>()));
         }
@@ -89,6 +90,7 @@ namespace Vektonn.Tests.Contracts.ApiModels
                     vectorsAreSparse: true,
                     attributeValueTypes: new Dictionary<string, AttributeValueTypeCode>()),
                 Algorithms.SparnnIndexCosine,
+                IdAttributes: new HashSet<string>(),
                 SplitAttributes: new HashSet<string>(),
                 IndexShardsMap: new IndexShardsMapMeta(new Dictionary<string, IndexShardMeta>()));
         }
@@ -98,7 +100,7 @@ namespace Vektonn.Tests.Contracts.ApiModels
             return new DataSourceMeta(
                 TestVectorDimension,
                 vectorsAreSparse,
-                IdAttributes: new HashSet<string>(),
+                PermanentAttributes: new HashSet<string>(),
                 DataSourceShardingMeta: new DataSourceShardingMeta(new Dictionary<string, IDataSourceAttributeValueSharder>()),
                 attributeValueTypes
             );

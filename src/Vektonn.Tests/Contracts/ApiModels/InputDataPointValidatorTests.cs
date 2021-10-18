@@ -128,7 +128,7 @@ namespace Vektonn.Tests.Contracts.ApiModels
             return new DataSourceMeta(
                 TestVectorDimension,
                 vectorsAreSparse,
-                IdAttributes: new HashSet<string>(),
+                PermanentAttributes: attributeValueSharders.Keys.ToHashSet(),
                 DataSourceShardingMeta: new DataSourceShardingMeta(attributeValueSharders),
                 AttributeValueTypes: knownAttributes.ToDictionary(t => t.Key, t => t.Type)
             );

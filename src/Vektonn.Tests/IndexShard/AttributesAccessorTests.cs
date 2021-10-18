@@ -256,10 +256,11 @@ namespace Vektonn.Tests.IndexShard
                 new DataSourceMeta(
                     VectorDimension: 32,
                     VectorsAreSparse: false,
-                    IdAttributes: indexIdAttributes.Select(t => t.Key).ToHashSet(),
+                    PermanentAttributes: indexIdAttributes.Select(t => t.Key).Concat(splitAttributes.Select(t => t.Key)).ToHashSet(),
                     DataSourceShardingMeta: new DataSourceShardingMeta(new Dictionary<string, IDataSourceAttributeValueSharder>()),
                     AttributeValueTypes: indexIdAttributes.Concat(splitAttributes).Concat(indexPayloadAttributes).ToDictionary(t => t.Key, t => t.Type)),
                 IndexAlgorithm: Algorithms.FaissIndexFlatL2,
+                IdAttributes: indexIdAttributes.Select(t => t.Key).ToHashSet(),
                 SplitAttributes: splitAttributes.Select(t => t.Key).ToHashSet(),
                 IndexShardsMap: new IndexShardsMapMeta(new Dictionary<string, IndexShardMeta>()));
         }

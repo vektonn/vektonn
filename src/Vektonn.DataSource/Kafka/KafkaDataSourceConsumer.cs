@@ -18,7 +18,7 @@ namespace Vektonn.DataSource.Kafka
     {
         private readonly IndexShardMeta indexShardMeta;
         private readonly Action<IReadOnlyList<DataPointOrTombstone<TVector>>> updateIndexShard;
-        private readonly string[] idAttributeKeys;
+        private readonly string[] permanentAttributeKeys;
         private readonly Func<InputDataPoint, TVector> decodeVector;
         private readonly KafkaConsumer kafkaConsumer;
 
@@ -32,7 +32,7 @@ namespace Vektonn.DataSource.Kafka
             this.indexShardMeta = indexShardMeta;
             this.updateIndexShard = updateIndexShard;
 
-            idAttributeKeys = dataSource.Meta.IdAttributes.OrderBy(x => x, StringComparer.InvariantCulture).ToArray();
+            permanentAttributeKeys = dataSource.Meta.PermanentAttributes.OrderBy(x => x, StringComparer.InvariantCulture).ToArray();
 
             decodeVector = dataSource.Meta.VectorsAreSparse
                 ? inputDataPoint => (TVector)(IVector)new SparseVector(dataSource.Meta.VectorDimension, inputDataPoint.VectorCoordinates, inputDataPoint.VectorCoordinateIndices!)
@@ -61,13 +61,13 @@ namespace Vektonn.DataSource.Kafka
 
             foreach (var kafkaMessage in kafkaMessages)
             {
-                var idAttributes = GetIdAttributes(kafkaMessage.Key);
+                var permanentAttributes = GetPermanentAttributes(kafkaMessage.Key);
 
-                if (!indexShardMeta.Contains(idAttributes))
+                if (!indexShardMeta.Contains(permanentAttributes))
                     continue;
 
                 if (kafkaMessage.Value == null)
-                    dataPointOrTombstones.Add(new DataPointOrTombstone<TVector>(new Tombstone(idAttributes)));
+                    dataPointOrTombstones.Add(new DataPointOrTombstone<TVector>(new Tombstone(permanentAttributes)));
                 else
                 {
                     var dataPoint = GetDataPoint(kafkaMessage.Value);
@@ -78,13 +78,13 @@ namespace Vektonn.DataSource.Kafka
             updateIndexShard(dataPointOrTombstones);
         }
 
-        private Dictionary<string, AttributeValue> GetIdAttributes(byte[] kafkaMessageKey)
+        private Dictionary<string, AttributeValue> GetPermanentAttributes(byte[] kafkaMessageKey)
         {
-            var idAttributeValues = AttributeValueSerializer.Deserialize(kafkaMessageKey);
-            if (idAttributeValues.Length != idAttributeKeys.Length)
-                throw new InvalidOperationException($"values.Length ({idAttributeValues.Length}) != keys.Length {idAttributeKeys.Length}");
+            var permanentAttributeValues = AttributeValueSerializer.Deserialize(kafkaMessageKey);
+            if (permanentAttributeValues.Length != permanentAttributeKeys.Length)
+                throw new InvalidOperationException($"values.Length ({permanentAttributeValues.Length}) != keys.Length {permanentAttributeKeys.Length}");
 
-            return idAttributeKeys.Zip(idAttributeValues).ToDictionary(t => t.First, t => t.Second);
+            return permanentAttributeKeys.Zip(permanentAttributeValues).ToDictionary(t => t.First, t => t.Second);
         }
 
         private DataPoint<TVector> GetDataPoint(byte[] kafkaMessageValue)

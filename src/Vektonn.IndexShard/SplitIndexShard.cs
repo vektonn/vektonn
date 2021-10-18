@@ -20,7 +20,6 @@ namespace Vektonn.IndexShard
         private readonly IndexMeta indexMeta;
         private readonly IIndexStoreFactory<byte[], byte[]> indexStoreFactory;
         private readonly AttributesAccessor attributesAccessor;
-        private readonly bool allSplitAttributesAreInIdAttributes;
 
         private int processedDataPointsTotalCount;
 
@@ -34,7 +33,6 @@ namespace Vektonn.IndexShard
             this.indexStoreFactory = indexStoreFactory;
 
             attributesAccessor = new AttributesAccessor(indexMeta);
-            allSplitAttributesAreInIdAttributes = !indexMeta.SplitAttributes.Except(indexMeta.IdAttributes).Any();
         }
 
         public long DataPointsCount => indexesBySplitKey.Values.Sum(x => x.DataPointsCount);
@@ -44,10 +42,7 @@ namespace Vektonn.IndexShard
             if (!dataPointOrTombstones.Any())
                 return;
 
-            if (allSplitAttributesAreInIdAttributes || dataPointOrTombstones.All(x => x.Tombstone == null))
-                UpdateSplitBySplit(dataPointOrTombstones);
-            else
-                UpdateForInefficientIndexSchema(dataPointOrTombstones);
+            UpdateSplitBySplit(dataPointOrTombstones);
 
             processedDataPointsTotalCount += dataPointOrTombstones.Count;
             log.Info(
@@ -76,36 +71,6 @@ namespace Vektonn.IndexShard
         {
             foreach (var indexWithLocker in indexesBySplitKey.Values)
                 indexWithLocker.Dispose();
-        }
-
-        private void UpdateForInefficientIndexSchema(IReadOnlyList<DataPointOrTombstone<TVector>> batch)
-        {
-            var homogeneousBatch = new List<DataPointOrTombstone<TVector>>();
-            for (var i = 0; i < batch.Count; i++)
-            {
-                homogeneousBatch.Add(batch[i]);
-
-                if (i + 1 == batch.Count ||
-                    batch[i].Tombstone == null && batch[i + 1].Tombstone != null ||
-                    batch[i].Tombstone != null && batch[i + 1].Tombstone == null)
-                {
-                    UpdateWithHomogeneousBatch(homogeneousBatch);
-                    homogeneousBatch.Clear();
-                }
-            }
-        }
-
-        private void UpdateWithHomogeneousBatch(List<DataPointOrTombstone<TVector>> homogeneousBatch)
-        {
-            if (homogeneousBatch.Last().Tombstone == null)
-                UpdateSplitBySplit(homogeneousBatch.ToArray());
-            else
-            {
-                log.Warn($"Scanning all splits to process {homogeneousBatch.Count} tombstones for index with non-optimal schema");
-
-                foreach (var (splitKey, indexWithLocker) in indexesBySplitKey)
-                    UpdateIndexForSplitKey(splitKey, indexWithLocker, homogeneousBatch);
-            }
         }
 
         private void UpdateSplitBySplit(IReadOnlyList<DataPointOrTombstone<TVector>> batch)
