@@ -18,17 +18,17 @@ If you wish some feature to be added please contact us on [Slack channel](http:/
 3. Deploy to Kubernetes
     - [ ] "Static" helm charts
     - [ ] Deployment artifacts publication
-        - [ ] Docker images
-        - [ ] Helm charts
+      - [ ] Docker images
+      - [ ] Helm charts
     - [ ] Dynamic Index Scheduler
-        - [ ] Desired Index State Storage
-        - [ ] Index Scheduler Daemon
-        - [ ] Index Management API
+      - [ ] Desired Index State Storage
+      - [ ] Index Scheduler Daemon
+      - [ ] Index Management API
 4. Telemetry
-   - [ ] Logs
-   - [ ] Metrics
-       - [ ] Prometheus 
-       - [ ] ... (Tell us what system you use)
+    - [ ] Logs
+    - [ ] Metrics
+      - [ ] Prometheus 
+      - [ ] ... (Tell us what system you use)
 5. Integrations with other MLOps products
-   - [ ] Kubeflow?
-   - [ ] ... (Tell us what integration you need)
+    - [ ] Kubeflow?
+    - [ ] ... (Tell us what integration you need)
