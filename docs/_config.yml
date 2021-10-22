@@ -3,11 +3,10 @@ title: Vektonn
 # social links
 github_username:   # DO NOT include the @ character, or else the build will fail!
 
-show_excerpts: true # set to false to remove excerpts on the homepage
-
 remote_theme: pmarsceill/just-the-docs
 
-# Footer content
-# Back to top link
-back_to_top: true
-back_to_top_text: "Back to top"
+# just-the-docs theme configuration
+color_scheme: nil
+markdown: kramdown
+search_enabled: false
+back_to_top: false
