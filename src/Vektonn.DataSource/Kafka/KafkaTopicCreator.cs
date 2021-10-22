@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Confluent.Kafka;
 using Confluent.Kafka.Admin;
@@ -55,7 +56,7 @@ namespace Vektonn.DataSource.Kafka
             }
             catch (CreateTopicsException e)
             {
-                if (e.Error.Code != ErrorCode.TopicAlreadyExists)
+                if (e.Results.Single().Error.Code != ErrorCode.TopicAlreadyExists)
                     throw;
 
                 log.Warn(e, $"Topic '{topicName}' already exists");
