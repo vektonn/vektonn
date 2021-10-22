@@ -7,6 +7,4 @@ remote_theme: pmarsceill/just-the-docs
 
 # just-the-docs theme configuration
 color_scheme: nil
-markdown: kramdown
 search_enabled: false
-back_to_top: false
