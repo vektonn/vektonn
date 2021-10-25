@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Confluent.Kafka;
-using Vektonn.Contracts;
 using Vektonn.SharedImpl.BinarySerialization;
+using Vektonn.SharedImpl.Contracts;
 using Vektonn.SharedImpl.Json;
 using Vostok.Logging.Abstractions;
 

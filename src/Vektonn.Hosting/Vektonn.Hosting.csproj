@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Vostok.Applications.AspNetCore" Version="0.2.15" />
+    <PackageReference Include="Vostok.Hosting" Version="0.3.30" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vektonn.ApiContracts\Vektonn.ApiContracts.csproj" />
+  </ItemGroup>
+
+</Project>

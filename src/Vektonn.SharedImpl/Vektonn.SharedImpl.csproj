@@ -11,11 +11,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Farmhash.Sharp" Version="0.9.0" />
+    <PackageReference Include="FluentValidation" Version="10.3.4" />
     <PackageReference Include="protobuf-net" Version="3.0.101" />
+    <PackageReference Include="Vektonn.Index" Version="0.3.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Vektonn.Contracts\Vektonn.Contracts.csproj" />
+    <ProjectReference Include="..\Vektonn.ApiContracts\Vektonn.ApiContracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>

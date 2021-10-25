@@ -1,6 +1,6 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Vektonn.Contracts.ApiModels;
+using Vektonn.ApiContracts;
 using Vektonn.Service.IndexShard;
 
 namespace Vektonn.Service.Controllers

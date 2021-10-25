@@ -5,11 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using MoreLinq;
-using Vektonn.Contracts;
-using Vektonn.Contracts.Sharding.DataSource;
-using Vektonn.Contracts.Sharding.Index;
+using Vektonn.Hosting;
 using Vektonn.Index;
 using Vektonn.IndexShard;
+using Vektonn.SharedImpl.Contracts;
+using Vektonn.SharedImpl.Contracts.Sharding.DataSource;
+using Vektonn.SharedImpl.Contracts.Sharding.Index;
 using Vostok.Logging.Abstractions;
 
 namespace Vektonn.Service.IndexShard

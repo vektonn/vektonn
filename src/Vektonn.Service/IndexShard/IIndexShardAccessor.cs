@@ -1,6 +1,6 @@
-using Vektonn.Contracts;
-using Vektonn.Contracts.ApiModels;
+using Vektonn.ApiContracts;
 using Vektonn.IndexShard;
+using Vektonn.SharedImpl.Contracts;
 
 namespace Vektonn.Service.IndexShard
 {

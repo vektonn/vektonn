@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>Vektonn.ApiClient</PackageId>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Vostok.ClusterClient.Core" Version="0.1.37" />
+    <PackageReference Include="Vostok.ClusterClient.Tracing" Version="0.1.5" />
+    <PackageReference Include="Vostok.ClusterClient.Transport" Version="0.1.21" />
+    <PackageReference Include="Vostok.Logging.Tracing" Version="0.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vektonn.ApiContracts\Vektonn.ApiContracts.csproj" />
+  </ItemGroup>
+
+</Project>

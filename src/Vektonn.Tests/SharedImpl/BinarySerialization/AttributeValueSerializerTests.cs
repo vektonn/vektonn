@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
-using Vektonn.Contracts;
 using Vektonn.SharedImpl.BinarySerialization;
+using Vektonn.SharedImpl.Contracts;
 
 namespace Vektonn.Tests.SharedImpl.BinarySerialization
 {

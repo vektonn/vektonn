@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using ProtoBuf;
 using ProtoBuf.Meta;
-using Vektonn.Contracts;
+using Vektonn.SharedImpl.Contracts;
 
 namespace Vektonn.SharedImpl.BinarySerialization
 {

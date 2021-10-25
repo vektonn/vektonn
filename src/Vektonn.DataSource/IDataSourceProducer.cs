@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Vektonn.Contracts;
+using Vektonn.SharedImpl.Contracts;
 
 namespace Vektonn.DataSource
 {

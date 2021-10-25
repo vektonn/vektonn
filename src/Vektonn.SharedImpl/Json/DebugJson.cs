@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Vektonn.ApiContracts.Json;
 
 namespace Vektonn.SharedImpl.Json
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Vektonn.Contracts;
 using Vektonn.Index;
+using Vektonn.SharedImpl.Contracts;
 
 namespace Vektonn.IndexShard
 {

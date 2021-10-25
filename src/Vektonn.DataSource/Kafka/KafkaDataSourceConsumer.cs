@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Confluent.Kafka;
-using Vektonn.Contracts;
-using Vektonn.Contracts.Sharding.Index;
 using Vektonn.Index;
 using Vektonn.SharedImpl.BinarySerialization;
+using Vektonn.SharedImpl.Contracts;
+using Vektonn.SharedImpl.Contracts.Sharding.Index;
 using Vostok.Logging.Abstractions;
 
 namespace Vektonn.DataSource.Kafka

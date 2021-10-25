@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Vektonn.Hosting\Vektonn.Hosting.csproj" />
     <ProjectReference Include="..\Vektonn.IndexShard\Vektonn.IndexShard.csproj" />
   </ItemGroup>
 

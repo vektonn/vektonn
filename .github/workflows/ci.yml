@@ -34,8 +34,11 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release
 
-    - name: Pack Vektonn.Contracts
-      run: dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./Vektonn.Contracts/Vektonn.Contracts.csproj
+    - name: Pack Vektonn.ApiContracts
+      run: dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./Vektonn.ApiContracts/Vektonn.ApiContracts.csproj
+
+    - name: Pack Vektonn.ApiClient
+      run: dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./Vektonn.ApiClient/Vektonn.ApiClient.csproj
 
     - name: Pack Vektonn.SharedImpl
       run: dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./Vektonn.SharedImpl/Vektonn.SharedImpl.csproj

@@ -6,13 +6,15 @@
 
   <ItemGroup>
     <PackageReference Include="FakeItEasy" Version="7.2.0" />
-    <PackageReference Include="FluentAssertions" Version="6.1.0" />
+    <PackageReference Include="FluentAssertions" Version="6.2.0" />
     <PackageReference Include="NUnit" Version="3.13.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="Vostok.Logging.Console" Version="1.0.6" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Vektonn.ApiClient\Vektonn.ApiClient.csproj" />
     <ProjectReference Include="..\Vektonn.DataSource\Vektonn.DataSource.csproj" />
     <ProjectReference Include="..\Vektonn.IndexShard\Vektonn.IndexShard.csproj" />
   </ItemGroup>

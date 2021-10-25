@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
-using Vektonn.Contracts;
-using Vektonn.Contracts.ApiModels;
-using Vektonn.Contracts.ApiModels.Validation;
+using Vektonn.ApiContracts;
 using Vektonn.Index;
+using Vektonn.SharedImpl.ApiContracts;
+using Vektonn.SharedImpl.ApiContracts.Validation;
+using Vektonn.SharedImpl.Contracts;
 using Vostok.Logging.Abstractions;
 
 namespace Vektonn.IndexShard
@@ -54,7 +55,7 @@ namespace Vektonn.IndexShard
         public SearchResultDto[] ExecuteSearchQuery(SearchQueryDto query)
         {
             var searchQuery = new SearchQuery<TVector>(
-                query.SplitFilter?.ToDictionary(x => x.Key, x => x.Value),
+                query.SplitFilter?.ToDictionary(x => x.Key, x => x.Value.ToAttributeValue()),
                 query.QueryVectors.Select(x => (TVector)x.ToVector(IndexMeta.VectorDimension)).ToArray(),
                 query.K);
 
@@ -67,7 +68,7 @@ namespace Vektonn.IndexShard
                         x.NearestDataPoints.Select(
                                 p => new FoundDataPointDto(
                                     p.Vector.ToVectorDto(),
-                                    p.Attributes.Select(t => new AttributeDto(t.Key, t.Value)).ToArray(),
+                                    p.Attributes.Select(t => new AttributeDto(t.Key, t.Value.ToAttributeValueDto())).ToArray(),
                                     p.Distance)
                             )
                             .ToArray())

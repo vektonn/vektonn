@@ -2,14 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using Vektonn.Contracts;
-using Vektonn.Contracts.ApiModels;
-using Vektonn.Contracts.Sharding.DataSource;
-using Vektonn.Contracts.Sharding.Index;
+using Vektonn.ApiContracts;
 using Vektonn.Index;
 using Vektonn.IndexShard;
+using Vektonn.SharedImpl.ApiContracts;
+using Vektonn.SharedImpl.Contracts;
+using Vektonn.SharedImpl.Contracts.Sharding.DataSource;
+using Vektonn.SharedImpl.Contracts.Sharding.Index;
 using Vostok.Logging.Abstractions;
-using static Vektonn.Tests.Contracts.ApiModels.AttributeDtoTestHelpers;
+using static Vektonn.Tests.SharedImpl.ApiContracts.AttributeDtoTestHelpers;
 using static Vektonn.Tests.IndexShard.AttributeValueTestHelpers;
 
 namespace Vektonn.Tests.IndexShard

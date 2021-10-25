@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using ProtoBuf;
-using Vektonn.Contracts;
+using Vektonn.SharedImpl.Contracts;
 
 namespace Vektonn.SharedImpl.BinarySerialization
 {

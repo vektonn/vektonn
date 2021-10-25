@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Vektonn.ApiContracts.Json;
+using Vektonn.Hosting;
 using Vektonn.Service.IndexShard;
 using Vektonn.SharedImpl.Json;
 using Vostok.Logging.Abstractions;
