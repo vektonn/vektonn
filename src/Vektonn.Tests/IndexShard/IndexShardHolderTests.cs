@@ -181,7 +181,9 @@ namespace Vektonn.Tests.IndexShard
             (string Key, AttributeValueTypeCode Type)[] indexPayloadAttributes)
         {
             return new IndexMeta(
+                new IndexId(Name: "test", Version: "1.0"),
                 new DataSourceMeta(
+                    new DataSourceId(Name: "test", Version: "1.0"),
                     VectorDimension,
                     VectorsAreSparse: true,
                     PermanentAttributes: indexIdAttributes.Select(t => t.Key).ToHashSet(),

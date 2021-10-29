@@ -5,6 +5,7 @@ using Vektonn.SharedImpl.Contracts.Sharding.DataSource;
 namespace Vektonn.SharedImpl.Contracts
 {
     public record DataSourceMeta(
+        DataSourceId Id,
         int VectorDimension,
         bool VectorsAreSparse,
         HashSet<string> PermanentAttributes,
@@ -15,7 +16,8 @@ namespace Vektonn.SharedImpl.Contracts
 
         public override string ToString()
         {
-            return $"{nameof(VectorDimension)} = {VectorDimension}, " +
+            return $"{nameof(Id)} = {Id}, " +
+                   $"{nameof(VectorDimension)} = {VectorDimension}, " +
                    $"{nameof(VectorsAreSparse)} = {VectorsAreSparse}, " +
                    $"{nameof(PermanentAttributes)} = {string.Join(";", PermanentAttributes)}, " +
                    $"{nameof(ShardAttributes)} = {string.Join(";", ShardAttributes)}, " +

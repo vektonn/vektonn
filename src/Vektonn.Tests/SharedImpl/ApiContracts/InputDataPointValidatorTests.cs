@@ -126,6 +126,7 @@ namespace Vektonn.Tests.SharedImpl.ApiContracts
             );
 
             return new DataSourceMeta(
+                new DataSourceId(Name: "test", Version: "1.0"),
                 TestVectorDimension,
                 vectorsAreSparse,
                 PermanentAttributes: attributeValueSharders.Keys.ToHashSet(),

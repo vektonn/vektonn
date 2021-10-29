@@ -76,6 +76,7 @@ namespace Vektonn.Tests.SharedImpl.ApiContracts
         {
             var attributeValueTypes = (splitAttributes ?? Array.Empty<(string Key, AttributeValueTypeCode Type)>()).ToDictionary(t => t.Key, t => t.Type);
             return new IndexMeta(
+                new IndexId(Name: "test", Version: "1.0"),
                 DataSourceMeta(vectorsAreSparse: false, attributeValueTypes),
                 Algorithms.FaissIndexFlatIP,
                 IdAttributes: new HashSet<string>(),
@@ -86,6 +87,7 @@ namespace Vektonn.Tests.SharedImpl.ApiContracts
         private static IndexMeta IndexMetaSparse()
         {
             return new IndexMeta(
+                new IndexId(Name: "test", Version: "1.0"),
                 DataSourceMeta(
                     vectorsAreSparse: true,
                     attributeValueTypes: new Dictionary<string, AttributeValueTypeCode>()),
@@ -98,6 +100,7 @@ namespace Vektonn.Tests.SharedImpl.ApiContracts
         private static DataSourceMeta DataSourceMeta(bool vectorsAreSparse, Dictionary<string, AttributeValueTypeCode> attributeValueTypes)
         {
             return new DataSourceMeta(
+                new DataSourceId(Name: "test", Version: "1.0"),
                 TestVectorDimension,
                 vectorsAreSparse,
                 PermanentAttributes: new HashSet<string>(),

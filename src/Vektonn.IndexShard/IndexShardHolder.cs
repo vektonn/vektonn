@@ -17,6 +17,7 @@ namespace Vektonn.IndexShard
         private readonly ILog log;
         private readonly SearchQueryValidator searchQueryValidator;
         private readonly IIndexShard<TVector> indexShard;
+        private bool isDisposed;
 
         public IndexShardHolder(ILog log, IndexMeta indexMeta)
         {
@@ -35,25 +36,47 @@ namespace Vektonn.IndexShard
 
         public IndexMeta IndexMeta { get; }
 
-        public long DataPointsCount => indexShard.DataPointsCount;
+        public long DataPointsCount
+        {
+            get
+            {
+                if (isDisposed)
+                    throw new ObjectDisposedException(nameof(indexShard));
+
+                return indexShard.DataPointsCount;
+            }
+        }
 
         public void Dispose()
         {
+            if (isDisposed)
+                return;
+
             indexShard.Dispose();
+            isDisposed = true;
         }
 
         public void UpdateIndexShard(IReadOnlyList<DataPointOrTombstone<TVector>> dataPointOrTombstones)
         {
+            if (isDisposed)
+                throw new ObjectDisposedException(nameof(indexShard));
+
             indexShard.UpdateIndex(dataPointOrTombstones);
         }
 
         public ValidationResult ValidateSearchQuery(SearchQueryDto query)
         {
+            if (isDisposed)
+                throw new ObjectDisposedException(nameof(indexShard));
+
             return searchQueryValidator.Validate(query);
         }
 
         public SearchResultDto[] ExecuteSearchQuery(SearchQueryDto query)
         {
+            if (isDisposed)
+                throw new ObjectDisposedException(nameof(indexShard));
+
             var searchQuery = new SearchQuery<TVector>(
                 query.SplitFilter?.ToDictionary(x => x.Key, x => x.Value.ToAttributeValue()),
                 query.QueryVectors.Select(x => (TVector)x.ToVector(IndexMeta.VectorDimension)).ToArray(),

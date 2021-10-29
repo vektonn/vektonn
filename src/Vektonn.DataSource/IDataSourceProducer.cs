@@ -6,6 +6,6 @@ namespace Vektonn.DataSource
 {
     public interface IDataSourceProducer
     {
-        Task ProduceAsync(DataSourceDescriptor dataSource, IReadOnlyList<InputDataPointOrTombstone> dataPointOrTombstones);
+        Task ProduceAsync(DataSourceMeta dataSourceMeta, IReadOnlyList<InputDataPointOrTombstone> dataPointOrTombstones);
     }
 }

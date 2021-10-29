@@ -7,7 +7,7 @@ using Vostok.Logging.Abstractions;
 namespace Vektonn.DataSource.Kafka
 {
     // todo (andrew, 25.09.2021): test
-    public class KafkaTopicPartitionOffsets
+    internal class KafkaTopicPartitionOffsets
     {
         private readonly Dictionary<TopicPartition, long> offsets;
 

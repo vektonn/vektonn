@@ -13,7 +13,7 @@ namespace Vektonn.DataSource.Kafka
 {
     // todo (andrew, 25.09.2021): test
     // todo (andrew, 01.10.2021): debug logs
-    public class KafkaConsumer : IDisposable
+    internal class KafkaConsumer : IDisposable
     {
         private readonly ILog log;
         private readonly KafkaConsumerConfig kafkaConsumerConfig;
@@ -31,6 +31,9 @@ namespace Vektonn.DataSource.Kafka
             string[] topicsToConsume,
             Action<IReadOnlyList<Message<byte[], byte[]>>> processKafkaMessages)
         {
+            if (!topicsToConsume.Any())
+                throw new InvalidOperationException($"{nameof(topicsToConsume)} is empty");
+
             this.log = log.ForContext<KafkaConsumer>();
             this.kafkaConsumerConfig = kafkaConsumerConfig;
             this.topicsToConsume = topicsToConsume;
@@ -77,8 +80,8 @@ namespace Vektonn.DataSource.Kafka
 
         public async Task RunAsync(CancellationToken cancellationToken)
         {
+            log.Info($"Subscribing to topics: {string.Join("; ", topicsToConsume)}");
             consumer.Subscribe(topicsToConsume);
-            log.Info($"Subscribed to topics: {string.Join("; ", topicsToConsume)}");
 
             var initializationTcs = new TaskCompletionSource();
 

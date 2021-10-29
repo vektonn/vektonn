@@ -1,0 +1,25 @@
+dataSourceId:
+  name: Samples.SparseVectors
+  version: 0.1
+indexAlgorithm: SparnnIndex.Cosine
+idAttributes: ["Id", "ShardId"]
+splitAttributes: ["SplitId"]
+shardsById:
+  ShardA:
+    shardsByAttributeKey:
+      ShardId:
+        numberOfShards: 6
+        shardValues: [0, 2, 4]
+    dataSourceShardsToConsume:
+    - shardingCoordinatesByAttributeKey:
+        ShardId: 0
+    - shardingCoordinatesByAttributeKey:
+        ShardId: 2
+  ShardB:
+    shardsByAttributeKey:
+      ShardId:
+        numberOfShards: 6
+        shardValues: [1, 3, 5]
+    dataSourceShardsToConsume:
+    - shardingCoordinatesByAttributeKey:
+        ShardId: 1

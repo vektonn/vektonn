@@ -21,25 +21,26 @@ namespace Vektonn.DataSource.Kafka
         private readonly string[] permanentAttributeKeys;
         private readonly Func<InputDataPoint, TVector> decodeVector;
         private readonly KafkaConsumer kafkaConsumer;
+        private bool isDisposed;
 
         public KafkaDataSourceConsumer(
             ILog log,
             KafkaConsumerConfig kafkaConsumerConfig,
-            DataSourceDescriptor dataSource,
+            DataSourceMeta dataSourceMeta,
             IndexShardMeta indexShardMeta,
             Action<IReadOnlyList<DataPointOrTombstone<TVector>>> updateIndexShard)
         {
             this.indexShardMeta = indexShardMeta;
             this.updateIndexShard = updateIndexShard;
 
-            permanentAttributeKeys = dataSource.Meta.PermanentAttributes.OrderBy(x => x, StringComparer.InvariantCulture).ToArray();
+            permanentAttributeKeys = dataSourceMeta.PermanentAttributes.OrderBy(x => x, StringComparer.InvariantCulture).ToArray();
 
-            decodeVector = dataSource.Meta.VectorsAreSparse
-                ? inputDataPoint => (TVector)(IVector)new SparseVector(dataSource.Meta.VectorDimension, inputDataPoint.VectorCoordinates, inputDataPoint.VectorCoordinateIndices!)
+            decodeVector = dataSourceMeta.VectorsAreSparse
+                ? inputDataPoint => (TVector)(IVector)new SparseVector(dataSourceMeta.VectorDimension, inputDataPoint.VectorCoordinates, inputDataPoint.VectorCoordinateIndices!)
                 : inputDataPoint => (TVector)(IVector)new DenseVector(inputDataPoint.VectorCoordinates);
 
             var topicsToConsume = indexShardMeta.DataSourceShardsToConsume
-                .Select(x => KafkaTopicNameFormatter.FormatTopicNameOrPattern(dataSource.Id, x.ShardingCoordinatesByAttributeKey))
+                .Select(x => KafkaTopicNameFormatter.FormatTopicNameOrPattern(dataSourceMeta.Id, x.ShardingCoordinatesByAttributeKey))
                 .ToArray();
 
             kafkaConsumer = new KafkaConsumer(log, kafkaConsumerConfig, topicsToConsume, ProcessKafkaMessages);
@@ -47,11 +48,18 @@ namespace Vektonn.DataSource.Kafka
 
         public void Dispose()
         {
+            if (isDisposed)
+                return;
+
             kafkaConsumer.Dispose();
+            isDisposed = true;
         }
 
         public Task RunAsync(CancellationToken cancellationToken)
         {
+            if (isDisposed)
+                throw new ObjectDisposedException(nameof(kafkaConsumer));
+
             return kafkaConsumer.RunAsync(cancellationToken);
         }
 

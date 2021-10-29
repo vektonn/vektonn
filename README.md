@@ -32,7 +32,7 @@ git clone https://github.com/vektonn/vektonn.git
 cd vektonn 
 ./docker-compose-up.sh
 ```
-After, a Swagger-specification for [Vektonn API](https://vektonn.github.io/vektonn/swagger/index.html) will be available at <http://localhost:8080>.
+After, a Swagger-specification for [Vektonn API](https://vektonn.github.io/vektonn/swagger/index.html) will be available at <http://localhost:8081>.
 
 ### Next Step 
 

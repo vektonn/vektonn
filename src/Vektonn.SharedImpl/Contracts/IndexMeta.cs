@@ -7,6 +7,7 @@ using Vektonn.SharedImpl.Contracts.Sharding.Index;
 namespace Vektonn.SharedImpl.Contracts
 {
     public record IndexMeta(
+        IndexId Id,
         DataSourceMeta DataSourceMeta,
         string IndexAlgorithm,
         HashSet<string> IdAttributes,
@@ -54,7 +55,8 @@ namespace Vektonn.SharedImpl.Contracts
 
         public override string ToString()
         {
-            return $"{nameof(IndexAlgorithm)} = {IndexAlgorithm}, " +
+            return $"{nameof(Id)} = {Id}, " +
+                   $"{nameof(IndexAlgorithm)} = {IndexAlgorithm}, " +
                    $"{nameof(IdAttributes)} = {string.Join(";", IdAttributes)}, " +
                    $"{nameof(SplitAttributes)} = {string.Join(";", SplitAttributes)}, " +
                    $"{nameof(ShardAttributes)} = {string.Join(";", ShardAttributes)}, " +

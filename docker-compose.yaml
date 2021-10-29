@@ -1,17 +1,70 @@
-version: "3.9"
+version: '3.8'
 
 services:
-  vektonn:
+  api:
     build:
       context: ./src
+      target: api-service
+    hostname: vektonn-api
+    container_name: vektonn-api
+    depends_on:
+    - kafka-broker
+    - index-shard
     ports:
-    - "8080:8080"
+    - 8081:8081
     volumes:
-    - .data-samples:/data
+    - ./samples/config:/config:ro
     environment:
-    # supported index algorithms: FaissIndex.Flat.L2, FaissIndex.Flat.IP, SparnnIndex.Cosine, SparnnIndex.JaccardBinary
-    - SH_INDEX_ALGORITHM=FaissIndex.Flat.L2
-    - SH_VECTORS_FILE_NAME=/data/vectors-df.csv
-    # supported vector file formats: VectorArrayJson, PandasDataFrameCsv, PandasDataFrameJson
-    - SH_VECTORS_FILE_FORMAT=PandasDataFrameCsv
-    - SH_VECTORS_METADATA_FILE_NAME=/data/vectors-metadata.json
+      VEKTONN_KAFKA_BOOTSTRAP_SERVERS: kafka-broker:29092
+
+  index-shard:
+    build:
+      context: ./src
+      target: index-shard-service
+    hostname: vektonn-index-shard
+    container_name: vektonn-index-shard
+    depends_on:
+    - kafka-broker
+    ports:
+    - 8082:8082
+    volumes:
+    - ./samples/config:/config:ro
+    environment:
+      VEKTONN_KAFKA_BOOTSTRAP_SERVERS: kafka-broker:29092
+      VEKTONN_INDEX_NAME: Samples.DenseVectors
+      VEKTONN_INDEX_VERSION: 0.1
+      VEKTONN_INDEX_SHARD_ID: SingleShard
+
+  kafka-broker:
+    image: confluentinc/cp-kafka:6.2.0
+    hostname: kafka-broker
+    container_name: kafka-broker
+    depends_on:
+    - zookeeper
+    ports:
+    - 29092:29092
+    - 9092:9092
+    - 9101:9101
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
+      KAFKA_OFFSETS_TOPIC_NUM_PARTITIONS: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_JMX_PORT: 9101
+      KAFKA_JMX_HOSTNAME: localhost
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:6.2.0
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+    - 2181:2181
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000

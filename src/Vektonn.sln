@@ -3,13 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.Service", "Vektonn.Service\Vektonn.Service.csproj", "{CDF47CAB-F284-43B3-BDCB-5A44701A9375}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{66E42814-877F-4D7F-9987-B16A5FF7CD3B}"
 	ProjectSection(SolutionItems) = preProject
 		..\docker-compose-up.sh = ..\docker-compose-up.sh
 		..\docker-compose.yaml = ..\docker-compose.yaml
 		Dockerfile = Dockerfile
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHubWorkflows", "GitHubWorkflows", "{20FA83E2-64BB-41B9-8A6C-13F0B634EF78}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\ci.yml = ..\.github\workflows\ci.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.Tests", "Vektonn.Tests\Vektonn.Tests.csproj", "{B3760941-CACB-46DD-AA0F-628C438839DB}"
@@ -36,10 +39,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CDF47CAB-F284-43B3-BDCB-5A44701A9375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CDF47CAB-F284-43B3-BDCB-5A44701A9375}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CDF47CAB-F284-43B3-BDCB-5A44701A9375}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CDF47CAB-F284-43B3-BDCB-5A44701A9375}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B3760941-CACB-46DD-AA0F-628C438839DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B3760941-CACB-46DD-AA0F-628C438839DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3760941-CACB-46DD-AA0F-628C438839DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -79,6 +78,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{20FA83E2-64BB-41B9-8A6C-13F0B634EF78} = {66E42814-877F-4D7F-9987-B16A5FF7CD3B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {421BF17D-8E97-42D8-84BA-A086E33BAF5B}

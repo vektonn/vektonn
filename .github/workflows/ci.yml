@@ -34,20 +34,8 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release
 
-    - name: Pack Vektonn.ApiContracts
-      run: dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./Vektonn.ApiContracts/Vektonn.ApiContracts.csproj
-
-    - name: Pack Vektonn.ApiClient
-      run: dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./Vektonn.ApiClient/Vektonn.ApiClient.csproj
-
-    - name: Pack Vektonn.SharedImpl
-      run: dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./Vektonn.SharedImpl/Vektonn.SharedImpl.csproj
-
-    - name: Pack Vektonn.DataSource
-      run: dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./Vektonn.DataSource/Vektonn.DataSource.csproj
-
-    - name: Pack Vektonn.IndexShard
-      run: dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./Vektonn.IndexShard/Vektonn.IndexShard.csproj
+    - name: Pack
+      run: dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./Vektonn.sln
 
     - name: Store nuget packages as artifacts
       uses: actions/upload-artifact@v2
