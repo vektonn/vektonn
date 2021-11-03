@@ -17,7 +17,9 @@ namespace Vektonn.Hosting
 
         private static string WalkDirectoryTree(string fileSystemObjectName, Func<string, bool> fileSystemObjectExists)
         {
-            var baseDirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+            var appDomainBaseDirectory = AppDomain.CurrentDomain.BaseDirectory ?? throw new InvalidOperationException("AppDomain.CurrentDomain.BaseDirectory is not set");
+
+            var baseDirectory = new DirectoryInfo(appDomainBaseDirectory);
             while (baseDirectory != null)
             {
                 var candidateName = Path.Combine(baseDirectory.FullName, fileSystemObjectName);
@@ -27,7 +29,7 @@ namespace Vektonn.Hosting
                 baseDirectory = baseDirectory.Parent;
             }
 
-            return fileSystemObjectName;
+            return Path.Combine(appDomainBaseDirectory, fileSystemObjectName);
         }
     }
 }

@@ -13,7 +13,7 @@ services:
     ports:
     - 8081:8081
     volumes:
-    - ./samples/config:/config:ro
+    - ./samples/config:/vektonn/config:ro
     environment:
       VEKTONN_KAFKA_BOOTSTRAP_SERVERS: kafka-broker:29092
 
@@ -28,7 +28,7 @@ services:
     ports:
     - 8082:8082
     volumes:
-    - ./samples/config:/config:ro
+    - ./samples/config:/vektonn/config:ro
     environment:
       VEKTONN_KAFKA_BOOTSTRAP_SERVERS: kafka-broker:29092
       VEKTONN_INDEX_NAME: Samples.DenseVectors

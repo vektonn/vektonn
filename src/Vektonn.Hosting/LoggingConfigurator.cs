@@ -12,7 +12,7 @@ namespace Vektonn.Hosting
 {
     public static class LoggingConfigurator
     {
-        public static ILog SetupLocalLog(string? hostingEnvironment = null)
+        public static ILog SetupLocalLog(string applicationName, string? hostingEnvironment = null)
         {
             SetupUnhandledExceptionLogging();
 
@@ -27,15 +27,21 @@ namespace Vektonn.Hosting
                         }));
             }
 
-            var appDomainBaseDirectory = AppDomain.CurrentDomain.BaseDirectory ?? throw new InvalidOperationException("AppDomain.CurrentDomain.BaseDirectory is not set");
             logs.Add(
                 new FileLog(
                     new FileLogSettings
                     {
                         Encoding = Encoding.UTF8,
-                        FileOpenMode = FileOpenMode.Rewrite,
-                        RollingStrategy = new RollingStrategyOptions {Type = RollingStrategyType.None},
-                        FilePath = Path.Combine(appDomainBaseDirectory, "logs", $"{DateTime.Now:yyyy-MM-dd.HH-mm-ss}.log"),
+                        FileOpenMode = FileOpenMode.Append,
+                        FilePath = Path.Combine(
+                            FileSystemHelpers.PatchDirectoryName("logs"),
+                            $"{applicationName}.{{RollingSuffix}}.{DateTime.Now:HH-mm-ss}.log"),
+                        RollingStrategy = new RollingStrategyOptions
+                        {
+                            Type = RollingStrategyType.ByTime,
+                            Period = RollingPeriod.Day,
+                            MaxFiles = 30
+                        }
                     }));
 
             var localLog = new CompositeLog(logs.ToArray())

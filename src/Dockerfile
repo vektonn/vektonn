@@ -74,29 +74,31 @@ RUN dotnet publish \
 # final stage/image for ApiService (target entrypoint with: docker build --target api-service)
 FROM $DOTNET_REPO/runtime-deps:$DOTNET_VERSION_TAG AS api-service
 EXPOSE 8081
-WORKDIR /app
-COPY --from=publish-api-service /app .
+WORKDIR /vektonn
+COPY --from=publish-api-service /app ./bin
+RUN mkdir ./logs
 ENV ASPNETCORE_ENVIRONMENT=Development \
     VEKTONN_HOSTING_ENVIRONMENT=dev \
     VEKTONN_HTTP_PORT=8081 \
     VEKTONN_KAFKA_BOOTSTRAP_SERVERS=localhost \
     VEKTONN_KAFKA_TOPIC_REPLICATION_FACTOR=1 \
-    VEKTONN_CONFIG_BASE_DIRECTORY=/config
-ENTRYPOINT ["./Vektonn.ApiService"]
+    VEKTONN_CONFIG_BASE_DIRECTORY=config
+ENTRYPOINT ["./bin/Vektonn.ApiService"]
 
 # final stage/image for IndexShardService (target entrypoint with: docker build --target index-shard-service)
 FROM $DOTNET_REPO/runtime-deps:$DOTNET_VERSION_TAG AS index-shard-service
 EXPOSE 8082
-WORKDIR /app
-COPY --from=publish-index-shard-service /app .
-COPY --from=faiss-lib /lib-faiss-native/ /lib-faiss-native/
-ENV LD_LIBRARY_PATH=/lib-faiss-native \
+WORKDIR /vektonn
+COPY --from=publish-index-shard-service /app ./bin
+COPY --from=faiss-lib /lib-faiss-native/ ./lib-faiss-native/
+RUN mkdir ./logs
+ENV LD_LIBRARY_PATH=/vektonn/lib-faiss-native \
     ASPNETCORE_ENVIRONMENT=Development \
     VEKTONN_HOSTING_ENVIRONMENT=dev \
     VEKTONN_HTTP_PORT=8082 \
     VEKTONN_KAFKA_BOOTSTRAP_SERVERS=localhost \
-    VEKTONN_CONFIG_BASE_DIRECTORY=/config \
+    VEKTONN_CONFIG_BASE_DIRECTORY=config \
     VEKTONN_INDEX_NAME= \
     VEKTONN_INDEX_VERSION= \
     VEKTONN_INDEX_SHARD_ID=
-ENTRYPOINT ["./Vektonn.IndexShardService"]
+ENTRYPOINT ["./bin/Vektonn.IndexShardService"]

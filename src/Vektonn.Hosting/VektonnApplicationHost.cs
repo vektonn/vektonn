@@ -23,7 +23,7 @@ namespace Vektonn.Hosting
 
         public VektonnApplicationHost(VektonnApplicationHostSettings hostSettings, TApplication application)
         {
-            localLog = LoggingConfigurator.SetupLocalLog(hostSettings.HostingEnvironment);
+            localLog = LoggingConfigurator.SetupLocalLog(application.ApplicationName, hostSettings.HostingEnvironment);
 
             var vostokHostSettings = new VostokHostSettings(
                 application,
