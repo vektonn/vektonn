@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.Service", "Vektonn.Service\Vektonn.Service.csproj", "{CDF47CAB-F284-43B3-BDCB-5A44701A9375}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{66E42814-877F-4D7F-9987-B16A5FF7CD3B}"
 	ProjectSection(SolutionItems) = preProject
 		..\docker-compose-up.sh = ..\docker-compose-up.sh
@@ -12,9 +10,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{66E4
 		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.Tests", "Vektonn.Tests\Vektonn.Tests.csproj", "{B3760941-CACB-46DD-AA0F-628C438839DB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHubWorkflows", "GitHubWorkflows", "{20FA83E2-64BB-41B9-8A6C-13F0B634EF78}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\ci.yml = ..\.github\workflows\ci.yml
+	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.Contracts", "Vektonn.Contracts\Vektonn.Contracts.csproj", "{182C7AB7-D415-4E12-A169-305062BA4B4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.Tests", "Vektonn.Tests\Vektonn.Tests.csproj", "{B3760941-CACB-46DD-AA0F-628C438839DB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.IndexShard", "Vektonn.IndexShard\Vektonn.IndexShard.csproj", "{47A6FB77-CC44-4DF3-A02A-879A70BCD2B4}"
 EndProject
@@ -22,24 +23,26 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.DataSource", "Vekto
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.SharedImpl", "Vektonn.SharedImpl\Vektonn.SharedImpl.csproj", "{422615C3-8700-4F71-A7E6-6794FDBFA83E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.IndexShardService", "Vektonn.IndexShardService\Vektonn.IndexShardService.csproj", "{BB477299-B442-4451-86EA-B15B166D3074}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.ApiContracts", "Vektonn.ApiContracts\Vektonn.ApiContracts.csproj", "{9E871F33-481C-42FF-8D89-EDBD898EDB7D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.ApiClient", "Vektonn.ApiClient\Vektonn.ApiClient.csproj", "{2EB01EB9-267C-4FEA-9F16-1C0DA343ED5A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.ApiService", "Vektonn.ApiService\Vektonn.ApiService.csproj", "{7CF92CDB-0B19-430A-81F1-74B775064153}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vektonn.Hosting", "Vektonn.Hosting\Vektonn.Hosting.csproj", "{939CFA53-9590-4620-AD0D-52128890DCC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CDF47CAB-F284-43B3-BDCB-5A44701A9375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CDF47CAB-F284-43B3-BDCB-5A44701A9375}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CDF47CAB-F284-43B3-BDCB-5A44701A9375}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CDF47CAB-F284-43B3-BDCB-5A44701A9375}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B3760941-CACB-46DD-AA0F-628C438839DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B3760941-CACB-46DD-AA0F-628C438839DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3760941-CACB-46DD-AA0F-628C438839DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3760941-CACB-46DD-AA0F-628C438839DB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{182C7AB7-D415-4E12-A169-305062BA4B4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{182C7AB7-D415-4E12-A169-305062BA4B4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{182C7AB7-D415-4E12-A169-305062BA4B4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{182C7AB7-D415-4E12-A169-305062BA4B4B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{47A6FB77-CC44-4DF3-A02A-879A70BCD2B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{47A6FB77-CC44-4DF3-A02A-879A70BCD2B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47A6FB77-CC44-4DF3-A02A-879A70BCD2B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -52,9 +55,32 @@ Global
 		{422615C3-8700-4F71-A7E6-6794FDBFA83E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{422615C3-8700-4F71-A7E6-6794FDBFA83E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{422615C3-8700-4F71-A7E6-6794FDBFA83E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB477299-B442-4451-86EA-B15B166D3074}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB477299-B442-4451-86EA-B15B166D3074}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB477299-B442-4451-86EA-B15B166D3074}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB477299-B442-4451-86EA-B15B166D3074}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E871F33-481C-42FF-8D89-EDBD898EDB7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E871F33-481C-42FF-8D89-EDBD898EDB7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E871F33-481C-42FF-8D89-EDBD898EDB7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E871F33-481C-42FF-8D89-EDBD898EDB7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EB01EB9-267C-4FEA-9F16-1C0DA343ED5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EB01EB9-267C-4FEA-9F16-1C0DA343ED5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EB01EB9-267C-4FEA-9F16-1C0DA343ED5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EB01EB9-267C-4FEA-9F16-1C0DA343ED5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CF92CDB-0B19-430A-81F1-74B775064153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CF92CDB-0B19-430A-81F1-74B775064153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CF92CDB-0B19-430A-81F1-74B775064153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CF92CDB-0B19-430A-81F1-74B775064153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{939CFA53-9590-4620-AD0D-52128890DCC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{939CFA53-9590-4620-AD0D-52128890DCC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{939CFA53-9590-4620-AD0D-52128890DCC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{939CFA53-9590-4620-AD0D-52128890DCC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{20FA83E2-64BB-41B9-8A6C-13F0B634EF78} = {66E42814-877F-4D7F-9987-B16A5FF7CD3B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {421BF17D-8E97-42D8-84BA-A086E33BAF5B}

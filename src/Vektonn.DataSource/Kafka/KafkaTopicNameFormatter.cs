@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using Vektonn.Contracts;
+using Vektonn.SharedImpl.Contracts;
 
 namespace Vektonn.DataSource.Kafka
 {

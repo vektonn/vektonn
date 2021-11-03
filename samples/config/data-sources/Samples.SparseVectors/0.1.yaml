@@ -1,0 +1,11 @@
+vectorDimension: 100500
+vectorsAreSparse: true
+attributeValueTypes:
+  Id: Int64
+  ShardId: Guid
+  SplitId: Bool
+  Payload: String
+permanentAttributes: ["Id", "ShardId", "SplitId"]
+shardersByAttributeKey:
+  ShardId:
+    numberOfShards: 7

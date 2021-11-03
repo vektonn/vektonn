@@ -9,78 +9,28 @@
     "version": "v1"
   },
   "paths": {
-    "/api/v1/Info": {
+    "/api/v1/search/{indexName}/{indexVersion}": {
       "get": {
         "tags": [
-          "Api"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/IndexInfoDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/IndexInfoDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/IndexInfoDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/Probe": {
-      "get": {
-        "tags": [
-          "Api"
+          "SearchApi"
         ],
         "parameters": [
           {
-            "name": "k",
-            "in": "query",
+            "name": "indexName",
+            "in": "path",
+            "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
+            }
+          },
+          {
+            "name": "indexVersion",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/SearchResultDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SearchResultDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SearchResultDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/Search": {
-      "get": {
-        "tags": [
-          "Api"
         ],
         "requestBody": {
           "content": {
@@ -135,7 +85,25 @@
       },
       "post": {
         "tags": [
-          "Api"
+          "SearchApi"
+        ],
+        "parameters": [
+          {
+            "name": "indexName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "indexVersion",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "requestBody": {
           "content": {
@@ -188,6 +156,64 @@
           }
         }
       }
+    },
+    "/api/v1/upload/{dataSourceName}/{dataSourceVersion}": {
+      "post": {
+        "tags": [
+          "UploadApi"
+        ],
+        "parameters": [
+          {
+            "name": "dataSourceName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dataSourceVersion",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/InputDataPointDto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/InputDataPointDto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/InputDataPointDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -199,12 +225,12 @@
             "type": "string"
           },
           "value": {
-            "$ref": "#/components/schemas/AttributeValue"
+            "$ref": "#/components/schemas/AttributeValueDto"
           }
         },
         "additionalProperties": false
       },
-      "AttributeValue": {
+      "AttributeValueDto": {
         "type": "object",
         "properties": {
           "string": {
@@ -268,22 +294,28 @@
         },
         "additionalProperties": false
       },
-      "IndexInfoDto": {
+      "InputDataPointDto": {
         "type": "object",
         "properties": {
-          "indexAlgorithm": {
-            "type": "string"
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AttributeDto"
+            }
           },
-          "vectorType": {
-            "type": "string"
+          "vector": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DenseVectorDto"
+              },
+              {
+                "$ref": "#/components/schemas/SparseVectorDto"
+              }
+            ],
+            "nullable": true
           },
-          "vectorDimension": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "dataPointsCount": {
-            "type": "integer",
-            "format": "int64"
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

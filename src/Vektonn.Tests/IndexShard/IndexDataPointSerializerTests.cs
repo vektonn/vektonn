@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using Vektonn.Contracts;
-using Vektonn.Contracts.Sharding.DataSource;
-using Vektonn.Contracts.Sharding.Index;
 using Vektonn.Index;
 using Vektonn.IndexShard;
 using Vektonn.SharedImpl.BinarySerialization;
+using Vektonn.SharedImpl.Contracts;
+using Vektonn.SharedImpl.Contracts.Sharding.DataSource;
+using Vektonn.SharedImpl.Contracts.Sharding.Index;
 using static Vektonn.Tests.IndexShard.AttributeValueTestHelpers;
 
 namespace Vektonn.Tests.IndexShard
@@ -199,7 +199,9 @@ namespace Vektonn.Tests.IndexShard
             (string Key, AttributeValueTypeCode Type)[] indexPayloadAttributes)
         {
             return new IndexMeta(
+                new IndexId(Name: "test", Version: "1.0"),
                 new DataSourceMeta(
+                    new DataSourceId(Name: "test", Version: "1.0"),
                     VectorDimension,
                     VectorsAreSparse: false,
                     PermanentAttributes: indexIdAttributes.Select(t => t.Key).Concat(splitAttributes.Select(t => t.Key)).ToHashSet(),

@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Confluent.Kafka;
-using Vektonn.Contracts;
 using Vektonn.SharedImpl.BinarySerialization;
+using Vektonn.SharedImpl.Contracts;
 using Vektonn.SharedImpl.Json;
 using Vostok.Logging.Abstractions;
 
@@ -16,6 +16,7 @@ namespace Vektonn.DataSource.Kafka
     {
         private readonly ConcurrentDictionary<DataSourceId, string[]> permanentAttributeKeysByDataSourceId = new();
         private readonly KafkaProducer kafkaProducer;
+        private bool isDisposed;
 
         public KafkaDataSourceProducer(ILog log, KafkaProducerConfig kafkaProducerConfig)
         {
@@ -24,30 +25,37 @@ namespace Vektonn.DataSource.Kafka
 
         public void Dispose()
         {
+            if (isDisposed)
+                return;
+
             kafkaProducer.Dispose();
+            isDisposed = true;
         }
 
-        public async Task ProduceAsync(DataSourceDescriptor dataSource, IReadOnlyList<InputDataPointOrTombstone> dataPointOrTombstones)
+        public async Task ProduceAsync(DataSourceMeta dataSourceMeta, IReadOnlyList<InputDataPointOrTombstone> dataPointOrTombstones)
         {
+            if (isDisposed)
+                throw new ObjectDisposedException(nameof(kafkaProducer));
+
             var produceTasksByTopic = dataPointOrTombstones
                 .GroupBy(
-                    x => GetTopicName(dataSource, x),
-                    x => SerializeToKafkaMessage(dataSource, x))
+                    x => GetTopicName(dataSourceMeta, x),
+                    x => SerializeToKafkaMessage(dataSourceMeta, x))
                 .Select(g => kafkaProducer.ProduceAsync(topicName: g.Key, messages: g.ToArray()));
 
             await Task.WhenAll(produceTasksByTopic);
         }
 
-        private static string GetTopicName(DataSourceDescriptor dataSource, InputDataPointOrTombstone dataPointOrTombstone)
+        private static string GetTopicName(DataSourceMeta dataSourceMeta, InputDataPointOrTombstone dataPointOrTombstone)
         {
             var attributes = dataPointOrTombstone.GetAttributes();
-            var shardingCoordinatesByAttributeKey = dataSource.Meta.DataSourceShardingMeta.GetDataSourceShardingCoordinates(attributes);
-            return KafkaTopicNameFormatter.FormatTopicName(dataSource.Id, shardingCoordinatesByAttributeKey);
+            var shardingCoordinatesByAttributeKey = dataSourceMeta.DataSourceShardingMeta.GetDataSourceShardingCoordinates(attributes);
+            return KafkaTopicNameFormatter.FormatTopicName(dataSourceMeta.Id, shardingCoordinatesByAttributeKey);
         }
 
-        private Message<byte[], byte[]> SerializeToKafkaMessage(DataSourceDescriptor dataSource, InputDataPointOrTombstone dataPointOrTombstone)
+        private Message<byte[], byte[]> SerializeToKafkaMessage(DataSourceMeta dataSourceMeta, InputDataPointOrTombstone dataPointOrTombstone)
         {
-            var permanentAttributes = GetPermanentAttributes(dataSource, dataPointOrTombstone);
+            var permanentAttributes = GetPermanentAttributes(dataSourceMeta, dataPointOrTombstone);
 
             var kafkaMessage = new Message<byte[], byte[]>
             {
@@ -61,15 +69,15 @@ namespace Vektonn.DataSource.Kafka
             return kafkaMessage;
         }
 
-        private AttributeValue[] GetPermanentAttributes(DataSourceDescriptor dataSource, InputDataPointOrTombstone dataPointOrTombstone)
+        private AttributeValue[] GetPermanentAttributes(DataSourceMeta dataSourceMeta, InputDataPointOrTombstone dataPointOrTombstone)
         {
             var permanentAttributeKeys = permanentAttributeKeysByDataSourceId.GetOrAdd(
-                dataSource.Id,
+                dataSourceMeta.Id,
                 _ =>
                 {
-                    var permanentAttributes = dataSource.Meta.PermanentAttributes.OrderBy(x => x, StringComparer.InvariantCulture).ToArray();
+                    var permanentAttributes = dataSourceMeta.PermanentAttributes.OrderBy(x => x, StringComparer.InvariantCulture).ToArray();
                     if (!permanentAttributes.Any())
-                        throw new InvalidOperationException($"{nameof(permanentAttributes)} is empty for dataSource: {dataSource.ToPrettyJson()}");
+                        throw new InvalidOperationException($"{nameof(permanentAttributes)} is empty for dataSource: {dataSourceMeta.ToPrettyJson()}");
 
                     return permanentAttributes;
                 });

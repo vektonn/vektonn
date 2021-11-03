@@ -1,4 +1,4 @@
-using Vektonn.Contracts;
+using Vektonn.SharedImpl.Contracts;
 
 namespace Vektonn.Tests.IndexShard
 {

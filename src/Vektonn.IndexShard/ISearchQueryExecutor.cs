@@ -1,5 +1,5 @@
 using FluentValidation.Results;
-using Vektonn.Contracts.ApiModels;
+using Vektonn.ApiContracts;
 
 namespace Vektonn.IndexShard
 {

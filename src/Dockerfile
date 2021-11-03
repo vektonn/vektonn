@@ -12,10 +12,14 @@ FROM $DOTNET_REPO/sdk:$DOTNET_VERSION_TAG AS build
 
 ARG DOTNET_RID=linux-x64
 ARG PUBLISH_TRIMMED=false
-ARG SHARED_LIB_CONTRACTS=Vektonn.Contracts
+ARG SHARED_LIB_API_CONTRACTS=Vektonn.ApiContracts
+ARG SHARED_LIB_API_CLIENT=Vektonn.ApiClient
 ARG SHARED_LIB_IMPL=Vektonn.SharedImpl
+ARG SHARED_LIB_DATA_SOURCE=Vektonn.DataSource
 ARG SHARED_LIB_INDEX_SHARD=Vektonn.IndexShard
-ARG PROJECT=Vektonn.Service
+ARG SHARED_LIB_HOSTING=Vektonn.Hosting
+ARG SERVICE_API=Vektonn.ApiService
+ARG SERVICE_INDEX_SHARD=Vektonn.IndexShardService
 
 WORKDIR /src
 
@@ -23,17 +27,29 @@ WORKDIR /src
 COPY global.json .
 COPY nuget.config .
 COPY Directory.Build.props .
-COPY $SHARED_LIB_CONTRACTS/$SHARED_LIB_CONTRACTS.csproj $SHARED_LIB_CONTRACTS/
+COPY $SHARED_LIB_API_CONTRACTS/$SHARED_LIB_API_CONTRACTS.csproj $SHARED_LIB_API_CONTRACTS/
+COPY $SHARED_LIB_API_CLIENT/$SHARED_LIB_API_CLIENT.csproj $SHARED_LIB_API_CLIENT/
 COPY $SHARED_LIB_IMPL/$SHARED_LIB_IMPL.csproj $SHARED_LIB_IMPL/
+COPY $SHARED_LIB_DATA_SOURCE/$SHARED_LIB_DATA_SOURCE.csproj $SHARED_LIB_DATA_SOURCE/
 COPY $SHARED_LIB_INDEX_SHARD/$SHARED_LIB_INDEX_SHARD.csproj $SHARED_LIB_INDEX_SHARD/
-COPY $PROJECT/$PROJECT.csproj $PROJECT/
-RUN dotnet restore --runtime $DOTNET_RID $PROJECT/$PROJECT.csproj
+COPY $SHARED_LIB_HOSTING/$SHARED_LIB_HOSTING.csproj $SHARED_LIB_HOSTING/
+COPY $SERVICE_API/$SERVICE_API.csproj $SERVICE_API/
+COPY $SERVICE_INDEX_SHARD/$SERVICE_INDEX_SHARD.csproj $SERVICE_INDEX_SHARD/
 
-# copy app sources and publish
-COPY $SHARED_LIB_CONTRACTS/ $SHARED_LIB_CONTRACTS/
+RUN dotnet restore --runtime $DOTNET_RID $SERVICE_API/$SERVICE_API.csproj
+RUN dotnet restore --runtime $DOTNET_RID $SERVICE_INDEX_SHARD/$SERVICE_INDEX_SHARD.csproj
+
+# copy shared sources
+COPY $SHARED_LIB_API_CONTRACTS/ $SHARED_LIB_API_CONTRACTS/
+COPY $SHARED_LIB_API_CLIENT/ $SHARED_LIB_API_CLIENT/
 COPY $SHARED_LIB_IMPL/ $SHARED_LIB_IMPL/
+COPY $SHARED_LIB_DATA_SOURCE/ $SHARED_LIB_DATA_SOURCE/
 COPY $SHARED_LIB_INDEX_SHARD/ $SHARED_LIB_INDEX_SHARD/
-COPY $PROJECT/ $PROJECT/
+COPY $SHARED_LIB_HOSTING/ $SHARED_LIB_HOSTING/
+
+# publish stage for ApiService
+FROM build AS publish-api-service
+COPY $SERVICE_API/ $SERVICE_API/
 RUN dotnet publish \
     --no-restore \
     --configuration Release \
@@ -41,15 +57,46 @@ RUN dotnet publish \
     --runtime $DOTNET_RID \
     -p:PublishTrimmed=$PUBLISH_TRIMMED \
     --output /app \
-    $PROJECT/$PROJECT.csproj
+    $SERVICE_API/$SERVICE_API.csproj
 
+# publish stage for IndexShardService
+FROM build AS publish-index-shard-service
+COPY $SERVICE_INDEX_SHARD/ $SERVICE_INDEX_SHARD/
+RUN dotnet publish \
+    --no-restore \
+    --configuration Release \
+    --self-contained true \
+    --runtime $DOTNET_RID \
+    -p:PublishTrimmed=$PUBLISH_TRIMMED \
+    --output /app \
+    $SERVICE_INDEX_SHARD/$SERVICE_INDEX_SHARD.csproj
 
-# final stage
-FROM $DOTNET_REPO/runtime-deps:$DOTNET_VERSION_TAG
-EXPOSE 8080
+# final stage/image for ApiService (target entrypoint with: docker build --target api-service)
+FROM $DOTNET_REPO/runtime-deps:$DOTNET_VERSION_TAG AS api-service
+EXPOSE 8081
 WORKDIR /app
-COPY --from=build /app .
+COPY --from=publish-api-service /app .
+ENV ASPNETCORE_ENVIRONMENT=Development \
+    VEKTONN_HOSTING_ENVIRONMENT=dev \
+    VEKTONN_HTTP_PORT=8081 \
+    VEKTONN_KAFKA_BOOTSTRAP_SERVERS=localhost \
+    VEKTONN_KAFKA_TOPIC_REPLICATION_FACTOR=1 \
+    VEKTONN_CONFIG_BASE_DIRECTORY=/config
+ENTRYPOINT ["./Vektonn.ApiService"]
+
+# final stage/image for IndexShardService (target entrypoint with: docker build --target index-shard-service)
+FROM $DOTNET_REPO/runtime-deps:$DOTNET_VERSION_TAG AS index-shard-service
+EXPOSE 8082
+WORKDIR /app
+COPY --from=publish-index-shard-service /app .
 COPY --from=faiss-lib /lib-faiss-native/ /lib-faiss-native/
-ENV ASPNETCORE_URLS=http://+:8080 \
-    LD_LIBRARY_PATH=/lib-faiss-native
-ENTRYPOINT ["./Vektonn.Service"]
+ENV LD_LIBRARY_PATH=/lib-faiss-native \
+    ASPNETCORE_ENVIRONMENT=Development \
+    VEKTONN_HOSTING_ENVIRONMENT=dev \
+    VEKTONN_HTTP_PORT=8082 \
+    VEKTONN_KAFKA_BOOTSTRAP_SERVERS=localhost \
+    VEKTONN_CONFIG_BASE_DIRECTORY=/config \
+    VEKTONN_INDEX_NAME= \
+    VEKTONN_INDEX_VERSION= \
+    VEKTONN_INDEX_SHARD_ID=
+ENTRYPOINT ["./Vektonn.IndexShardService"]

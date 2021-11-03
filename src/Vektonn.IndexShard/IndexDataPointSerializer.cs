@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Vektonn.Contracts;
 using Vektonn.Index;
 using Vektonn.SharedImpl.BinarySerialization;
+using Vektonn.SharedImpl.Contracts;
 
 namespace Vektonn.IndexShard
 {
