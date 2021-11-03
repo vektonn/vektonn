@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{66E42814-877F-4D7F-9987-B16A5FF7CD3B}"
 	ProjectSection(SolutionItems) = preProject
+		.build-docker-image.sh = .build-docker-image.sh
 		..\docker-compose-up.sh = ..\docker-compose-up.sh
 		..\docker-compose.yaml = ..\docker-compose.yaml
 		Dockerfile = Dockerfile
+		version.json = version.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHubWorkflows", "GitHubWorkflows", "{20FA83E2-64BB-41B9-8A6C-13F0B634EF78}"

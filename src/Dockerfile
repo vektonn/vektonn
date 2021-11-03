@@ -47,8 +47,7 @@ COPY $SHARED_LIB_DATA_SOURCE/ $SHARED_LIB_DATA_SOURCE/
 COPY $SHARED_LIB_INDEX_SHARD/ $SHARED_LIB_INDEX_SHARD/
 COPY $SHARED_LIB_HOSTING/ $SHARED_LIB_HOSTING/
 
-# publish stage for ApiService
-FROM build AS publish-api-service
+# publish ApiService
 COPY $SERVICE_API/ $SERVICE_API/
 RUN dotnet publish \
     --no-restore \
@@ -56,11 +55,10 @@ RUN dotnet publish \
     --self-contained true \
     --runtime $DOTNET_RID \
     -p:PublishTrimmed=$PUBLISH_TRIMMED \
-    --output /app \
+    --output /app/$SERVICE_API \
     $SERVICE_API/$SERVICE_API.csproj
 
-# publish stage for IndexShardService
-FROM build AS publish-index-shard-service
+# publish IndexShardService
 COPY $SERVICE_INDEX_SHARD/ $SERVICE_INDEX_SHARD/
 RUN dotnet publish \
     --no-restore \
@@ -68,14 +66,14 @@ RUN dotnet publish \
     --self-contained true \
     --runtime $DOTNET_RID \
     -p:PublishTrimmed=$PUBLISH_TRIMMED \
-    --output /app \
+    --output /app/$SERVICE_INDEX_SHARD \
     $SERVICE_INDEX_SHARD/$SERVICE_INDEX_SHARD.csproj
 
 # final stage/image for ApiService (target entrypoint with: docker build --target api-service)
 FROM $DOTNET_REPO/runtime-deps:$DOTNET_VERSION_TAG AS api-service
 EXPOSE 8081
 WORKDIR /vektonn
-COPY --from=publish-api-service /app ./bin
+COPY --from=build /app/Vektonn.ApiService ./bin
 RUN mkdir ./logs
 ENV ASPNETCORE_ENVIRONMENT=Development \
     VEKTONN_HOSTING_ENVIRONMENT=dev \
@@ -89,7 +87,7 @@ ENTRYPOINT ["./bin/Vektonn.ApiService"]
 FROM $DOTNET_REPO/runtime-deps:$DOTNET_VERSION_TAG AS index-shard-service
 EXPOSE 8082
 WORKDIR /vektonn
-COPY --from=publish-index-shard-service /app ./bin
+COPY --from=build /app/Vektonn.IndexShardService ./bin
 COPY --from=faiss-lib /lib-faiss-native/ ./lib-faiss-native/
 RUN mkdir ./logs
 ENV LD_LIBRARY_PATH=/vektonn/lib-faiss-native \

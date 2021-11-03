@@ -25,17 +25,22 @@ jobs:
     defaults:
       run:
         working-directory: ./src
+    outputs:
+      nuget-package-version: ${{ steps.pack.outputs.nuget-package-version }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        fetch-depth: 0
+        fetch-depth: 0 # avoid shallow clone so nbgv can do its work
 
     - name: Build
       run: dotnet build --configuration Release
 
     - name: Pack
-      run: dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./Vektonn.sln
+      id: pack
+      run: |
+        dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./Vektonn.sln
+        echo "::set-output name=nuget-package-version::$NBGV_NuGetPackageVersion"
 
     - name: Store nuget packages as artifacts
       uses: actions/upload-artifact@v2
@@ -62,3 +67,36 @@ jobs:
 
     - name: Publish to nuget.org
       run: dotnet nuget push ${{ env.NUGET_PACKAGES_DIR }}/*.nupkg --api-key ${{ secrets.NUGET_ORG_API_KEY }} --source https://api.nuget.org/v3/index.json
+
+  docker-publish:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build-pack-and-test
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: ./src
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set environment variables
+      run: |
+        DOCKER_TAG=${{needs.build-pack-and-test.outputs.nuget-package-version}}
+        DOCKER_IMAGE_NAME_PREFIX=ghcr.io/${{ github.repository_owner }}/vektonn
+        echo "DOCKER_IMAGE_NAME_AND_TAG_API=$DOCKER_IMAGE_NAME_PREFIX/api-service:$DOCKER_TAG" >> $GITHUB_ENV
+        echo "DOCKER_IMAGE_NAME_AND_TAG_INDEX_SHARD=$DOCKER_IMAGE_NAME_PREFIX/index-shard-service:$DOCKER_TAG" >> $GITHUB_ENV
+
+    - name: Build and tag docker images
+      run: |
+        ./.build-docker-image.sh api-service $DOCKER_IMAGE_NAME_AND_TAG_API
+        ./.build-docker-image.sh index-shard-service $DOCKER_IMAGE_NAME_AND_TAG_INDEX_SHARD
+
+    - name: Log into registry
+      run: |
+        echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io --username ${{ github.actor }} --password-stdin
+
+    - name: Push docker images to GitHub registry
+      run: |
+        docker image push $DOCKER_IMAGE_NAME_AND_TAG_API
+        docker image push $DOCKER_IMAGE_NAME_AND_TAG_INDEX_SHARD
