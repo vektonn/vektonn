@@ -8,7 +8,7 @@ namespace Vektonn.Hosting.Configuration
         {
             return EnvironmentVariables
                 .Get("VEKTONN_KAFKA_BOOTSTRAP_SERVERS")
-                .Split(';', StringSplitOptions.RemoveEmptyEntries);
+                .Split(',', StringSplitOptions.RemoveEmptyEntries);
         }
 
         public byte GetTopicReplicationFactor()
