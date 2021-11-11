@@ -36,7 +36,7 @@ namespace Vektonn.IndexShardService.Controllers
                 K: k ?? 1);
 
             if (searchQuery.K <= 0)
-                return BadRequest(new {errorMessages = new[] {"searchQuery.K must be greater than 0"}});
+                return BadRequest(new ErrorDto(ErrorMessages: new[] {"searchQuery.K must be greater than 0"}));
 
             return indexShardAccessor.SearchQueryExecutor.ExecuteSearchQuery(searchQuery).Single();
         }
@@ -47,7 +47,7 @@ namespace Vektonn.IndexShardService.Controllers
         {
             var validationResult = indexShardAccessor.SearchQueryExecutor.ValidateSearchQuery(searchQuery);
             if (!validationResult.IsValid)
-                return BadRequest(new {errorMessages = validationResult.Errors.Select(x => x.ErrorMessage).ToArray()});
+                return BadRequest(new ErrorDto(ErrorMessages: validationResult.Errors.Select(x => x.ErrorMessage).ToArray()));
 
             return indexShardAccessor.SearchQueryExecutor.ExecuteSearchQuery(searchQuery);
         }

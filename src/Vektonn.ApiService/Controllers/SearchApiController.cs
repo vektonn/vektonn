@@ -51,12 +51,12 @@ namespace Vektonn.ApiService.Controllers
             var indexId = new IndexId(indexName, indexVersion);
             var indexMeta = indexMetaProvider.TryGetIndexMeta(indexId);
             if (indexMeta == null)
-                return NotFound(new {errorMessage = $"Index {indexId} does not exist"});
+                return NotFound(new ErrorDto(ErrorMessages: new[] {$"Index {indexId} does not exist"}));
 
             var searchQueryValidator = new SearchQueryValidator(indexMeta);
             var validationResult = await searchQueryValidator.ValidateAsync(searchQuery);
             if (!validationResult.IsValid)
-                return BadRequest(new {errorMessages = validationResult.Errors.Select(x => x.ErrorMessage).ToArray()});
+                return BadRequest(new ErrorDto(ErrorMessages: validationResult.Errors.Select(x => x.ErrorMessage).ToArray()));
 
             var splitFilter = searchQuery.SplitFilter?.Select(t => (AttributeKey: t.Key, t.Value.ToAttributeValue())).ToArray();
             var shardIdsForQuery = indexMeta.IndexShardsMap.GetShardIdsForQuery(splitFilter);

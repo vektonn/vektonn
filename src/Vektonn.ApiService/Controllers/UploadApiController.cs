@@ -37,7 +37,7 @@ namespace Vektonn.ApiService.Controllers
             var dataSourceId = new DataSourceId(dataSourceName, dataSourceVersion);
             var dataSourceMeta = indexMetaProvider.TryGetDataSourceMeta(dataSourceId);
             if (dataSourceMeta == null)
-                return NotFound(new {errorMessage = $"Data source {dataSourceId} does not exist"});
+                return NotFound(new ErrorDto(ErrorMessages: new[] {$"Data source {dataSourceId} does not exist"}));
 
             var inputDataPointOrTombstones = new List<InputDataPointOrTombstone>();
             var inputDataPointValidator = new InputDataPointValidator(dataSourceMeta);
@@ -45,7 +45,7 @@ namespace Vektonn.ApiService.Controllers
             {
                 var validationResult = await inputDataPointValidator.ValidateAsync(inputDataPoint);
                 if (!validationResult.IsValid)
-                    return BadRequest(new {errorMessages = validationResult.Errors.Select(x => x.ErrorMessage).ToArray()});
+                    return BadRequest(new ErrorDto(ErrorMessages: validationResult.Errors.Select(x => x.ErrorMessage).ToArray()));
 
                 inputDataPointOrTombstones.Add(ToInputDataPointOrTombstone(inputDataPoint));
             }
