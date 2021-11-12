@@ -13,8 +13,8 @@ If you wish some feature to be added please contact us on [Slack channel](http:/
     - [ ] SQL Connector?
     - [ ] ... (If you have your own datastore, please tell us)
 2. HTTP API
-    - [ ] Search & DataUpload API
-    - [ ] Python SDK
+    - [x] Search & DataUpload API
+    - [x] Python SDK
 3. Deploy to Kubernetes
     - [ ] "Static" helm charts
     - [ ] Deployment artifacts publication

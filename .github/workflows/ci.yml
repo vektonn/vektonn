@@ -83,7 +83,8 @@ jobs:
     - name: Set environment variables
       run: |
         DOCKER_TAG=${{needs.build-pack-and-test.outputs.nuget-package-version}}
-        DOCKER_IMAGE_NAME_PREFIX=ghcr.io/${{ github.repository_owner }}/vektonn
+        DOCKER_IMAGE_NAME_PREFIX=ghcr.io/${{ github.repository_owner }}
+        echo "DOCKER_TAG=$DOCKER_TAG" >> $GITHUB_ENV
         echo "DOCKER_IMAGE_NAME_AND_TAG_API=$DOCKER_IMAGE_NAME_PREFIX/api-service:$DOCKER_TAG" >> $GITHUB_ENV
         echo "DOCKER_IMAGE_NAME_AND_TAG_INDEX_SHARD=$DOCKER_IMAGE_NAME_PREFIX/index-shard-service:$DOCKER_TAG" >> $GITHUB_ENV
 
@@ -92,11 +93,20 @@ jobs:
         ./.build-docker-image.sh api-service $DOCKER_IMAGE_NAME_AND_TAG_API
         ./.build-docker-image.sh index-shard-service $DOCKER_IMAGE_NAME_AND_TAG_INDEX_SHARD
 
-    - name: Log into registry
-      run: |
-        echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io --username ${{ github.actor }} --password-stdin
-
     - name: Push docker images to GitHub registry
       run: |
+        echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io --username ${{ github.actor }} --password-stdin
         docker image push $DOCKER_IMAGE_NAME_AND_TAG_API
         docker image push $DOCKER_IMAGE_NAME_AND_TAG_INDEX_SHARD
+        docker logout ghcr.io
+
+    - name: Push docker images to DockerHub registry
+      run: |
+        echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login --username vektonn --password-stdin
+        docker image tag $DOCKER_IMAGE_NAME_AND_TAG_API vektonn/api-service:latest
+        docker image tag $DOCKER_IMAGE_NAME_AND_TAG_API vektonn/api-service:$DOCKER_TAG
+        docker image tag $DOCKER_IMAGE_NAME_AND_TAG_INDEX_SHARD vektonn/index-shard-service:latest
+        docker image tag $DOCKER_IMAGE_NAME_AND_TAG_INDEX_SHARD vektonn/index-shard-service:$DOCKER_TAG
+        docker image push --all-tags vektonn/api-service
+        docker image push --all-tags vektonn/index-shard-service
+        docker logout
