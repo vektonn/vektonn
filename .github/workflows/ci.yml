@@ -8,12 +8,14 @@ on:
     - 'v[0-9]+.[0-9]+-release*'
     paths:
     - 'src/**'
+    - '.github/workflows/**'
 
   pull_request:
     branches:
     - master
     paths:
     - 'src/**'
+    - '.github/workflows/**'
 
 env:
   NUGET_PACKAGES_DIR: ${{ github.workspace }}/nuget-packages

@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  api:
+  vektonn-api:
     build:
       context: ./src
       target: api-service
@@ -9,7 +9,7 @@ services:
     container_name: vektonn-api
     depends_on:
     - kafka-broker
-    - index-shard
+    - vektonn-index-shard
     ports:
     - 8081:8081
     volumes:
@@ -17,7 +17,7 @@ services:
     environment:
     - VEKTONN_KAFKA_BOOTSTRAP_SERVERS=kafka-broker:29092
 
-  index-shard:
+  vektonn-index-shard:
     build:
       context: ./src
       target: index-shard-service
@@ -36,35 +36,31 @@ services:
     - VEKTONN_INDEX_SHARD_ID=SingleShard
 
   kafka-broker:
-    image: confluentinc/cp-kafka:6.2.0
+    image: confluentinc/cp-kafka:7.0.0
     hostname: kafka-broker
     container_name: kafka-broker
-    depends_on:
-    - zookeeper
     ports:
-    - 29092:29092
     - 9092:9092
     - 9101:9101
     environment:
     - KAFKA_BROKER_ID=1
-    - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-    - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+    - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
     - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka-broker:29092,PLAINTEXT_HOST://localhost:9092
+    - KAFKA_LISTENERS=PLAINTEXT://kafka-broker:29092,CONTROLLER://kafka-broker:29093,PLAINTEXT_HOST://localhost:9092
     - KAFKA_AUTO_CREATE_TOPICS_ENABLE=false
     - KAFKA_OFFSETS_TOPIC_NUM_PARTITIONS=1
     - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    - KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS=0
     - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
     - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
-    - KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS=0
     - KAFKA_JMX_PORT=9101
     - KAFKA_JMX_HOSTNAME=localhost
-
-  zookeeper:
-    image: confluentinc/cp-zookeeper:6.2.0
-    hostname: zookeeper
-    container_name: zookeeper
-    ports:
-    - 2181:2181
-    environment:
-    - ZOOKEEPER_CLIENT_PORT=2181
-    - ZOOKEEPER_TICK_TIME=2000
+    - KAFKA_PROCESS_ROLES=broker,controller
+    - KAFKA_NODE_ID=1
+    - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka-broker:29093
+    - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+    - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+    - KAFKA_LOG_DIRS=/tmp/kraft-combined-logs
+    volumes:
+    - ./scripts/update-kafka-run-script-for-kraft.sh:/tmp/update_run.sh
+    command: "bash -c 'if [ ! -f /tmp/update_run.sh ]; then echo \"ERROR: update_run.sh not found\" && exit 1 ; else /tmp/update_run.sh && /etc/confluent/docker/run ; fi'"
