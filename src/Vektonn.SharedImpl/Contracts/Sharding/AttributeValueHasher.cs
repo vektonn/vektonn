@@ -19,6 +19,9 @@ namespace Vektonn.SharedImpl.Contracts.Sharding
             if (attributeValue.Int64 != null)
                 return Hash64(GetPortableBytes(attributeValue.Int64.Value));
 
+            if (attributeValue.Float64 != null)
+                return Hash64(GetPortableBytes(attributeValue.Float64.Value));
+
             if (attributeValue.DateTime != null)
                 return Hash64(GetPortableBytes(attributeValue.DateTime.Value.Ticks));
 
@@ -27,7 +30,17 @@ namespace Vektonn.SharedImpl.Contracts.Sharding
 
         private static byte[] GetPortableBytes(long value)
         {
-            var bytes = BitConverter.GetBytes(value);
+            return GetPortableBytes(value, BitConverter.GetBytes);
+        }
+
+        private static byte[] GetPortableBytes(double value)
+        {
+            return GetPortableBytes(value, BitConverter.GetBytes);
+        }
+
+        private static byte[] GetPortableBytes<T>(T value, Func<T, byte[]> getBytes)
+        {
+            var bytes = getBytes(value);
 
             // note (andrew, 04.08.2021): true for x86-64
             if (BitConverter.IsLittleEndian)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
@@ -49,6 +49,15 @@ namespace Vektonn.Tests.SharedImpl.Sharding
             yield return new TestCaseData(new AttributeValue(Int64: int.MaxValue)) {ExpectedResult = 12509318086319848728UL};
             yield return new TestCaseData(new AttributeValue(Int64: long.MaxValue)) {ExpectedResult = 16359246543468789202UL};
             yield return new TestCaseData(new AttributeValue(Int64: long.MinValue)) {ExpectedResult = 7578918962206252314UL};
+
+            yield return new TestCaseData(new AttributeValue(Float64: 0.0)) {ExpectedResult = 1457330246272086660UL};
+            yield return new TestCaseData(new AttributeValue(Float64: 1.0)) {ExpectedResult = 12277520569804993523UL};
+            yield return new TestCaseData(new AttributeValue(Float64: -1.0)) {ExpectedResult = 4272473773845466057UL};
+            yield return new TestCaseData(new AttributeValue(Float64: 3.1415926)) {ExpectedResult = 3625877603776526340UL};
+            yield return new TestCaseData(new AttributeValue(Float64: float.MaxValue)) {ExpectedResult = 11439933791117993827UL};
+            yield return new TestCaseData(new AttributeValue(Float64: float.MinValue)) {ExpectedResult = 8243174340667092320UL};
+            yield return new TestCaseData(new AttributeValue(Float64: double.MaxValue)) {ExpectedResult = 8904282951473543737UL};
+            yield return new TestCaseData(new AttributeValue(Float64: double.MinValue)) {ExpectedResult = 5686420462916985433UL};
 
             yield return new TestCaseData(new AttributeValue(DateTime: new DateTime(2021, 07, 31, 13, 52, 59, DateTimeKind.Utc))) {ExpectedResult = 11262061747148714790UL};
         }

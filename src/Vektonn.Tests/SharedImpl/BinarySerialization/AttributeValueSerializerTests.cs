@@ -47,6 +47,15 @@ namespace Vektonn.Tests.SharedImpl.BinarySerialization
             yield return new TestCaseData(arg: new[] {new AttributeValue(Int64: long.MaxValue)}) {ExpectedResult = 12};
             yield return new TestCaseData(arg: new[] {new AttributeValue(Int64: long.MinValue)}) {ExpectedResult = 13};
 
+            yield return new TestCaseData(arg: new[] {new AttributeValue(Float64: 0.0)}) {ExpectedResult = 11};
+            yield return new TestCaseData(arg: new[] {new AttributeValue(Float64: -0.0)}) {ExpectedResult = 11};
+            yield return new TestCaseData(arg: new[] {new AttributeValue(Float64: 3.1415926)}) {ExpectedResult = 11};
+            yield return new TestCaseData(arg: new[] {new AttributeValue(Float64: -3.1415926)}) {ExpectedResult = 11};
+            yield return new TestCaseData(arg: new[] {new AttributeValue(Float64: float.MaxValue)}) {ExpectedResult = 11};
+            yield return new TestCaseData(arg: new[] {new AttributeValue(Float64: float.MinValue)}) {ExpectedResult = 11};
+            yield return new TestCaseData(arg: new[] {new AttributeValue(Float64: double.MaxValue)}) {ExpectedResult = 11};
+            yield return new TestCaseData(arg: new[] {new AttributeValue(Float64: double.MinValue)}) {ExpectedResult = 11};
+
             yield return new TestCaseData(arg: new[] {new AttributeValue(DateTime: new DateTime(2021, 07, 31, 13, 52, 59, DateTimeKind.Utc))}) {ExpectedResult = 10};
 
             yield return new TestCaseData(arg: new[] {new AttributeValue(Guid: Guid.NewGuid()), new AttributeValue(Guid: Guid.NewGuid())}) {ExpectedResult = 40};

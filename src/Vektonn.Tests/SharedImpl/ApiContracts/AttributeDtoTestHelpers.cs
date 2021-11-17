@@ -16,6 +16,11 @@ namespace Vektonn.Tests.SharedImpl.ApiContracts
             return new AttributeDto(key, new AttributeValueDto(Int64: value));
         }
 
+        public static AttributeDto Attribute(string key, double value)
+        {
+            return new AttributeDto(key, new AttributeValueDto(Float64: value));
+        }
+
         public static AttributeDto Attribute(string key, string? value)
         {
             return new AttributeDto(key, new AttributeValueDto(String: value));

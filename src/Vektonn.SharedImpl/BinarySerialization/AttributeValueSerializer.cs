@@ -18,7 +18,8 @@ namespace Vektonn.SharedImpl.BinarySerialization
             meta.Add(2, nameof(AttributeValue.Guid));
             meta.Add(3, nameof(AttributeValue.Bool));
             meta.Add(4, nameof(AttributeValue.Int64));
-            meta.Add(5, nameof(AttributeValue.DateTime));
+            meta.Add(5, nameof(AttributeValue.Float64));
+            meta.Add(6, nameof(AttributeValue.DateTime));
 
             // note (andrew, 28.07.2021): enforce compact Guid encoding in 16 bytes (http://protobuf-net.github.io/protobuf-net/compatibilitylevel.html)
             meta[2].DataFormat = DataFormat.FixedSize;

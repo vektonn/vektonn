@@ -107,6 +107,10 @@ namespace Vektonn.Tests.ApiContracts
             ) {ExpectedResult = "{\"key\":\"int_key\",\"value\":{\"int64\":42}}"};
 
             yield return new TestCaseData(
+                Attribute("float_key", 3.1415926)
+            ) {ExpectedResult = "{\"key\":\"float_key\",\"value\":{\"float64\":3.1415926}}"};
+
+            yield return new TestCaseData(
                 Attribute("date", new DateTime(2021, 11, 23, 23, 59, 01))
             ) {ExpectedResult = "{\"key\":\"date\",\"value\":{\"dateTime\":\"2021-11-23T23:59:01\"}}"};
         }

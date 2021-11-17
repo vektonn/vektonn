@@ -12,6 +12,7 @@ namespace Vektonn.SharedImpl.ApiContracts
                 dto.Guid,
                 dto.Bool,
                 dto.Int64,
+                dto.Float64,
                 dto.DateTime);
         }
 
@@ -22,6 +23,7 @@ namespace Vektonn.SharedImpl.ApiContracts
                 attributeValue.Guid,
                 attributeValue.Bool,
                 attributeValue.Int64,
+                attributeValue.Float64,
                 attributeValue.DateTime);
         }
     }

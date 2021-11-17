@@ -7,6 +7,7 @@ namespace Vektonn.ApiContracts
         Guid? Guid = null,
         bool? Bool = null,
         long? Int64 = null,
+        double? Float64 = null,
         DateTime? DateTime = null)
     {
         public override string ToString()
@@ -15,6 +16,7 @@ namespace Vektonn.ApiContracts
                    ?? Guid?.ToString("D")
                    ?? Bool?.ToString()
                    ?? Int64?.ToString()
+                   ?? Float64?.ToString()
                    ?? DateTime?.ToString("O")
                    ?? string.Empty;
         }

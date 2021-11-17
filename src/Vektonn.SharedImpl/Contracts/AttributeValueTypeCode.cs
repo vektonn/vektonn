@@ -6,6 +6,7 @@ namespace Vektonn.SharedImpl.Contracts
         Guid = 1,
         Bool = 2,
         Int64 = 3,
-        DateTime = 4,
+        Float64 = 4,
+        DateTime = 5,
     }
 }

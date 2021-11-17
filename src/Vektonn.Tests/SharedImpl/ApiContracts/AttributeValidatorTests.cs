@@ -54,7 +54,7 @@ namespace Vektonn.Tests.SharedImpl.ApiContracts
             ) {ExpectedResult = "Test attribute key is unknown: 'K1'"};
 
             yield return new TestCaseData(
-                new AttributeDto("k1", new AttributeValueDto(String: null, Guid: null, Bool: null, Int64: null, DateTime: null)),
+                new AttributeDto("k1", new AttributeValueDto(String: null, Guid: null, Bool: null, Int64: null, Float64: null, DateTime: null)),
                 KnownAttributes(("k1", AttributeValueTypeCode.String))
             ) {ExpectedResult = "Test attribute 'k1' has invalid value: ''"};
 
@@ -86,6 +86,11 @@ namespace Vektonn.Tests.SharedImpl.ApiContracts
             yield return new TestCaseData(
                 Attribute("k1", value: Guid.NewGuid()),
                 KnownAttributes(("k1", AttributeValueTypeCode.Guid))
+            ) {ExpectedResult = string.Empty};
+
+            yield return new TestCaseData(
+                Attribute("k1", value: 3.1415926),
+                KnownAttributes(("k1", AttributeValueTypeCode.Float64))
             ) {ExpectedResult = string.Empty};
 
             yield return new TestCaseData(
