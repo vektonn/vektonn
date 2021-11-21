@@ -12,7 +12,7 @@ namespace Vektonn.Tests.SharedImpl.Configuration
 {
     public class IndexMetaProviderTests
     {
-        private readonly IndexMetaProvider sut = new(configBaseDirectory: FileSystemHelpers.PatchDirectoryName("samples/config"));
+        private readonly IndexMetaProvider sut = new(configBaseDirectory: FileSystemHelpers.PatchDirectoryName("tests/config"));
 
         [Test]
         public void TryGetDataSourceMeta()
