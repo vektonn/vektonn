@@ -1,60 +1,75 @@
 ---
 layout: default
-title: Home
+title: Quick start
 nav_order: 1
 permalink: /
 ---
 
-# Vektonn
-{: .fs-9 }
 
-Service for finding k-nearest neighbors.
-{: .fs-6 .fw-300 }
+# Quick start
 
-[View it on GitHub](https://github.com/vektonn/vektonn){: .btn .fs-5 .mb-4 .mb-md-0 }
 
----
+## Overview
 
-# Get started
+Vektonn is a high-performance service for finding [k-nearest neighbors (kNN)](https://en.wikipedia.org/wiki/Nearest_neighbor_search#k-nearest_neighbors) in vector space.  
+See [Examples](#examples) for some use cases.
 
-Vektonn is a service for finding k-nearest neighbors (kNN) using a .NET library [Vektonn.Index](https://github.com/vektonn/vektonn-index).
+**Features:**
+- Support for both dense and sparse vectors.
+- Precise and approximate kNN (AkNN) algorithms.
+- Scalable architecture that easily supports hundreds-of-GB-worth of vector data.
 
-Dense and sparse vectors are supported. [Faiss](https://github.com/facebookresearch/faiss) library is used for dense vectors. [PySparNN](https://github.com/facebookresearch/pysparnn) is being ported to C# and used for sparse vectors. 
+Vektonn is licensed under [Apache license](https://en.wikipedia.org/wiki/Apache_License), so you may freely use it for commercial purposes.
 
-## Reasons to use Vektonn
 
-Vektonn advantages are: 
-* Support dense and sparse vectors.
-* Faiss support.
-* Ported PySparNN support.
-* Approximate kNN (AkNN) support.
+### Components
 
-## Vektonn.Index library
+There are three main parts of Vektonn: an API, an Index, and a Data Source.
 
-Vektonn.Index stores a mapping between vectors and vector ID’s. kNN/AkNN returns vector ID’s as result.
+- The **API** has methods for search and uploading vector data. It proxies requests to corresponding Indices and Data Sources. 
+- A **Data Source** is where all the vectors' data being persistently stored. Currently, a Data Source is implemented as a topic in Kafka. You must declare a Data Source before uploading any data to it.
+- An **Index** is an in-memory snapshot of data in Data Source. It updates asynchronously from a corresponding Data Source. Also needs to be declared before use.
+  
+A data from a single Data Source can be sharded (split) over several Indices to fit in RAM of hosting nodes.
 
-The library also allows you to keep any metadata alongside corresponding vectors. kNN/AkNN search results contain metadata as well as vectors. 
+A single Data Source may have several Indices defined on it with different metrics.
 
-[Read more about Vektonn.Index](https://github.com/vektonn/vektonn-index).
 
-## Local installation 
-```
-git clone https://github.com/vektonn/vektonn.git 
-cd vektonn
-./docker-compose-up.sh
-```
-After, a Swagger-specification for [Vektonn API](https://vektonn.github.io/vektonn/swagger/index.html) will be available at <http://localhost:8081>.
+### Repositories
 
-## Next Step 
+- [**Vektonn**](https://github.com/vektonn/vektonn) is a main repository with implementations for the API, Index shards and Data Sources. It also contains sources for [Vektonn's .NET client](https://www.nuget.org/packages/Vektonn.ApiClient/).
+- [**Vektonn-index**](https://github.com/vektonn/vektonn-index) is a .NET library for finding nearest neighbors in vector space. It provides an implementation of basic functionality for Indices: vector storage and retrieval.
+- [**Vektonn-client-python**](https://github.com/vektonn/vektonn-client-python) is, unsurprisingly, a Python's client for Vektonn.
+- [**Vectonn-examples**](https://github.com/vektonn/vektonn-examples) is a repository with examples in Jupyter's notebooks. [Start here](#examples) to see Vektonn in action.  
 
-* [See how to use Vektonn](https://vektonn.github.io/vektonn/how-to-use/how-to-use.html).
 
----
 
-## Support
+## Running Vektonn
 
-If you have any questions or need help with Vektonn please contact us on [Slack channel](http://vektonn.slack.com/).
+### Prerequisites
 
-## License
+We provide Docker images for Vektonn through [Docker Hub](https://hub.docker.com/u/vektonn).
+You'll need [Docker installed](https://docs.docker.com/get-docker/) to run Vektonn locally from these images.
 
-Vektonn is distributed by an [Apache License 2.0](https://github.com/vektonn/vektonn/blob/master/LICENSE).
+_[Optionally]_ For building the project from source see instructions in individual repositories. You'll need to have [.NET SDK](https://dotnet.microsoft.com/download) (not just runtime) version 5 or greater. 
+
+
+### Examples <a name="examples"></a>
+
+1. [Hotels](https://github.com/vektonn/vektonn-examples/blob/master/jupyter-notebooks/hotels/hotels.ipynb).
+Task: save the user's time while searching for hotels. 
+This example uses vectorized user reviews to find hotels.
+
+1. [Price Match Guarantee](https://github.com/vektonn/vektonn-examples/blob/master/jupyter-notebooks/cv/cv.ipynb).
+Task: help the seller establish a competitive price for their product on the marketplace.
+This example uses data from [Shopee kaggle competiton](https://www.kaggle.com/c/shopee-product-matching/overview/description).
+
+1. [Books](https://github.com/vektonn/vektonn-examples/blob/master/jupyter-notebooks/sparse-vectors/sparse-vectors.ipynb).
+Task: find similar books by user reviews. This example uses sparse vectors.
+
+All examples are located in [vektonn-examples](https://github.com/vektonn/vektonn-examples). It's the only repository you need to clone to try Vektonn.
+
+
+
+
+
