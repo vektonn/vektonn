@@ -6,5 +6,9 @@ github_username: vektonn
 remote_theme: pmarsceill/just-the-docs
 
 # just-the-docs theme configuration
-color_scheme: nil
+color_scheme: dark
 search_enabled: false
+aux_links:
+  'Vektonn on GitHub':
+  - '//github.com/vektonn/vektonn'
+aux_links_new_tab: true

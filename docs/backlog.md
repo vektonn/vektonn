@@ -1,12 +1,12 @@
 ---
 layout: default
 title: Backlog
-nav_order: 2
+nav_order: 3
 ---
 
 # Backlog
 
-If you wish some feature to be added please contact us on [Slack channel](http://vektonn.slack.com/).
+If you wish some feature to be added please contact us on [Slack channel](https://join.slack.com/t/vektonn/shared_invite/zt-yhiz2yoi-oKEA9UZgzMtgUky4PhdLwA).
 
 1. Persistent Data Sources
     - [x] Kafka
