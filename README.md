@@ -1,42 +1,41 @@
-</p>
-<p align="center">
-    <h1 align="center">Vektonn</h1>
-    <br>
-</p>
+# Vektonn
+
+Vektonn is a high-performance service for finding [k-nearest neighbors (kNN)](https://en.wikipedia.org/wiki/Nearest_neighbor_search#k-nearest_neighbors) in vector space.
+
+
+## Overview
+
+### Features
+
+- Support for both dense and sparse vectors
+- Precise and approximate kNN (AkNN) algorithms
+- Scalable architecture that allows to easily handle hundreds-of-GB-worth of vector data
+
+### Components
+
+There are three main parts of Vektonn: an API, an Index, and a Data Source.
+
+- The **API** has methods for search and uploading vector data. It proxies requests to corresponding Indices and Data Sources. 
+- A **Data Source** is where all the vectors' data being persistently stored. Currently, a Data Source is implemented as a topic in Kafka.
+- An **Index** is an in-memory snapshot of data in Data Source. It updates asynchronously from a corresponding Data Source.
+  
+A data from a single Data Source can be spread (sharded) over several Indices to fit in RAM of hosting nodes.
+
+A single Data Source may have several Indices defined on it with different metrics.
+
+### Repositories
+
+- [**vektonn**](https://github.com/vektonn/vektonn) is a main repository with implementations for the API, Index shards and Data Sources. It also contains sources for [Vektonn's .NET client](https://www.nuget.org/packages/Vektonn.ApiClient).
+- [**vektonn-index**](https://github.com/vektonn/vektonn-index) is a .NET library for finding nearest neighbors in vector space. It provides an implementation of basic functionality for Indices: vector storage and retrieval.
+- [**vektonn-client-python**](https://github.com/vektonn/vektonn-client-python) hosts [Python client for Vektonn](https://pypi.org/project/vektonn) source code.
+- [**vectonn-examples**](https://github.com/vektonn/vektonn-examples) is a repository with various examples of Vektonn usage.
+
 
 ## Get started
 
-Vektonn is a service for finding k-nearest neighbors (kNN) using a .NET library [Vektonn.Index](https://github.com/vektonn/vektonn-index). 
-
-Dense and sparse vectors are supported. [Faiss](https://github.com/facebookresearch/faiss) library is used for dense vectors. [PySparNN](https://github.com/facebookresearch/pysparnn) is being ported to C# and used for sparse vectors. 
-
-### Reasons to use Vektonn 
-
-Vektonn advantages are: 
-* Support dense and sparse vectors.
-* Faiss support.
-* PySparNN support.
-* Approximate kNN (AkNN) support.
-
-### Vektonn.Index library
-
-Vektonn.Index keeps a mapping between vectors and vector ID’s. kNN/AkNN returns vector ID’s as result.
-
-The library also allows you to keep any metadata alongside corresponding vectors. kNN/AkNN search results contain metadata as well as vectors. 
-
-[Read more about Vektonn.Index](https://github.com/vektonn/vektonn-index).
-
-### Local installation 
-```
-git clone https://github.com/vektonn/vektonn.git 
-cd vektonn 
-./docker-compose-up.sh
-```
-After, a Swagger-specification for [Vektonn API](https://vektonn.github.io/vektonn/swagger/index.html) will be available at <http://localhost:8081>.
-
-### Next Step 
-
-* [See how to use Vektonn](https://vektonn.github.io/vektonn/how-to-use/how-to-use.html).
+- Read documentation [here](https://vektonn.github.io/vektonn)
+- To play with Vektonn locally check out [QuickStart](https://github.com/vektonn/vektonn-examples/tree/master/quick-start) guide and example [Jupyter notebooks](https://github.com/vektonn/vektonn-examples/tree/master/jupyter-notebooks)
+- If your stack is other than Python or .NET use [OpenAPI Specification](https://vektonn.github.io/vektonn/swagger/index.html) for Vektonn to develop your own client
 
 
 ## Support
@@ -46,4 +45,4 @@ If you have any questions or need help with Vektonn please contact us on [Slack 
 
 ## License
 
-Vektonn is distributed by an [Apache License 2.0](https://github.com/vektonn/vektonn/blob/master/LICENSE).
+Vektonn is licensed under [Apache License 2.0](https://github.com/vektonn/vektonn/blob/master/LICENSE).
