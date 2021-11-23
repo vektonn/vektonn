@@ -23,13 +23,6 @@ A data from a single Data Source can be spread (sharded) over several Indices to
 
 A single Data Source may have several Indices defined on it with different metrics.
 
-### Repositories
-
-- [**vektonn**](https://github.com/vektonn/vektonn) is a main repository with implementations for the API, Index shards and Data Sources. It also contains sources for [Vektonn's .NET client](https://www.nuget.org/packages/Vektonn.ApiClient).
-- [**vektonn-index**](https://github.com/vektonn/vektonn-index) is a .NET library for finding nearest neighbors in vector space. It provides an implementation of basic functionality for Indices: vector storage and retrieval.
-- [**vektonn-client-python**](https://github.com/vektonn/vektonn-client-python) hosts [Python client for Vektonn](https://pypi.org/project/vektonn) source code.
-- [**vectonn-examples**](https://github.com/vektonn/vektonn-examples) is a repository with various examples of Vektonn usage.
-
 
 ## Get started
 
@@ -40,7 +33,17 @@ A single Data Source may have several Indices defined on it with different metri
 
 ## Support
 
-If you have any questions or need help with Vektonn please contact us on [Slack channel](http://vektonn.slack.com/).
+If you have any questions or need help with Vektonn please contact us on [Slack channel](https://join.slack.com/t/vektonn/shared_invite/zt-yhiz2yoi-oKEA9UZgzMtgUky4PhdLwA).
+
+
+## Contributing
+
+### Repositories
+
+- [**vektonn**](https://github.com/vektonn/vektonn) is a main repository with implementations for the API, Index shards and Data Sources. It also contains sources for [Vektonn's .NET client](https://www.nuget.org/packages/Vektonn.ApiClient).
+- [**vektonn-index**](https://github.com/vektonn/vektonn-index) is a .NET library for finding nearest neighbors in vector space. It provides an implementation of basic functionality for Indices: vector storage and retrieval.
+- [**vektonn-client-python**](https://github.com/vektonn/vektonn-client-python) hosts [Python client for Vektonn](https://pypi.org/project/vektonn) source code.
+- [**vectonn-examples**](https://github.com/vektonn/vektonn-examples) is a repository with various examples of Vektonn usage.
 
 
 ## License
