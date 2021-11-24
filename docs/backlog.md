@@ -18,7 +18,7 @@ If you wish some feature to be added please contact us on [Slack channel](https:
 3. Deploy to Kubernetes
     - [ ] "Static" helm charts
     - [ ] Deployment artifacts publication
-      - [ ] Docker images
+      - [x] Docker images
       - [ ] Helm charts
     - [ ] Dynamic Index Scheduler
       - [ ] Desired Index State Storage
