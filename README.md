@@ -1,5 +1,7 @@
 # Vektonn
 
+[![Docker](https://badgen.net/badge/icon/docker?icon=docker&label)](https://hub.docker.com/u/vektonn)
+
 Vektonn is a high-performance service for finding [k-nearest neighbors (kNN)](https://en.wikipedia.org/wiki/Nearest_neighbor_search#k-nearest_neighbors) in vector space.
 
 
