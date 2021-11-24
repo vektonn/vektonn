@@ -1,5 +1,6 @@
 # Vektonn
 
+[![CI](https://github.com/vektonn/vektonn/actions/workflows/ci.yml/badge.svg)](https://github.com/vektonn/vektonn/actions/workflows/ci.yml)
 [![Docker](https://badgen.net/badge/icon/docker?icon=docker&label)](https://hub.docker.com/u/vektonn)
 [![License](https://img.shields.io/hexpm/l/plug.svg?color=green)](https://github.com/vektonn/vektonn/blob/master/LICENSE)
 
