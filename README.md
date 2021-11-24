@@ -4,10 +4,10 @@
 [![Docker](https://badgen.net/badge/icon/docker?icon=docker&label)](https://hub.docker.com/u/vektonn)
 [![License](https://img.shields.io/hexpm/l/plug.svg?color=green)](https://github.com/vektonn/vektonn/blob/master/LICENSE)
 
-Vektonn is a high-performance service for finding [k-nearest neighbors (kNN)](https://en.wikipedia.org/wiki/Nearest_neighbor_search#k-nearest_neighbors) in vector space.
-
 
 ## Overview
+
+Vektonn is a high-performance service for finding [k-nearest neighbors (kNN)](https://en.wikipedia.org/wiki/Nearest_neighbor_search#k-nearest_neighbors) in vector space.
 
 ### Features
 
