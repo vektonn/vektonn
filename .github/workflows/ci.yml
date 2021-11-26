@@ -8,7 +8,7 @@ on:
     - 'v[0-9]+.[0-9]+-release*'
     paths:
     - 'src/**'
-    - '.github/workflows/**'
+    - '.github/workflows/ci.yml'
 
   pull_request:
     branches:

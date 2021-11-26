@@ -1,7 +1,5 @@
 ---
-layout: default
 title: Backlog
-nav_order: 3
 ---
 
 # Backlog
@@ -18,17 +16,17 @@ If you wish some feature to be added please contact us on [Slack channel](https:
 3. Deploy to Kubernetes
     - [ ] "Static" helm charts
     - [ ] Deployment artifacts publication
-      - [x] Docker images
-      - [ ] Helm charts
+        - [x] Docker images
+        - [ ] Helm charts
     - [ ] Dynamic Index Scheduler
-      - [ ] Desired Index State Storage
-      - [ ] Index Scheduler Daemon
-      - [ ] Index Management API
+        - [ ] Desired Index State Storage
+        - [ ] Index Scheduler Daemon
+        - [ ] Index Management API
 4. Telemetry
     - [ ] Logs
     - [ ] Metrics
-      - [ ] Prometheus 
-      - [ ] ... (Tell us what system you use)
+        - [ ] Prometheus 
+        - [ ] ... (Tell us what system you use)
 5. Integrations with other MLOps products
     - [ ] Kubeflow?
     - [ ] ... (Tell us what integration you need)
