@@ -15,7 +15,7 @@ on:
     - master
     paths:
     - 'src/**'
-    - '.github/workflows/**'
+    - '.github/workflows/ci.yml'
 
 env:
   NUGET_PACKAGES_DIR: ${{ github.workspace }}/nuget-packages
