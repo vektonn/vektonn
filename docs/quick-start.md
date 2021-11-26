@@ -1,7 +1,5 @@
 ---
-layout: default
 title: Quick Start
-nav_order: 2
 ---
 
 # Quick Start
@@ -26,13 +24,13 @@ Docker images for Vektonn are published on [Docker Hub](https://hub.docker.com/u
 
 You will need [Python >= 3.7](https://www.python.org/downloads/) to run this sample.
 
-Install [Vektonn SDK](https://pypi.org/project/vektonn/) for Python:
+1. Install [Vektonn SDK](https://pypi.org/project/vektonn/) for Python:
 
 ```bash
 pip install vektonn
 ```
 
-Initialize Vektonn client:
+2. Initialize Vektonn client:
 
 ```python
 from vektonn import Vektonn
@@ -40,7 +38,7 @@ from vektonn import Vektonn
 vektonn_client = Vektonn('http://localhost:8081')
 ```
 
-Upload data to Vektonn:
+3. Upload data to Vektonn:
 
 ```python
 from vektonn.dtos import AttributeDto, AttributeValueDto, InputDataPointDto, VectorDto
@@ -58,7 +56,7 @@ vektonn_client.upload(
     ])
 ```
 
-Search for `k` nearest data points to the given `query_vector`:
+4. Search for `k` nearest data points to the given `query_vector`:
 
 ```python
 from vektonn.dtos import VectorDto, SearchQueryDto
