@@ -1,8 +1,8 @@
 ---
-title: Backlog
+title: Roadmap
 ---
 
-# Backlog
+# Roadmap
 
 If you wish some feature to be added please contact us on [Slack channel](https://join.slack.com/t/vektonn/shared_invite/zt-yhiz2yoi-oKEA9UZgzMtgUky4PhdLwA).
 
