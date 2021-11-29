@@ -11,6 +11,8 @@ theme:
   - toc.integrate
   icon:
     repo: fontawesome/brands/github
+  logo: assets/vektonn-star-rounded-white.svg
+  favicon: assets/vektonn-star-rounded-white.svg
   palette:
   - media: '(prefers-color-scheme: light)'
     scheme: default
