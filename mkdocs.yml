@@ -6,6 +6,7 @@ edit_uri: ''
 
 theme:
   name: material
+  custom_dir: docs/overrides
   features:
   - toc.integrate
   icon:
