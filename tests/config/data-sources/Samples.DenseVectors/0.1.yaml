@@ -1,7 +1,0 @@
-vectorDimension: 2
-vectorsAreSparse: false
-attributeValueTypes:
-  Id: Int64
-  SplitId: Bool
-  Payload: String
-permanentAttributes: ["Id", "SplitId"]

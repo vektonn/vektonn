@@ -1,0 +1,6 @@
+vectorDimension: 2
+vectorsAreSparse: false
+attributeValueTypes:
+  id: Int64
+  payload: String
+permanentAttributes: ["id"]

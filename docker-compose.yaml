@@ -31,8 +31,8 @@ services:
     - ./tests/config:/vektonn/config:ro
     environment:
     - VEKTONN_KAFKA_BOOTSTRAP_SERVERS=kafka-broker:9092
-    - VEKTONN_INDEX_NAME=Samples.DenseVectors
-    - VEKTONN_INDEX_VERSION=0.1
+    - VEKTONN_INDEX_NAME=QuickStart.Index
+    - VEKTONN_INDEX_VERSION=1.0
     - VEKTONN_INDEX_SHARD_ID=SingleShard
 
   kafka-broker:
