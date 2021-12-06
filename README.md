@@ -32,6 +32,7 @@ A single Data Source may have several Indices defined on it with different metri
 
 - Read documentation [here](https://vektonn.github.io/vektonn)
 - To play with Vektonn locally check out [QuickStart](https://github.com/vektonn/vektonn-examples/tree/master/quick-start) guide and example [Jupyter notebooks](https://github.com/vektonn/vektonn-examples/tree/master/jupyter-notebooks)
+- To learn how to deploy Vektonn to Kubernetes check out example [Helm charts](https://github.com/vektonn/vektonn-examples/tree/master/helm-charts)
 - If your stack is other than Python or .NET use [OpenAPI Specification](https://vektonn.github.io/vektonn/swagger/index.html) for Vektonn to develop your own client
 
 
