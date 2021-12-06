@@ -1,0 +1,8 @@
+QuickStart.Index:
+  1.0:
+    SingleShard: vektonn-index-shard:8082
+
+Samples.SparseVectors:
+  0.1:
+    ShardA: localhost:8082
+    ShardB: localhost:8083

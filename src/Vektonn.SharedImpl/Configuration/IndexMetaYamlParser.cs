@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net;
 using Vektonn.SharedImpl.Contracts;
 using Vektonn.SharedImpl.Contracts.Sharding;
 using Vektonn.SharedImpl.Contracts.Sharding.DataSource;
@@ -25,6 +26,34 @@ namespace Vektonn.SharedImpl.Configuration
                 .IgnoreUnmatchedProperties()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
                 .Build();
+        }
+
+        /// yaml structure:
+        /// ---
+        /// IndexName:
+        ///   IndexVersion:
+        ///     ShardId: endpoint
+        public Dictionary<IndexId, Dictionary<string, DnsEndPoint>> ParseIndexShardEndpoints(string yaml)
+        {
+            var dto = yamlDeserializer.Deserialize<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(yaml);
+
+            return dto
+                .SelectMany(
+                    x => x.Value.Select(
+                        y =>
+                        {
+                            var shardEndpoints = y.Value.ToDictionary(
+                                z => z.Key,
+                                z =>
+                                {
+                                    var endpointParts = z.Value.Split(':', StringSplitOptions.RemoveEmptyEntries);
+                                    var host = endpointParts[0];
+                                    var port = int.Parse(endpointParts[1]);
+                                    return new DnsEndPoint(host, port);
+                                });
+                            return (Key: new IndexId(Name: x.Key, Version: y.Key), ShardEndpoints: shardEndpoints);
+                        }))
+                .ToDictionary(t => t.Key, t => t.ShardEndpoints);
         }
 
         public DataSourceId ParseDataSourceId(string yaml)

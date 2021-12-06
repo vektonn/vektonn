@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net;
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using MoreLinq;
@@ -23,6 +24,52 @@ namespace Vektonn.Tests.SharedImpl.Configuration
         private readonly ISerializer yamlSerializer = new SerializerBuilder()
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
             .Build();
+
+        [Test]
+        public void ParseIndexShardEndpoints()
+        {
+            const string yaml = @"
+Index1:
+  v1:
+    Shard1: host1:81
+    Shard2: host2:82
+  v2:
+    Shard3: host3:8080
+    Shard4: host4:8080
+Index2:
+  v1:
+    Shard1: host1:83
+    Shard2: host2:83
+  v3:
+    Shard3: host:80
+";
+
+            sut.ParseIndexShardEndpoints(yaml)
+                .Should()
+                .BeEquivalentTo(
+                    new Dictionary<IndexId, Dictionary<string, DnsEndPoint>>
+                    {
+                        [new IndexId("Index1", "v1")] = new Dictionary<string, DnsEndPoint>
+                        {
+                            ["Shard1"] = new DnsEndPoint("host1", 81),
+                            ["Shard2"] = new DnsEndPoint("host2", 82),
+                        },
+                        [new IndexId("Index1", "v2")] = new Dictionary<string, DnsEndPoint>
+                        {
+                            ["Shard3"] = new DnsEndPoint("host3", 8080),
+                            ["Shard4"] = new DnsEndPoint("host4", 8080),
+                        },
+                        [new IndexId("Index2", "v1")] = new Dictionary<string, DnsEndPoint>
+                        {
+                            ["Shard1"] = new DnsEndPoint("host1", 83),
+                            ["Shard2"] = new DnsEndPoint("host2", 83),
+                        },
+                        [new IndexId("Index2", "v3")] = new Dictionary<string, DnsEndPoint>
+                        {
+                            ["Shard3"] = new DnsEndPoint("host", 80),
+                        },
+                    });
+        }
 
         [Test]
         public void ParseDataSourceId()

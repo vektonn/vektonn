@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using Vektonn.SharedImpl.Contracts;
 using Vektonn.SharedImpl.Contracts.Sharding;
 
@@ -8,7 +11,7 @@ namespace Vektonn.SharedImpl.Configuration
     public class IndexMetaProvider : IIndexMetaProvider
     {
         private readonly IndexMetaYamlParser yamlParser = new(new AttributeValueHasher());
-        private readonly ConcurrentDictionary<IndexId, IndexMeta> indexMetasById = new();
+        private readonly ConcurrentDictionary<IndexId, IndexMetaWithShardEndpoints> indexMetasById = new();
         private readonly ConcurrentDictionary<DataSourceId, DataSourceMeta> dataSourceMetasById = new();
 
         private readonly string configBaseDirectory;
@@ -18,7 +21,7 @@ namespace Vektonn.SharedImpl.Configuration
             this.configBaseDirectory = configBaseDirectory;
         }
 
-        public IndexMeta? TryGetIndexMeta(IndexId indexId)
+        public IndexMetaWithShardEndpoints? TryGetIndexMeta(IndexId indexId)
         {
             var indexConfigFileName = FormatIndexConfigFileName(indexId);
             if (!File.Exists(indexConfigFileName))
@@ -38,7 +41,7 @@ namespace Vektonn.SharedImpl.Configuration
             return dataSourceMeta;
         }
 
-        private IndexMeta GetIndexMeta(IndexId indexId, string indexConfigFileName)
+        private IndexMetaWithShardEndpoints GetIndexMeta(IndexId indexId, string indexConfigFileName)
         {
             var indexConfigYaml = ReadConfigYaml(indexConfigFileName);
             var dataSourceId = yamlParser.ParseDataSourceId(indexConfigYaml);
@@ -49,7 +52,25 @@ namespace Vektonn.SharedImpl.Configuration
 
             indexMeta.ValidateConsistency();
 
-            return indexMeta;
+            var endpointsByShardId = GetEndpointsByShardIdForIndex(indexMeta);
+            return new IndexMetaWithShardEndpoints(indexMeta, endpointsByShardId);
+        }
+
+        private Dictionary<string, DnsEndPoint> GetEndpointsByShardIdForIndex(IndexMeta indexMeta)
+        {
+            var indexShardEndpointsYaml = ReadConfigYaml(Path.Combine(configBaseDirectory, "index-shards-topology.yaml"));
+            var indexShardEndpoints = yamlParser.ParseIndexShardEndpoints(indexShardEndpointsYaml);
+
+            if (!indexShardEndpoints.TryGetValue(indexMeta.Id, out var endpointsByShardId))
+                throw new InvalidOperationException($"Index shards topology is not defined for indexId: {indexMeta.Id}");
+
+            foreach (var shardId in indexMeta.IndexShardsMap.ShardsById.Keys)
+            {
+                if (!endpointsByShardId.ContainsKey(shardId))
+                    throw new InvalidOperationException($"Index shard endpoint is not specified for indexId: {indexMeta.Id}, shardId: {shardId}");
+            }
+
+            return endpointsByShardId;
         }
 
         private DataSourceMeta GetDataSourceMeta(DataSourceId dataSourceId, string dataSourceConfigFileName)

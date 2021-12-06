@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Farmhash.Sharp" Version="0.9.0" />
-    <PackageReference Include="FluentValidation" Version="10.3.4" />
+    <PackageReference Include="FluentValidation" Version="10.3.5" />
     <PackageReference Include="protobuf-net" Version="3.0.101" />
     <PackageReference Include="Vektonn.Index" Version="0.3.1" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" />

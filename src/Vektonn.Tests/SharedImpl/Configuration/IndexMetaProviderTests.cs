@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using FluentAssertions.Execution;
@@ -30,12 +32,14 @@ namespace Vektonn.Tests.SharedImpl.Configuration
         [Test]
         public void TryGetIndexMeta()
         {
-            var indexMeta = sut.TryGetIndexMeta(new IndexId(Name: "Samples.SparseVectors", Version: "0.1"));
+            var indexMetaWithShardEndpoints = sut.TryGetIndexMeta(new IndexId(Name: "Samples.SparseVectors", Version: "0.1"));
+            indexMetaWithShardEndpoints.Should().NotBeNull();
 
             using (new AssertionScope())
             {
-                indexMeta.Should().NotBeNull();
-                indexMeta!.HasSplits.Should().BeTrue();
+                var indexMeta = indexMetaWithShardEndpoints!.IndexMeta;
+
+                indexMeta.HasSplits.Should().BeTrue();
                 indexMeta.HasPayload.Should().BeTrue();
                 indexMeta.ShardAttributes.Should().BeEquivalentTo(new[] {"ShardId"}.ToHashSet());
                 indexMeta.IndexIdAttributes.Should().BeEquivalentTo(new[] {"Id", "ShardId"}.ToHashSet());
@@ -50,6 +54,15 @@ namespace Vektonn.Tests.SharedImpl.Configuration
                             shardValues: new ushort[] {0, 2, 4}.ToHashSet(),
                             attributeValueProjector: null!),
                         ComparingWithRespectToRuntimeTypes);
+
+                indexMetaWithShardEndpoints.EndpointsByShardId
+                    .Should()
+                    .BeEquivalentTo(
+                        new Dictionary<string, DnsEndPoint>
+                        {
+                            ["ShardA"] = new DnsEndPoint("localhost", 8082),
+                            ["ShardB"] = new DnsEndPoint("localhost", 8083),
+                        });
             }
         }
 

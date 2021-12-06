@@ -14,7 +14,7 @@ If you wish some feature to be added please contact us on [Slack channel](https:
     - [x] Search & DataUpload API
     - [x] Python SDK
 3. Deploy to Kubernetes
-    - [ ] "Static" helm charts
+    - [x] "Static" Helm charts
     - [ ] Deployment artifacts publication
         - [x] Docker images
         - [ ] Helm charts
