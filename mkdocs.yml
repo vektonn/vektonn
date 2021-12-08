@@ -52,6 +52,11 @@ markdown_extensions:
 plugins:
   search: {}
 
+extra:
+  analytics:
+    provider: google
+    property: G-KXSME6LZNH
+
 nav:
 - 'index.md'
 - 'quick-start.md'
