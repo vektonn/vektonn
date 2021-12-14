@@ -18,10 +18,12 @@ Vektonn is a high-performance service for finding [k-nearest neighbors (kNN)](ht
 
 There are three main parts of Vektonn: an API, an Index, and a Data Source.
 
-- The **API** has methods for search and uploading vector data. It proxies requests to corresponding Indices and Data Sources. 
+![Vektonn components](assets/vektonn-components.svg)
+
+- The **API** has methods for search and uploading vector data. It proxies requests to corresponding Indices and Data Sources.
 - A **Data Source** is where all the vectors' data being persistently stored. Currently, a Data Source is implemented using [Apache Kafka](https://kafka.apache.org/).
 - An **Index** is an in-memory snapshot of data in Data Source. It updates asynchronously from a corresponding Data Source.
-  
+
 A data from a single Data Source can be spread (sharded) over several Indices to fit in RAM of hosting nodes.
 
 A single Data Source may have several Indices defined on it with different metrics.
