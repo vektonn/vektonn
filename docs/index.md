@@ -42,4 +42,4 @@ If you have any questions or need help with Vektonn please contact us on [Slack 
 
 ## License
 
-Vektonn is licensed under [Apache License 2.0](https://github.com/vektonn/vektonn/blob/master/LICENSE).
+Vektonn is licensed under [Apache License 2.0](https://github.com/vektonn/vektonn/blob/master/LICENSE), so you may freely use it for commercial purposes.
