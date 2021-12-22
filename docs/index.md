@@ -12,6 +12,7 @@ Vektonn is a high-performance service for finding [k-nearest neighbors (kNN)](ht
 - Support for both dense and sparse vectors
 - Precise and approximate kNN (AkNN) algorithms
 - Scalable architecture that allows to easily handle hundreds-of-GB-worth of vector data
+- and [more](features.md).
 
 
 ## Components
