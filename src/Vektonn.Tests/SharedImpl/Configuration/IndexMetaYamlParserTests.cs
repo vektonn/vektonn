@@ -381,7 +381,7 @@ permanentAttributes: ['Id']
 ";
 
             const string indexYaml = @"
-indexAlgorithm: FaissIndex.Flat.L2
+indexAlgorithm: FaissIndex.L2
 idAttributes: ['Id']
 splitAttributes: []
 shardsById:
@@ -407,7 +407,7 @@ shardsById:
                             {
                                 {"Id", AttributeValueTypeCode.Int64}
                             }),
-                        IndexAlgorithm: Algorithms.FaissIndexFlatL2,
+                        IndexAlgorithm: Algorithms.FaissIndexL2,
                         IdAttributes: new[] {"Id"}.ToHashSet(),
                         SplitAttributes: new HashSet<string>(),
                         IndexShardsMap: new IndexShardsMapMeta(

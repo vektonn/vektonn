@@ -11,10 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Vostok.ClusterClient.Core" Version="0.1.37" />
-    <PackageReference Include="Vostok.ClusterClient.Tracing" Version="0.1.5" />
-    <PackageReference Include="Vostok.ClusterClient.Transport" Version="0.1.21" />
-    <PackageReference Include="Vostok.Logging.Tracing" Version="0.1.5" />
+    <PackageReference Include="Vostok.ClusterClient.Core" Version="0.1.39" />
+    <PackageReference Include="Vostok.ClusterClient.Tracing" Version="0.1.7" />
+    <PackageReference Include="Vostok.ClusterClient.Transport" Version="0.1.23" />
+    <PackageReference Include="Vostok.Logging.Tracing" Version="0.1.7" />
   </ItemGroup>
 
   <ItemGroup>

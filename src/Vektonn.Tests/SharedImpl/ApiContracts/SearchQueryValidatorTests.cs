@@ -78,7 +78,7 @@ namespace Vektonn.Tests.SharedImpl.ApiContracts
             return new IndexMeta(
                 new IndexId(Name: "test", Version: "1.0"),
                 DataSourceMeta(vectorsAreSparse: false, attributeValueTypes),
-                Algorithms.FaissIndexFlatIP,
+                Algorithms.FaissIndexIP,
                 IdAttributes: new HashSet<string>(),
                 SplitAttributes: attributeValueTypes.Keys.ToHashSet(),
                 IndexShardsMap: new IndexShardsMapMeta(new Dictionary<string, IndexShardMeta>()));

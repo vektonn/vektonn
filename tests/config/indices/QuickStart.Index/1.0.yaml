@@ -1,7 +1,7 @@
 dataSourceId:
   name: QuickStart.Source
   version: 1.0
-indexAlgorithm: FaissIndex.Flat.L2
+indexAlgorithm: FaissIndex.L2
 idAttributes: ["id"]
 shardsById:
   SingleShard: {}
