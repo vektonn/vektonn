@@ -9,7 +9,7 @@ namespace Vektonn.SharedImpl.Contracts
     public record IndexMeta(
         IndexId Id,
         DataSourceMeta DataSourceMeta,
-        string IndexAlgorithm,
+        IndexAlgorithm IndexAlgorithm,
         HashSet<string> IdAttributes,
         HashSet<string> SplitAttributes,
         IndexShardsMapMeta IndexShardsMap)
@@ -48,7 +48,7 @@ namespace Vektonn.SharedImpl.Contracts
             if (invalidSplitAttributes.Any())
                 throw new InvalidOperationException($"There are split attributes ({string.Join(", ", invalidSplitAttributes)}) which do not belong to permanent attributes for: {this}");
 
-            var vectorsAreSparse = AlgorithmTraits.VectorsAreSparse(IndexAlgorithm);
+            var vectorsAreSparse = AlgorithmTraits.VectorsAreSparse(IndexAlgorithm.Type);
             if (vectorsAreSparse ^ DataSourceMeta.VectorsAreSparse)
                 throw new InvalidOperationException($"IndexMeta.VectorsAreSparse ({vectorsAreSparse}) and DataSourceMeta.VectorsAreSparse ({DataSourceMeta.VectorsAreSparse}) are inconsistent");
         }

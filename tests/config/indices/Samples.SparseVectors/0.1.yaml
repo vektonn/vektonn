@@ -1,7 +1,8 @@
 dataSourceId:
   name: Samples.SparseVectors
   version: 0.1
-indexAlgorithm: SparnnIndex.Cosine
+indexAlgorithm:
+  type: SparnnIndex.Cosine
 idAttributes: ["Id", "ShardId"]
 splitAttributes: ["SplitId"]
 shardsById:

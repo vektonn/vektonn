@@ -88,7 +88,7 @@ namespace Vektonn.ApiService.Controllers
                         .ToArray();
                     var results = await Task.WhenAll(tasks);
 
-                    var mergeSortDirection = AlgorithmTraits.GetMergeSortDirection(indexMeta.IndexAlgorithm);
+                    var mergeSortDirection = AlgorithmTraits.GetMergeSortDirection(indexMeta.IndexAlgorithm.Type);
                     return MergeResultsOfShards(searchQuery, results, mergeSortDirection);
                 }
             }

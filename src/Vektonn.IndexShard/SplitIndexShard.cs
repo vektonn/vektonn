@@ -90,10 +90,11 @@ namespace Vektonn.IndexShard
 
                     indexWithLocker = new IndexWithLocker<TVector>(
                         indexStoreFactory.Create<TVector>(
-                            indexMeta.IndexAlgorithm,
+                            indexMeta.IndexAlgorithm.Type,
                             indexMeta.VectorDimension,
                             withDataStorage: indexMeta.HasPayload,
-                            ByteArrayComparer.Instance));
+                            idComparer: ByteArrayComparer.Instance,
+                            indexMeta.IndexAlgorithm.Params));
 
                     indexesBySplitKey.TryAdd(splitKey, indexWithLocker);
                 }
@@ -175,7 +176,7 @@ namespace Vektonn.IndexShard
         private IReadOnlyList<SearchResultItem<TVector>> MergeSearchResults(SearchQuery<TVector> query, IReadOnlyList<SearchResultItem<TVector>>[] searchResults)
         {
             var foundDataPoints = searchResults.Select(r => r.Select(x => x.NearestDataPoints).ToArray());
-            var mergeSortDirection = AlgorithmTraits.GetMergeSortDirection(indexMeta.IndexAlgorithm);
+            var mergeSortDirection = AlgorithmTraits.GetMergeSortDirection(indexMeta.IndexAlgorithm.Type);
             var mergedDataPoints = FoundDataPointsMerger.Merge(foundDataPoints, query.K, mergeSortDirection, foundDataPointsComparer);
             return query.QueryVectors.Zip(
                     mergedDataPoints,

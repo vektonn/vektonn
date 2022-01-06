@@ -27,7 +27,7 @@ namespace Vektonn.SharedImpl.ApiContracts.Validation
                     .SetValidator(splitFilterValidator)
             );
 
-            var vectorValidator = AlgorithmTraits.VectorsAreSparse(indexMeta.IndexAlgorithm)
+            var vectorValidator = AlgorithmTraits.VectorsAreSparse(indexMeta.IndexAlgorithm.Type)
                 ? new SparseVectorValidator(indexMeta.VectorDimension)
                 : (AbstractValidator<VectorDto>)new DenseVectorValidator(indexMeta.VectorDimension);
 

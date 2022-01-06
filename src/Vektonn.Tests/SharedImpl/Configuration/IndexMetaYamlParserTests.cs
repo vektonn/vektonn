@@ -218,7 +218,14 @@ shardersByAttributeKey:
 ";
             var indexMetaDto = new IndexMetaYamlParser.IndexMetaDto
             {
-                IndexAlgorithm = Algorithms.SparnnIndexCosine,
+                IndexAlgorithm = new IndexMetaYamlParser.IndexAlgorithmDto
+                {
+                    Type = Algorithms.SparnnIndexCosine,
+                    Params = new Dictionary<string, string>
+                    {
+                        {"IndexParamKey", "IndexParamValue"}
+                    }
+                },
                 IdAttributes = new[] {"Id", "ShardId"},
                 SplitAttributes = new[] {"SplitId"},
                 ShardsById = new Dictionary<string, IndexMetaYamlParser.IndexShardMetaDto>
@@ -268,7 +275,10 @@ shardersByAttributeKey:
             var indexYaml = yamlSerializer.Serialize(indexMetaDto);
             indexYaml.Should()
                 .Be(
-                    @"indexAlgorithm: SparnnIndex.Cosine
+                    @"indexAlgorithm:
+  type: SparnnIndex.Cosine
+  params:
+    IndexParamKey: IndexParamValue
 idAttributes:
 - Id
 - ShardId
@@ -326,7 +336,9 @@ shardsById:
                                 {"SplitId", AttributeValueTypeCode.Bool},
                                 {"Payload", AttributeValueTypeCode.String}
                             }),
-                        IndexAlgorithm: Algorithms.SparnnIndexCosine,
+                        IndexAlgorithm: new IndexAlgorithm(
+                            Type: Algorithms.SparnnIndexCosine,
+                            Params: new Dictionary<string, string> {{"IndexParamKey", "IndexParamValue"}}),
                         IdAttributes: new[] {"Id", "ShardId"}.ToHashSet(),
                         SplitAttributes: new[] {"SplitId"}.ToHashSet(),
                         IndexShardsMap: new IndexShardsMapMeta(
@@ -381,7 +393,8 @@ permanentAttributes: ['Id']
 ";
 
             const string indexYaml = @"
-indexAlgorithm: FaissIndex.L2
+indexAlgorithm:
+  type: FaissIndex.L2
 idAttributes: ['Id']
 splitAttributes: []
 shardsById:
@@ -407,7 +420,72 @@ shardsById:
                             {
                                 {"Id", AttributeValueTypeCode.Int64}
                             }),
-                        IndexAlgorithm: Algorithms.FaissIndexL2,
+                        IndexAlgorithm: new IndexAlgorithm(Algorithms.FaissIndexL2),
+                        IdAttributes: new[] {"Id"}.ToHashSet(),
+                        SplitAttributes: new HashSet<string>(),
+                        IndexShardsMap: new IndexShardsMapMeta(
+                            ShardsById: new Dictionary<string, IndexShardMeta>
+                            {
+                                {
+                                    "SingleShard", new IndexShardMeta(
+                                        ShardsByAttributeKey: new Dictionary<string, IIndexAttributeValueShard>(),
+                                        DataSourceShardsToConsume: new[] {new DataSourceShardSubscription(new Dictionary<string, ulong?>())})
+                                }
+                            })),
+                    ComparingWithRespectToRuntimeTypes);
+        }
+
+        [Test]
+        public void ParseIndexMeta_Hnsw()
+        {
+            const string dataSourceYaml = @"
+vectorDimension: 32
+vectorsAreSparse: false
+attributeValueTypes:
+  Id: Int64
+permanentAttributes: ['Id']
+";
+
+            const string indexYaml = @"
+indexAlgorithm:
+  type: FaissIndex.IP
+  params:
+    Hnsw_M: 16
+    Hnsw_EfConstruction: 200
+    Hnsw_EfSearch: 100
+idAttributes: ['Id']
+splitAttributes: []
+shardsById:
+  SingleShard: {}
+";
+
+            var indexId = new IndexId(Name: "Test.Name.Index", Version: "1.0");
+            var dataSourceId = new DataSourceId(Name: "Test.Name.Source", Version: "0.1");
+
+            sut.ParseIndexMeta((indexId, indexYaml), (dataSourceId, dataSourceYaml))
+                .Should()
+                .BeEquivalentTo(
+                    new IndexMeta(
+                        Id: indexId,
+                        DataSourceMeta: new DataSourceMeta(
+                            Id: dataSourceId,
+                            VectorDimension: 32,
+                            VectorsAreSparse: false,
+                            PermanentAttributes: new[] {"Id"}.ToHashSet(),
+                            DataSourceShardingMeta: new DataSourceShardingMeta(
+                                ShardersByAttributeKey: new Dictionary<string, IDataSourceAttributeValueSharder>()),
+                            AttributeValueTypes: new Dictionary<string, AttributeValueTypeCode>
+                            {
+                                {"Id", AttributeValueTypeCode.Int64}
+                            }),
+                        IndexAlgorithm: new IndexAlgorithm(
+                            Type: Algorithms.FaissIndexIP,
+                            Params: new Dictionary<string, string>
+                            {
+                                {IndexParamsKeys.Hnsw.M, "16"},
+                                {IndexParamsKeys.Hnsw.EfConstruction, "200"},
+                                {IndexParamsKeys.Hnsw.EfSearch, "100"},
+                            }),
                         IdAttributes: new[] {"Id"}.ToHashSet(),
                         SplitAttributes: new HashSet<string>(),
                         IndexShardsMap: new IndexShardsMapMeta(

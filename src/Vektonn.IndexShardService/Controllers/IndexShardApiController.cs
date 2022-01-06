@@ -20,7 +20,7 @@ namespace Vektonn.IndexShardService.Controllers
         public ActionResult<IndexInfoDto> Info()
         {
             return new IndexInfoDto(
-                IndexAlgorithm: indexShardAccessor.IndexMeta.IndexAlgorithm,
+                IndexAlgorithm: indexShardAccessor.IndexMeta.IndexAlgorithm.ToString(),
                 VectorType: indexShardAccessor.ZeroVector.GetType().Name,
                 VectorDimension: indexShardAccessor.IndexMeta.VectorDimension,
                 DataPointsCount: indexShardAccessor.DataPointsCount

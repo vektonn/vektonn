@@ -21,10 +21,11 @@ namespace Vektonn.IndexShard
             attributesAccessor = new AttributesAccessor(indexMeta);
             indexWithLocker = new IndexWithLocker<TVector>(
                 indexStoreFactory.Create<TVector>(
-                    indexMeta.IndexAlgorithm,
+                    indexMeta.IndexAlgorithm.Type,
                     indexMeta.VectorDimension,
                     withDataStorage: indexMeta.HasPayload,
-                    ByteArrayComparer.Instance));
+                    idComparer: ByteArrayComparer.Instance,
+                    indexMeta.IndexAlgorithm.Params));
         }
 
         public long DataPointsCount => indexWithLocker.DataPointsCount;

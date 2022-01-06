@@ -25,7 +25,7 @@ namespace Vektonn.IndexShardService
                     var indexShardConfiguration = indexShardConfigurationProvider.GetConfiguration();
                     log.Info($"Using indexShardConfiguration: {indexShardConfiguration.ToPrettyJson()}");
 
-                    return AlgorithmTraits.VectorsAreSparse(indexShardConfiguration.IndexMeta.IndexAlgorithm)
+                    return AlgorithmTraits.VectorsAreSparse(indexShardConfiguration.IndexMeta.IndexAlgorithm.Type)
                         ? new IndexShardOwner<SparseVector>(
                             log,
                             indexShardConfiguration,

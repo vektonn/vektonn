@@ -74,7 +74,7 @@ namespace Vektonn.SharedImpl.Configuration
             return new IndexMeta(
                 Id: indexConfig.Id,
                 DataSourceMeta: dataSourceMeta,
-                IndexAlgorithm: dto.IndexAlgorithm,
+                IndexAlgorithm: new IndexAlgorithm(dto.IndexAlgorithm.Type, dto.IndexAlgorithm.Params),
                 IdAttributes: dto.IdAttributes.ToHashSet(),
                 SplitAttributes: dto.SplitAttributes.ToHashSet(),
                 IndexShardsMap: new IndexShardsMapMeta(
@@ -127,7 +127,7 @@ namespace Vektonn.SharedImpl.Configuration
 
         public class DataSourceReferenceDto
         {
-            public IdDto DataSourceId { get; set; } = new IdDto();
+            public IdDto DataSourceId { get; set; } = new();
         }
 
         public class IdDto
@@ -138,16 +138,22 @@ namespace Vektonn.SharedImpl.Configuration
 
         public class IndexMetaDto
         {
-            public string IndexAlgorithm { get; set; } = string.Empty;
+            public IndexAlgorithmDto IndexAlgorithm { get; set; } = new();
             public string[] IdAttributes { get; set; } = Array.Empty<string>();
             public string[] SplitAttributes { get; set; } = Array.Empty<string>();
-            public Dictionary<string, IndexShardMetaDto> ShardsById { get; set; } = new Dictionary<string, IndexShardMetaDto>();
+            public Dictionary<string, IndexShardMetaDto> ShardsById { get; set; } = new();
+        }
+
+        public class IndexAlgorithmDto
+        {
+            public string Type { get; set; } = string.Empty;
+            public Dictionary<string, string>? Params { get; set; }
         }
 
         public class IndexShardMetaDto
         {
-            public Dictionary<string, IndexAttributeValueShardDto> ShardsByAttributeKey { get; set; } = new Dictionary<string, IndexAttributeValueShardDto>();
-            public DataSourceShardSubscriptionDto[] DataSourceShardsToConsume { get; set; } = {new DataSourceShardSubscriptionDto()};
+            public Dictionary<string, IndexAttributeValueShardDto> ShardsByAttributeKey { get; set; } = new();
+            public DataSourceShardSubscriptionDto[] DataSourceShardsToConsume { get; set; } = {new()};
         }
 
         // todo (andrew, 29.10.2021): support value-based sharding scheme
@@ -159,16 +165,16 @@ namespace Vektonn.SharedImpl.Configuration
 
         public class DataSourceShardSubscriptionDto
         {
-            public Dictionary<string, ulong?> ShardingCoordinatesByAttributeKey { get; set; } = new Dictionary<string, ulong?>();
+            public Dictionary<string, ulong?> ShardingCoordinatesByAttributeKey { get; set; } = new();
         }
 
         public class DataSourceMetaDto
         {
             public int VectorDimension { get; set; }
             public bool VectorsAreSparse { get; set; }
-            public Dictionary<string, AttributeValueTypeCode> AttributeValueTypes { get; set; } = new Dictionary<string, AttributeValueTypeCode>();
+            public Dictionary<string, AttributeValueTypeCode> AttributeValueTypes { get; set; } = new();
             public string[] PermanentAttributes { get; set; } = Array.Empty<string>();
-            public Dictionary<string, DataSourceAttributeValueSharderDto> ShardersByAttributeKey { get; set; } = new Dictionary<string, DataSourceAttributeValueSharderDto>();
+            public Dictionary<string, DataSourceAttributeValueSharderDto> ShardersByAttributeKey { get; set; } = new();
         }
 
         public class DataSourceAttributeValueSharderDto
