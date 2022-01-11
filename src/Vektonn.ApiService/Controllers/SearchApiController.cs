@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Vektonn.ApiClient.IndexShard;
 using Vektonn.ApiContracts;
 using Vektonn.ApiService.Services;
 using Vektonn.Hosting;

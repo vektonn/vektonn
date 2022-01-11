@@ -29,7 +29,7 @@ namespace Vektonn.SharedImpl.ApiContracts.Validation
                 AttributeValueTypeCode.Guid => attributeValue.Guid != null,
                 AttributeValueTypeCode.Bool => attributeValue.Bool != null,
                 AttributeValueTypeCode.Int64 => attributeValue.Int64 != null,
-                AttributeValueTypeCode.Float64 => attributeValue.Float64!= null,
+                AttributeValueTypeCode.Float64 => attributeValue.Float64 != null,
                 AttributeValueTypeCode.DateTime => attributeValue.DateTime != null,
                 _ => throw new InvalidOperationException($"Invalid {nameof(attributeValueType)}: {attributeValueType}")
             };
