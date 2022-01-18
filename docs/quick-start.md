@@ -41,33 +41,33 @@ vektonn_client = Vektonn('http://localhost:8081')
 3. Upload data to Vektonn:
 
 ```python
-from vektonn.dtos import AttributeDto, AttributeValueDto, InputDataPointDto, VectorDto
+from vektonn.dtos import Attribute, AttributeValue, InputDataPoint, Vector
 
 vektonn_client.upload(
     data_source_name='QuickStart.Source',
     data_source_version='1.0',
     input_data_points=[
-        InputDataPointDto(
+        InputDataPoint(
             attributes=[
-                AttributeDto(key='id', value=AttributeValueDto(int64=1)),
-                AttributeDto(key='payload', value=AttributeValueDto(string='sample data point')),
+                Attribute(key='id', value=AttributeValue(int64=1)),
+                Attribute(key='payload', value=AttributeValue(string='sample data point')),
             ],
-            vector=VectorDto(is_sparse=False, coordinates=[3.14, 2.71]))
+            vector=Vector(is_sparse=False, coordinates=[3.14, 2.71]))
     ])
 ```
 
 4. Search for `k` nearest data points to the given `query_vector`:
 
 ```python
-from vektonn.dtos import VectorDto, SearchQueryDto
+from vektonn.dtos import Vector, SearchQuery
 
 k = 10
-query_vector = VectorDto(is_sparse=False, coordinates=[1.2, 3.4])
+query_vector = Vector(is_sparse=False, coordinates=[1.2, 3.4])
 
 search_results = vektonn_client.search(
     index_name='QuickStart.Index',
     index_version='1.0',
-    search_query=SearchQueryDto(k=k, query_vectors=[query_vector]))
+    search_query=SearchQuery(k=k, query_vectors=[query_vector]))
 
 print(f'For query vector {query_vector.coordinates} {k} nearest data points are:')
 for fdp in search_results[0].nearest_data_points:
