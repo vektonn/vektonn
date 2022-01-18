@@ -7,7 +7,10 @@
 
 ## Overview
 
-Vektonn is a high-performance service for finding [k-nearest neighbors (kNN)](https://en.wikipedia.org/wiki/Nearest_neighbor_search#k-nearest_neighbors) in vector space.
+**Vektonn** is a high-performance battle-tested [kNN vector search](https://en.wikipedia.org/wiki/Nearest_neighbor_search#k-nearest_neighbors) engine for your data science applications.
+It helps you manage vectors' lifecycle and radically reduces time to market.
+
+See [documentation](https://vektonn.github.io/vektonn/) for more info.
 
 ### Features
 
