@@ -63,4 +63,5 @@ nav:
 - 'features.md'
 - 'quick-start.md'
 - 'Reference':
+    - 'reference/api.md'
     - 'reference/roadmap.md'
