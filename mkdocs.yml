@@ -9,6 +9,7 @@ theme:
   custom_dir: docs/overrides
   features:
   - toc.integrate
+  - content.code.annotate
   icon:
     repo: fontawesome/brands/github
   logo: assets/vektonn-star-rounded-white.svg
@@ -64,4 +65,6 @@ nav:
 - 'quick-start.md'
 - 'Reference':
     - 'reference/api.md'
+    - 'reference/definitions.md'
+    - 'reference/supported-algorithms.md'
     - 'reference/roadmap.md'
