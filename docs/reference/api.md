@@ -13,6 +13,8 @@ pip install vektonn
 
 See [Python Quick start](https://github.com/vektonn/vektonn-examples/tree/master/quick-start/python) for example usage.
 
+The source code is available in [the vektonn-client-python repository](https://github.com/vektonn/vektonn-client-python).
+
 
 ## .NET client
 
@@ -23,6 +25,8 @@ dotnet add package Vektonn.ApiClient
 ```
 
 See [.NET Quick start](https://github.com/vektonn/vektonn-examples/tree/master/quick-start/dotnet) for example usage.
+
+The source code is available in [the main repository](https://github.com/vektonn/vektonn/tree/master/src/Vektonn.ApiClient).
 
 
 ## HTTP API
