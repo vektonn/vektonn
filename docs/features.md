@@ -25,7 +25,6 @@ We have a handy [client for Python](https://pypi.org/project/vektonn/) (and also
 #### Low overhead
 
 We have a very thin and efficient management layer atop of actual binary indexes, so the overhead is almost non-existent.
-See [the benchmarks](benchmarks.md).
 
 #### Sharding
 
