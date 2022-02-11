@@ -9,7 +9,10 @@ namespace Vektonn.ApiClient.HttpClusterClient
         public VektonnClusterClientException(ClusterResult clusterResult)
             : base($"Request failed: {Format(clusterResult)}")
         {
+            ClusterResult = clusterResult;
         }
+
+        public ClusterResult ClusterResult { get; }
 
         private static string Format(ClusterResult clusterResult)
         {
