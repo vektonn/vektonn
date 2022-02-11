@@ -18,30 +18,38 @@ namespace Vektonn.ApiClient.IndexShard
             this.indexShardBaseUri = indexShardBaseUri;
         }
 
-        public async Task<IndexInfoDto> GetIndexInfoAsync()
+        public async Task<IndexInfoDto> GetIndexInfoAsync(
+            CancellationToken cancellationToken = default,
+            TimeSpan? timeout = null)
         {
             var requestUrl = new Uri(indexShardBaseUri, "api/v1/info");
             var request = clusterClient.BuildRequest(HttpMethod.Get, requestUrl);
 
-            return await clusterClient.GetResponseAsync<IndexInfoDto>(request);
+            return await clusterClient.GetResponseAsync<IndexInfoDto>(request, cancellationToken, timeout);
         }
 
-        public async Task<SearchResultDto> ProbeAsync(int? k = null)
+        public async Task<SearchResultDto> ProbeAsync(
+            int? k = null,
+            CancellationToken cancellationToken = default,
+            TimeSpan? timeout = null)
         {
             var requestUrl = new Uri(indexShardBaseUri, "api/v1/probe");
             var request = clusterClient.BuildRequest(HttpMethod.Get, requestUrl);
             if (k != null)
                 request = request.WithAdditionalQueryParameter(nameof(k), k.Value);
 
-            return await clusterClient.GetResponseAsync<SearchResultDto>(request);
+            return await clusterClient.GetResponseAsync<SearchResultDto>(request, cancellationToken, timeout);
         }
 
-        public async Task<SearchResultDto[]> SearchAsync(SearchQueryDto searchQuery, CancellationToken cancellationToken = default)
+        public async Task<SearchResultDto[]> SearchAsync(
+            SearchQueryDto searchQuery,
+            CancellationToken cancellationToken = default,
+            TimeSpan? timeout = null)
         {
             var requestUrl = new Uri(indexShardBaseUri, "api/v1/search");
             var request = clusterClient.BuildRequest(HttpMethod.Post, requestUrl, searchQuery);
 
-            return await clusterClient.GetResponseAsync<SearchResultDto[]>(request, cancellationToken);
+            return await clusterClient.GetResponseAsync<SearchResultDto[]>(request, cancellationToken, timeout);
         }
     }
 }

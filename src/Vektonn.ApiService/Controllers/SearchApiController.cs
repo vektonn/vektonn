@@ -15,6 +15,8 @@ using Vektonn.SharedImpl.ApiContracts.Validation;
 using Vektonn.SharedImpl.Configuration;
 using Vektonn.SharedImpl.Contracts;
 using Vektonn.SharedImpl.SearchResultsMerging;
+using Vostok.Applications.AspNetCore.Models;
+using Vostok.Context;
 using Vostok.Logging.Abstractions;
 
 namespace Vektonn.ApiService.Controllers
@@ -97,7 +99,10 @@ namespace Vektonn.ApiService.Controllers
         {
             var indexShardApiClient = indexShardApiClientProvider.GetIndexShardApiClient(endpointsByShardId, shardId);
 
-            return await indexShardApiClient.SearchAsync(searchQuery, shutdownTokenProvider.HostShutdownToken);
+            return await indexShardApiClient.SearchAsync(
+                searchQuery,
+                cancellationToken: shutdownTokenProvider.HostShutdownToken,
+                timeout: FlowingContext.Globals.Get<IRequestInfo>()!.RemainingTimeout);
         }
 
         private static SearchResultDto[] MergeResultsOfShards(SearchQueryDto searchQuery, SearchResultDto[][] results, ListSortDirection mergeSortDirection)
