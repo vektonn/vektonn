@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Vektonn.ApiContracts;
@@ -50,11 +48,9 @@ namespace Vektonn.ApiService.Controllers
         {
             var indexId = new IndexId(indexName, indexVersion);
 
-            var indexMetaWithShardEndpoints = indexMetaProvider.TryGetIndexMeta(indexId);
-            if (indexMetaWithShardEndpoints == null)
+            var indexMeta = indexMetaProvider.TryGetIndexMeta(indexId);
+            if (indexMeta == null)
                 return NotFound(new ErrorDto(ErrorMessages: new[] {$"Index {indexId} does not exist"}));
-
-            var (indexMeta, endpointsByShardId) = indexMetaWithShardEndpoints;
 
             var searchQueryValidator = new SearchQueryValidator(indexMeta);
             var validationResult = await searchQueryValidator.ValidateAsync(searchQuery);
@@ -80,12 +76,12 @@ namespace Vektonn.ApiService.Controllers
                 }
                 case 1:
                 {
-                    return await QueryShardAsync(endpointsByShardId, shardIdsForQuery.Single(), searchQuery);
+                    return await QueryShardAsync(indexId, shardIdsForQuery.Single(), searchQuery);
                 }
                 default:
                 {
                     var tasks = shardIdsForQuery
-                        .Select(shardId => QueryShardAsync(endpointsByShardId, shardId, searchQuery))
+                        .Select(shardId => QueryShardAsync(indexId, shardId, searchQuery))
                         .ToArray();
                     var results = await Task.WhenAll(tasks);
 
@@ -95,9 +91,9 @@ namespace Vektonn.ApiService.Controllers
             }
         }
 
-        private async Task<SearchResultDto[]> QueryShardAsync(Dictionary<string, DnsEndPoint> endpointsByShardId, string shardId, SearchQueryDto searchQuery)
+        private async Task<SearchResultDto[]> QueryShardAsync(IndexId indexId, string shardId, SearchQueryDto searchQuery)
         {
-            var indexShardApiClient = indexShardApiClientProvider.GetIndexShardApiClient(endpointsByShardId, shardId);
+            var indexShardApiClient = indexShardApiClientProvider.GetIndexShardApiClient(indexId, shardId);
 
             return await indexShardApiClient.SearchAsync(
                 searchQuery,

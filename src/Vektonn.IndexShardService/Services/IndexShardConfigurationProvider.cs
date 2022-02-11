@@ -47,11 +47,11 @@ namespace Vektonn.IndexShardService.Services
             var indexVersion = EnvironmentVariables.Get("VEKTONN_INDEX_VERSION");
             var indexId = new IndexId(indexName, indexVersion);
 
-            var indexMetaWithShardEndpoints = indexMetaProvider.TryGetIndexMeta(indexId);
-            if (indexMetaWithShardEndpoints == null)
-                throw new InvalidOperationException($"Failed to get indexMeta for: {indexId}");
+            var indexMeta = indexMetaProvider.TryGetIndexMeta(indexId);
+            if (indexMeta == null)
+                throw new InvalidOperationException($"Failed to get indexMeta for indexId: {indexId}");
 
-            return indexMetaWithShardEndpoints.IndexMeta;
+            return indexMeta;
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Vektonn.SharedImpl.Configuration
 {
     public interface IIndexMetaProvider
     {
-        IndexMetaWithShardEndpoints? TryGetIndexMeta(IndexId indexId);
+        IndexMeta? TryGetIndexMeta(IndexId indexId);
         DataSourceMeta? TryGetDataSourceMeta(DataSourceId dataSourceId);
     }
 }
