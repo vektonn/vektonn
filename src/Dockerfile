@@ -2,8 +2,8 @@
 
 # https://hub.docker.com/_/microsoft-dotnet
 ARG DOTNET_REPO=mcr.microsoft.com/dotnet
-ARG DOTNET_VERSION_TAG=5.0-buster-slim-amd64
-ARG FAISS_VERSION=1.7.2.1
+ARG DOTNET_VERSION_TAG=6.0-bullseye-slim-amd64
+ARG FAISS_VERSION=1.7.2.2
 
 FROM ghcr.io/vektonn/vektonn/faiss-lib:$FAISS_VERSION AS faiss-lib
 
