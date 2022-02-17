@@ -7,40 +7,40 @@ title: Features
 
 ## Ease of use
 
-#### Attributes
+#### Storing metadata (attributes)
 
-We store not only embeddings but also their attributes, which are more interesting since they can use real-world entities from your domain. For example, they can identify objects using their real identificators.
+We store not only embeddings/vectors themselves, but also their metadata (attributes), which allows you to use real-world entities from your domain. For example, attributes can be a real-world identifiers (such as name) or really any custom data you want to store along with vectors.
 
 #### Dense and sparse vector support
 
-You can work with vectors of any type. For example, to solve word processing problems, you can use bag-of-words and load appropriate sparse vectors into Vektonn.
+You can work with vectors of any type — dense or sparse. For example, to solve word processing problems, you can use bag-of-words and load appropriate sparse vectors into Vektonn.
 
 #### All set and ready to go
 
-We have a handy [client for Python](https://pypi.org/project/vektonn/) (and also [for .NET](https://www.nuget.org/packages/Vektonn.ApiClient/), btw) along with published [Docker images on DockerHub](https://hub.docker.com/u/vektonn) — everything you need for a [quick start](quick-start.md).
+We have a handy [client for Python](https://pypi.org/project/vektonn/) (and [for .NET](https://www.nuget.org/packages/Vektonn.ApiClient/) too) along with published [Docker images on DockerHub](https://hub.docker.com/u/vektonn) — everything you'll need for a [quick start](quick-start.md).
 
 
 ## Performance and scalability
 
 #### Low overhead
 
-We have a very thin and efficient management layer atop of actual binary indexes, so the overhead is almost non-existent.
+We have a very thin and efficient management layer atop of actual binary indices, so the overhead is pretty low.
 
 #### Sharding
 
 For horizontal scaling, you can specify the attributes by which the vectors will be distributed into groups (or index shards). When processing a search query, the results from multiple shards will be automatically combined.
 
-#### Data splitting and filtering
+#### Data filtering (splitting)
 
-You can adjust the indexing scheme for specific filter values for a more efficient search.
+Each shard can be further split into logical parts for an even more efficient search. Just specify split attributes in the indexing scheme, and all the queries for that index will filter out unnecessary data before searching. For example, you may search for some goods in a particular store, or for books written in a specific language.
 
 
 ## Vectors' lifecycle management
 
 #### Online changes
 
-We support changing indexes as new data arrives (delete, change, or add data to the index), in parallel with search queries.
+We support changing indices as new data arrives (delete, update, or insert data to the index), concurrently with search queries.
 
 #### Seamless versioning
 
-You can expand multiple indexes over a single data source (vectors and attributes) and seamlessly transition to new versions of indexes. You can expand different indexes with different parameters of the same data.
+You can deploy multiple indices over a single data source (containing the same vectors and attributes) and seamlessly transition to their new versions. Different indices may have different configuration parameters.
