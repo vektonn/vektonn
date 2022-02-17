@@ -38,7 +38,7 @@ namespace Vektonn.IndexShard
             try
             {
                 locker.EnterReadLock();
-                return indexStore.FindNearest(query.QueryVectors, query.K);
+                return indexStore.FindNearest(query.QueryVectors, query.K, query.RetrieveVectors);
             }
             finally
             {

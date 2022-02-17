@@ -80,14 +80,15 @@ namespace Vektonn.IndexShard
             var searchQuery = new SearchQuery<TVector>(
                 query.SplitFilter?.ToDictionary(x => x.Key, x => x.Value.ToAttributeValue()),
                 query.QueryVectors.Select(x => (TVector)x.ToVector(IndexMeta.VectorDimension)).ToArray(),
-                query.K);
+                query.K,
+                query.RetrieveVectors);
 
             log.Info($"Executing search query: {searchQuery}");
             var searchResults = indexShard.FindNearest(searchQuery);
 
             return searchResults.Select(
                     x => new SearchResultDto(
-                        x.QueryVector.ToVectorDto(),
+                        x.QueryVector.ToVectorDto()!,
                         x.NearestDataPoints.Select(
                                 p => new FoundDataPointDto(
                                     p.Vector.ToVectorDto(),

@@ -26,22 +26,22 @@ namespace Vektonn.Tests.SharedImpl.ApiContracts
         private static IEnumerable<TestCaseData> TestCases()
         {
             yield return new TestCaseData(
-                new SearchQueryDto(SplitFilter: null, DenseQueryVectors(), K: 0),
+                new SearchQueryDto(SplitFilter: null, DenseQueryVectors(), K: 0, RetrieveVectors: false),
                 IndexMetaDense()
             ) {ExpectedResult = "K must be positive"};
 
             yield return new TestCaseData(
-                new SearchQueryDto(SplitFilter: null, QueryVectors: Array.Empty<VectorDto>(), K: 1),
+                new SearchQueryDto(SplitFilter: null, QueryVectors: Array.Empty<VectorDto>(), K: 1, RetrieveVectors: false),
                 IndexMetaDense()
             ) {ExpectedResult = "At least one query vector is required"};
 
             yield return new TestCaseData(
-                new SearchQueryDto(SplitFilter: null, DenseQueryVectors(), K: 1),
+                new SearchQueryDto(SplitFilter: null, DenseQueryVectors(), K: 1, RetrieveVectors: false),
                 IndexMetaSparse()
             ) {ExpectedResult = "Vector must be sparse"};
 
             yield return new TestCaseData(
-                new SearchQueryDto(SplitFilter: null, SparseQueryVectors(), K: 1),
+                new SearchQueryDto(SplitFilter: null, SparseQueryVectors(), K: 1, RetrieveVectors: true),
                 IndexMetaDense()
             ) {ExpectedResult = "Vector must be dense"};
 
@@ -49,17 +49,18 @@ namespace Vektonn.Tests.SharedImpl.ApiContracts
                 new SearchQueryDto(
                     SplitFilter: new[] {Attribute("sk0", value: 0)},
                     DenseQueryVectors(),
-                    K: -1),
+                    K: -1,
+                    RetrieveVectors: true),
                 IndexMetaDense(splitAttributes: new[] {("sk1", AttributeValueTypeCode.Int64)})
             ) {ExpectedResult = "K must be positive \n SplitFilter attribute keys must be in SplitAttributes: {sk1}"};
 
             yield return new TestCaseData(
-                new SearchQueryDto(SplitFilter: null, SparseQueryVectors(), K: 1),
+                new SearchQueryDto(SplitFilter: null, SparseQueryVectors(), K: 1, RetrieveVectors: true),
                 IndexMetaSparse()
             ) {ExpectedResult = string.Empty};
 
             yield return new TestCaseData(
-                new SearchQueryDto(SplitFilter: null, QueryVectors: DenseQueryVectors(), K: 7),
+                new SearchQueryDto(SplitFilter: null, QueryVectors: DenseQueryVectors(), K: 7, RetrieveVectors: true),
                 IndexMetaDense()
             ) {ExpectedResult = string.Empty};
 
@@ -67,7 +68,8 @@ namespace Vektonn.Tests.SharedImpl.ApiContracts
                 new SearchQueryDto(
                     SplitFilter: new[] {Attribute("sk1", value: 0), Attribute("sk2", value: true)},
                     QueryVectors: DenseQueryVectors(),
-                    K: 1),
+                    K: 1,
+                    RetrieveVectors: true),
                 IndexMetaDense(splitAttributes: new[] {("sk1", AttributeValueTypeCode.Int64), ("sk2", AttributeValueTypeCode.Bool)})
             ) {ExpectedResult = string.Empty};
         }

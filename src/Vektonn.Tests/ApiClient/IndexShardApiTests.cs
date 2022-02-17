@@ -49,15 +49,16 @@ namespace Vektonn.Tests.ApiClient
         {
             var queryVectors = new[]
             {
-                RandomHelpers.NextSparseVector(Dimension, 5).ToVectorDto(),
-                RandomHelpers.NextSparseVector(Dimension, 7).ToVectorDto()
+                RandomHelpers.NextSparseVector(Dimension, 5).ToVectorDto()!,
+                RandomHelpers.NextSparseVector(Dimension, 7).ToVectorDto()!
             };
 
             const int k = 3;
             var searchQuery = new SearchQueryDto(
                 SplitFilter: null,
                 QueryVectors: queryVectors,
-                K: k);
+                K: k,
+                RetrieveVectors: true);
 
             var searchResult = await indexShardApiClient.SearchAsync(searchQuery);
             await Console.Out.WriteLineAsync(searchResult.ToPrettyJson());

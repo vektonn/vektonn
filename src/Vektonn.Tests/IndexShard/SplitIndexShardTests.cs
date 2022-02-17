@@ -124,7 +124,8 @@ namespace Vektonn.Tests.IndexShard
                     {"SplitZ", AttributeValue(false)},
                 },
                 QueryVectors: new[] {queryVector},
-                K: 2);
+                K: 2,
+                RetrieveVectors: true);
 
             splitIndexShard
                 .FindNearest(searchQuery)
@@ -220,7 +221,8 @@ namespace Vektonn.Tests.IndexShard
                     new SearchQuery<SparseVector>(
                         SplitFilter: new Dictionary<string, AttributeValue>(),
                         QueryVectors: new[] {queryVector},
-                        K: 4))
+                        K: 4,
+                        RetrieveVectors: true))
                 .Should()
                 .BeEquivalentTo(
                     new[]
@@ -288,7 +290,8 @@ namespace Vektonn.Tests.IndexShard
                             {"SplitA", AttributeValue(true)},
                         },
                         QueryVectors: new[] {queryVector},
-                        K: 3))
+                        K: 3,
+                        RetrieveVectors: true))
                 .Should()
                 .BeEquivalentTo(
                     new[]
@@ -340,7 +343,8 @@ namespace Vektonn.Tests.IndexShard
                             {"SplitA", AttributeValue(false)},
                         },
                         QueryVectors: new[] {queryVector},
-                        K: 3))
+                        K: 3,
+                        RetrieveVectors: true))
                 .Should()
                 .BeEquivalentTo(
                     new[]
@@ -372,7 +376,8 @@ namespace Vektonn.Tests.IndexShard
                             {"SplitZ", AttributeValue(true)},
                         },
                         QueryVectors: new[] {queryVector},
-                        K: 3))
+                        K: 3,
+                        RetrieveVectors: true))
                 .Should()
                 .BeEquivalentTo(
                     new[]
@@ -424,7 +429,8 @@ namespace Vektonn.Tests.IndexShard
                             {"SplitZ", AttributeValue(false)},
                         },
                         QueryVectors: new[] {queryVector},
-                        K: 3))
+                        K: 3,
+                        RetrieveVectors: true))
                 .Should()
                 .BeEquivalentTo(
                     new[]
@@ -480,7 +486,8 @@ namespace Vektonn.Tests.IndexShard
                     {"SplitA", AttributeValue(false)},
                 },
                 QueryVectors: new[] {queryVector},
-                K: 1);
+                K: 1,
+                RetrieveVectors: true);
 
             splitIndexShard
                 .FindNearest(searchQuery)
@@ -548,7 +555,8 @@ namespace Vektonn.Tests.IndexShard
                     {"SplitZ", AttributeValue(false)},
                 },
                 QueryVectors: new[] {queryVector},
-                K: 1);
+                K: 1,
+                RetrieveVectors: true);
 
             splitIndexShard
                 .FindNearest(searchQuery)

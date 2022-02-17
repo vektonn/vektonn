@@ -26,7 +26,7 @@ namespace Vektonn.IndexShardService.Services
                 indexShardConfiguration.IndexShardMeta,
                 dataPointOrTombstones => indexShardHolder.UpdateIndexShard(dataPointOrTombstones));
 
-            ZeroVector = zeroVector.ToVectorDto();
+            ZeroVector = zeroVector.ToVectorDto()!;
         }
 
         public IndexMeta IndexMeta => indexShardHolder.IndexMeta;
