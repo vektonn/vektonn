@@ -19,7 +19,7 @@ namespace Vektonn.ApiService
 
         protected sealed override void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IndexShardApiClusterClient>();
+            services.AddSingleton<IndexShardApiAbsoluteUriClusterClient>();
             services.AddSingleton<IndexShardApiClientProvider>();
 
             services.AddSingleton<IDataSourceProducer>(

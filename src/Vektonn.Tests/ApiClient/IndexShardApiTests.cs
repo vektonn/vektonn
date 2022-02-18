@@ -21,7 +21,7 @@ namespace Vektonn.Tests.ApiClient
             CoordinateIndices: Array.Empty<int>());
 
         private readonly IndexShardApiClient indexShardApiClient = new(
-            clusterClient: new IndexShardApiClusterClient(new SynchronousConsoleLog(), new DevNullTracer()),
+            new IndexShardApiAbsoluteUriClusterClient(new SynchronousConsoleLog(), new DevNullTracer()),
             indexShardBaseUri: new Uri("http://localhost:8082"));
 
         [Test]

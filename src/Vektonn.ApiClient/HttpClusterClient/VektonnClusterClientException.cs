@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Vostok.Clusterclient.Core.Model;
 
@@ -12,6 +13,8 @@ namespace Vektonn.ApiClient.HttpClusterClient
             ClusterResult = clusterResult;
         }
 
+        [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
         public ClusterResult ClusterResult { get; }
 
         private static string Format(ClusterResult clusterResult)
