@@ -84,6 +84,9 @@ namespace Vektonn.SharedImpl.Configuration
 
             var dataSourceYaml = ReadConfigYaml(dataSourceConfigFileName);
             var dataSourceMeta = yamlParser.ParseDataSourceMeta(dataSourceConfig: (dataSourceId, dataSourceYaml));
+
+            dataSourceMeta.ValidateConsistency();
+
             return dataSourceMeta;
         }
 
