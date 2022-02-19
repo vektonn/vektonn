@@ -14,9 +14,9 @@ namespace Vektonn.Tests.ApiClient
     [Explicit]
     public class VektonnApiTests
     {
-        private const int Dimension = 100500;
+        private const int Dimension = 2;
 
-        private readonly IndexId indexId = new(Name: "Samples.SparseVectors", Version: "0.1");
+        private readonly IndexId indexId = new(Name: "QuickStart.Index", Version: "1.0");
 
         private readonly VektonnApiClient vektonnApiClient = new(
             baseUri: new Uri("http://localhost:8081"),
@@ -28,8 +28,8 @@ namespace Vektonn.Tests.ApiClient
         {
             var queryVectors = new[]
             {
-                RandomHelpers.NextSparseVector(Dimension, 5).ToVectorDto()!,
-                RandomHelpers.NextSparseVector(Dimension, 7).ToVectorDto()!
+                RandomHelpers.NextDenseVector(Dimension).ToVectorDto()!,
+                RandomHelpers.NextDenseVector(Dimension).ToVectorDto()!
             };
 
             const int k = 3;
@@ -44,9 +44,9 @@ namespace Vektonn.Tests.ApiClient
 
             searchResult.Length.Should().Be(queryVectors.Length);
             searchResult[0].QueryVector.Should().BeEquivalentTo(queryVectors[0]);
-            searchResult[0].NearestDataPoints.Length.Should().Be(k);
+            searchResult[0].NearestDataPoints.Length.Should().Be(0);
             searchResult[1].QueryVector.Should().BeEquivalentTo(queryVectors[1]);
-            searchResult[1].NearestDataPoints.Length.Should().Be(k);
+            searchResult[1].NearestDataPoints.Length.Should().Be(0);
         }
     }
 }
