@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using FluentValidation.Results;
 using Vektonn.ApiContracts;
@@ -77,16 +78,17 @@ namespace Vektonn.IndexShard
             if (isDisposed)
                 throw new ObjectDisposedException(nameof(indexShard));
 
+            var sw = Stopwatch.StartNew();
+
             var searchQuery = new SearchQuery<TVector>(
                 query.SplitFilter?.ToDictionary(x => x.Key, x => x.Value.ToAttributeValue()),
                 query.QueryVectors.Select(x => (TVector)x.ToVector(IndexMeta.VectorDimension)).ToArray(),
                 query.K,
                 query.RetrieveVectors);
 
-            log.Info($"Executing search query: {searchQuery}");
             var searchResults = indexShard.FindNearest(searchQuery);
 
-            return searchResults.Select(
+            var searchResultDtos = searchResults.Select(
                     x => new SearchResultDto(
                         x.QueryVector.ToVectorDto()!,
                         x.NearestDataPoints.Select(
@@ -98,6 +100,10 @@ namespace Vektonn.IndexShard
                             .ToArray())
                 )
                 .ToArray();
+
+            log.Info($"Executing search query {{ {searchQuery} }} took {sw.Elapsed}");
+
+            return searchResultDtos;
         }
     }
 }
