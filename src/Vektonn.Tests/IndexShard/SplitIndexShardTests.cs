@@ -167,7 +167,7 @@ namespace Vektonn.Tests.IndexShard
                 {
                     new DataPointOrTombstone<SparseVector>(
                         new Tombstone(
-                            IdAttributes: new Dictionary<string, AttributeValue>
+                            PermanentAttributes: new Dictionary<string, AttributeValue>
                             {
                                 {"Id", AttributeValue(5)},
                                 {"SplitA", AttributeValue(true)},
@@ -520,7 +520,7 @@ namespace Vektonn.Tests.IndexShard
                 {
                     new DataPointOrTombstone<SparseVector>(
                         new Tombstone(
-                            IdAttributes: new Dictionary<string, AttributeValue>
+                            PermanentAttributes: new Dictionary<string, AttributeValue>
                             {
                                 {"Id", AttributeValue(0)},
                                 {"SplitA", AttributeValue(false)},
@@ -589,7 +589,7 @@ namespace Vektonn.Tests.IndexShard
                 {
                     new DataPointOrTombstone<SparseVector>(
                         new Tombstone(
-                            IdAttributes: new Dictionary<string, AttributeValue>
+                            PermanentAttributes: new Dictionary<string, AttributeValue>
                             {
                                 {"Id", AttributeValue(0)},
                                 {"SplitA", AttributeValue(false)},
