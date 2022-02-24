@@ -11,16 +11,14 @@ Title: Definitions
 DataPoint := (Vector, Attributes)
 
 Vector       := DenseVector | SparseVector
-DenseVector  := (Coordinates: list[float])
-SparseVector := (VectorDimension: int, Coordinates: list[float], Indices: list[int])
+DenseVector  := (coordinates: list[float])
+SparseVector := (coordinates: list[float], coordinateIndices: list[int])
 
-Attribute      := (Key: AttributeKey, Value: AttributeValue)
+Attribute      := (key: AttributeKey, value: AttributeValue)
 Attributes     := dict[AttributeKey, AttributeValue]
 AttributeKey   := str
-AttributeValue := bool | int | float | str | UUID | datetime
+AttributeValue := bool | int64 | float64 | str | UUID | datetime
 ```
-
-Both `int` and `float` are 64-bit.
 
 
 ## Data sources
@@ -39,9 +37,7 @@ DataSourceMeta := (
 )
 
 DataPointUpdate := DataPoint | Tombstone
-Tombstone := (idAttributes: Attributes)  # uniquely identify a data point to delete
-
-Index.idAttributes.keys() ⊆ DataSourceMeta.permanentAttributes
+Tombstone := (permanentAttributes: Attributes)  # uniquely identify a data point to delete
 ```
 
 Defining a data source requires you to set the type of data points that it will store, including their size and permanent attributes.
@@ -74,38 +70,36 @@ IndexMeta := (
 )
 
 Index.permanentAttributes := Index.idAttributes ⋃ Index.splitAttributes ⋃ Index.shardAttributes
-Index.permanentAttributes ⋂ Index.payloadAttributes ≡ ∅
-
 Index.permanentAttributes ⊆ DataSourceMeta.permanentAttributes
+
+Index.permanentAttributes ⋂ Index.payloadAttributes ≡ ∅
 ```
 
 1. See the list of <a href="/vektonn/reference/supported-algorithms">supported algorithms</a>.
 
 <a name="permanent-attributes"></a>
-**Permanent** attributes are:
+Index's **permanent attributes** are:
 
-- `IdAttributes` — a set of keys from your domain that uniquely identifies object represented by the vector;
-- `ShardAttributes` — defines a [sharding](#sharding) scheme;
-- `SplitAttributes` — defines a [splitting](#splitting) scheme.
+- `idAttributes` — a set of keys from your domain that uniquely identifies object represented by the vector;
+- `shardAttributes` — defines a [sharding](#sharding) scheme;
+- `splitAttributes` — defines a [splitting](#splitting) scheme.
 
-Index's permanent attributes must be a subset of a corresponding data source's permanent attributes. They cannot be changed during vector's lifetime.
+Note that `idAttributes`, `splitAttributes`, and `shardAttributes` sets can be in arbitrary relationships, but each one must be a subset of a corresponding data source's permanent attributes. They cannot be changed during vector's lifetime.
 
-Also note that `IdAttributes`, `SplitAttributes`, and `ShardAttributes` sets can be in arbitrary relationships.
-
-All **other attributes** are `PayloadAttributes` — any metadata to store alongside the vector, may be freely updated.
+All **other attributes** are `payloadAttributes` — any metadata to store alongside the vector, may be freely updated.
 
 
 ## Searching
 
+Search for `k` nearest neighbors for each of query vectors:
+
 ```python
 Search := Callable[[SearchQuery], list[SearchResult]]
 
-SearchQuery    := (SplitKey: Optional[Attributes], QueryVectors: list[Vector], int K)
+SearchQuery    := (k: int, queryVectors: list[Vector], splitFilter: Optional[Attributes])
 
-SearchResult   := (QueryVector: Vector, NearestKDataPoints: list[FoundDataPoint])
-FoundDataPoint := (Vector: DataPoint, Distance: float)
+SearchResult   := (queryVector: Vector, nearestDataPoints: list[FoundDataPoint])
+FoundDataPoint := (vector: Vector, attributes: Attributes, distance: float)
 ```
 
-Search query constraints:
-
-- If `SearchQuery.SplitKey` is present then `SearchQuery.SplitKey.Keys ⊆ IndexMeta.SplitAttributes`
+If `SearchQuery.splitFilter` is present then `SearchQuery.splitFilter.keys ⊆ IndexMeta.splitAttributes`.
