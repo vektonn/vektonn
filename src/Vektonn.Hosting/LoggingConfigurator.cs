@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Microsoft.Extensions.Hosting;
 using Vostok.Logging.Abstractions;
 using Vostok.Logging.Console;
 using Vostok.Logging.Context;
@@ -17,7 +18,7 @@ namespace Vektonn.Hosting
             SetupUnhandledExceptionLogging();
 
             var logs = new List<ILog>();
-            if (hostingEnvironment == Constants.DevHostingEnvironment)
+            if (hostingEnvironment == Environments.Development)
             {
                 logs.Add(
                     new ConsoleLog(
