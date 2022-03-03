@@ -101,7 +101,7 @@ namespace Vektonn.IndexShard
                 )
                 .ToArray();
 
-            log.Info($"Executing search query {{ {searchQuery} }} took {sw.Elapsed}");
+            log.Info($"Executing search query '{searchQuery}' took {sw.Elapsed}");
 
             return searchResultDtos;
         }
