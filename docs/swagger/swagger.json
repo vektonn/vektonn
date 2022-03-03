@@ -251,6 +251,11 @@
             "format": "int64",
             "nullable": true
           },
+          "float64": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
           "dateTime": {
             "type": "string",
             "format": "date-time",
@@ -279,7 +284,8 @@
               {
                 "$ref": "#/components/schemas/SparseVectorDto"
               }
-            ]
+            ],
+            "nullable": true
           },
           "attributes": {
             "type": "array",
@@ -346,6 +352,9 @@
           "k": {
             "type": "integer",
             "format": "int32"
+          },
+          "retrieveVectors": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
