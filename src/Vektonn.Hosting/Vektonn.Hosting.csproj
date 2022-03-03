@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Vostok.Applications.AspNetCore" Version="0.3.3" />
-    <PackageReference Include="Vostok.Hosting" Version="0.3.43" />
+    <PackageReference Include="Vostok.Applications.AspNetCore" Version="0.3.4" />
+    <PackageReference Include="Vostok.Hosting" Version="0.3.45" />
   </ItemGroup>
 
   <ItemGroup>
