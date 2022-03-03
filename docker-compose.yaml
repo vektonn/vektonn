@@ -15,7 +15,8 @@ services:
     volumes:
     - ./tests/config:/vektonn/config:ro
     environment:
-    - VEKTONN_KAFKA_BOOTSTRAP_SERVERS=kafka-broker:9092
+    - VEKTONN_KAFKA_BOOTSTRAP_SERVERS=kafka-broker:29092
+    - VEKTONN_KAFKA_TOPIC_REPLICATION_FACTOR=1
 
   vektonn-index-shard:
     build:
@@ -30,7 +31,7 @@ services:
     volumes:
     - ./tests/config:/vektonn/config:ro
     environment:
-    - VEKTONN_KAFKA_BOOTSTRAP_SERVERS=kafka-broker:9092
+    - VEKTONN_KAFKA_BOOTSTRAP_SERVERS=kafka-broker:29092
     - VEKTONN_INDEX_NAME=QuickStart.Index
     - VEKTONN_INDEX_VERSION=1.0
     - VEKTONN_INDEX_SHARD_ID=SingleShard
@@ -41,11 +42,10 @@ services:
     container_name: kafka-broker
     ports:
     - 9092:9092
-    - 9101:9101
     environment:
-    - KAFKA_LISTENERS=PLAINTEXT://kafka-broker:9092,CONTROLLER://kafka-broker:9093
-    - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
-    - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka-broker:9092
+    - KAFKA_LISTENERS=CONTROLLER://kafka-broker:9093,PLAINTEXT://kafka-broker:29092,PLAINTEXT_LOCALHOST://0.0.0.0:9092
+    - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_LOCALHOST:PLAINTEXT
+    - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka-broker:29092,PLAINTEXT_LOCALHOST://localhost:9092
     - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
     - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
     - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka-broker:9093

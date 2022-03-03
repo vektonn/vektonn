@@ -4,9 +4,8 @@
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "VEKTONN_HOSTING_ENVIRONMENT": "dev",
         "VEKTONN_HTTP_PORT": "8081",
-        "VEKTONN_KAFKA_BOOTSTRAP_SERVERS": "localhost",
+        "VEKTONN_KAFKA_BOOTSTRAP_SERVERS": "localhost:9092",
         "VEKTONN_KAFKA_TOPIC_REPLICATION_FACTOR": "1",
         "VEKTONN_CONFIG_BASE_DIRECTORY": "tests/config"
       }

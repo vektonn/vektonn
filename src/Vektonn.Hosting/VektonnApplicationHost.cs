@@ -56,6 +56,8 @@ namespace Vektonn.Hosting
                 "Setting up VostokHost. " +
                 $"HostSettings: {hostSettings}, " +
                 $"Application: {application}, " +
+                $"Environment.ProcessorCount: {Environment.ProcessorCount}, " +
+                $"EnvironmentVariables[OMP_NUM_THREADS]: {EnvironmentVariables.TryGet("OMP_NUM_THREADS")}, " +
                 $"GCSettings.IsServerGC: {GCSettings.IsServerGC}, " +
                 $"GCSettings.LatencyMode: {GCSettings.LatencyMode}");
 

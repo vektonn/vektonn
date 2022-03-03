@@ -49,7 +49,9 @@ namespace Vektonn.Hosting
 
                     services.AddSingleton<KafkaConfigurationProvider>();
 
-                    services.AddSingleton<IIndexMetaProvider>(BuildIndexMetaProvider(hostingEnvironment.Log));
+                    var indexMetaProvider = BuildIndexMetaProvider(hostingEnvironment.Log);
+                    services.AddSingleton<IIndexMetaProvider>(indexMetaProvider);
+                    services.AddSingleton<IIndexShardsTopologyProvider>(indexMetaProvider);
 
                     services
                         .AddControllers()

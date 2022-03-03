@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Vostok.Applications.AspNetCore" Version="0.3.2" />
-    <PackageReference Include="Vostok.Hosting" Version="0.3.42" />
+    <PackageReference Include="Vostok.Applications.AspNetCore" Version="0.3.4" />
+    <PackageReference Include="Vostok.Hosting" Version="0.3.45" />
   </ItemGroup>
 
   <ItemGroup>

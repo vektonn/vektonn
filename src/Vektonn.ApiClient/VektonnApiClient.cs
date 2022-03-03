@@ -2,7 +2,9 @@ using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Vektonn.ApiClient.HttpClusterClient;
 using Vektonn.ApiContracts;
+using Vostok.Clusterclient.Core;
 using Vostok.Logging.Abstractions;
 using Vostok.Tracing.Abstractions;
 
@@ -10,49 +12,54 @@ namespace Vektonn.ApiClient
 {
     public class VektonnApiClient
     {
-        private readonly Uri baseUri;
-        private readonly VektonnApiClusterClient clusterClient;
+        private readonly IClusterClient clusterClient;
+        private readonly IRequestUrlBuilder requestUrlBuilder;
 
-        public VektonnApiClient(Uri baseUri, ILog log, TimeSpan? defaultRequestTimeout = null)
-            : this(
-                baseUri,
-                new VektonnApiClusterClient(
-                    log,
-                    new DevNullTracer(),
-                    defaultRequestTimeout ?? TimeSpan.FromSeconds(10)))
+        public VektonnApiClient(IClusterClient clusterClient)
+            : this(clusterClient, new RelativeUriRequestUrlBuilder())
         {
         }
 
-        public VektonnApiClient(Uri baseUri, VektonnApiClusterClient clusterClient)
+        public VektonnApiClient(Uri baseUri, ILog log, TimeSpan? defaultRequestTimeout = null)
+            : this(
+                new VektonnApiClusterClient(
+                    log,
+                    new DevNullTracer(),
+                    defaultRequestTimeout ?? TimeSpan.FromSeconds(10)),
+                new AbsoluteUriRequestUrlBuilder(baseUri))
         {
-            this.baseUri = baseUri;
+        }
+
+        private VektonnApiClient(IClusterClient clusterClient, IRequestUrlBuilder requestUrlBuilder)
+        {
             this.clusterClient = clusterClient;
+            this.requestUrlBuilder = requestUrlBuilder;
         }
 
         public async Task<SearchResultDto[]> SearchAsync(
             string indexName,
             string indexVersion,
             SearchQueryDto searchQuery,
-            CancellationToken cancellationToken = default,
-            TimeSpan? timeout = null)
+            TimeSpan? timeout = null,
+            CancellationToken cancellationToken = default)
         {
-            var requestUrl = new Uri(baseUri, $"api/v1/search/{indexName}/{indexVersion}");
-            var request = clusterClient.BuildRequest(HttpMethod.Post, requestUrl, searchQuery);
+            var requestUrl = requestUrlBuilder.BuildRequestUrl(path: $"api/v1/search/{indexName}/{indexVersion}");
+            var request = ClusterClientExtensions.BuildVektonnRequest(HttpMethod.Post, requestUrl, searchQuery);
 
-            return await clusterClient.GetResponseAsync<SearchResultDto[]>(request, cancellationToken, timeout);
+            return await clusterClient.GetResponseAsync<SearchResultDto[]>(request, timeout, cancellationToken);
         }
 
         public async Task UploadAsync(
             string dataSourceName,
             string dataSourceVersion,
             InputDataPointDto[] uploadQuery,
-            CancellationToken cancellationToken = default,
-            TimeSpan? timeout = null)
+            TimeSpan? timeout = null,
+            CancellationToken cancellationToken = default)
         {
-            var requestUrl = new Uri(baseUri, $"api/v1/upload/{dataSourceName}/{dataSourceVersion}");
-            var request = clusterClient.BuildRequest(HttpMethod.Post, requestUrl, uploadQuery);
+            var requestUrl = requestUrlBuilder.BuildRequestUrl(path: $"api/v1/upload/{dataSourceName}/{dataSourceVersion}");
+            var request = ClusterClientExtensions.BuildVektonnRequest(HttpMethod.Post, requestUrl, uploadQuery);
 
-            await clusterClient.GetVoidResponseAsync(request, cancellationToken, timeout);
+            await clusterClient.GetVoidResponseAsync(request, timeout, cancellationToken);
         }
     }
 }

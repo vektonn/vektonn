@@ -75,7 +75,7 @@ namespace Vektonn.Tests.ApiContracts
         [Test]
         public void SerializeAndDeserialize_DtoWithDenseVector()
         {
-            var denseVector = RandomHelpers.NextDenseVector(dimension: 7).ToVectorDto();
+            var denseVector = RandomHelpers.NextDenseVector(dimension: 7).ToVectorDto()!;
             SerializeAndDeserializeDtoWithVector(new Dto {Vector = denseVector});
             SerializeAndDeserializeDtoWithVector(new RecordDto(denseVector));
         }
@@ -83,7 +83,7 @@ namespace Vektonn.Tests.ApiContracts
         [Test]
         public void SerializeAndDeserialize_DtoWithSparseVector()
         {
-            var sparseVector = RandomHelpers.NextSparseVector(dimension: 100, coordinatesCount: 5).ToVectorDto();
+            var sparseVector = RandomHelpers.NextSparseVector(dimension: 100, coordinatesCount: 5).ToVectorDto()!;
             SerializeAndDeserializeDtoWithVector(new Dto {Vector = sparseVector});
             SerializeAndDeserializeDtoWithVector(new RecordDto(sparseVector));
         }

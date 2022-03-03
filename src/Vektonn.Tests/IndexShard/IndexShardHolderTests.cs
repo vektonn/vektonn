@@ -83,7 +83,7 @@ namespace Vektonn.Tests.IndexShard
         {
             var queryVector1 = SparseVector(y: 0.5);
             var queryVector2 = SparseVector(y: -0.5);
-            var searchQuery1 = new SearchQueryDto(SplitFilter: null, new[] {queryVector1.ToVectorDto(), queryVector2.ToVectorDto()}, K: 1);
+            var searchQuery1 = new SearchQueryDto(SplitFilter: null, new[] {queryVector1.ToVectorDto()!, queryVector2.ToVectorDto()!}, K: 1, RetrieveVectors: true);
             var searchResults1 = indexHolder.ExecuteSearchQuery(searchQuery1);
 
             searchResults1
@@ -92,7 +92,7 @@ namespace Vektonn.Tests.IndexShard
                     new[]
                     {
                         new SearchResultDto(
-                            QueryVector: queryVector1.ToVectorDto(),
+                            QueryVector: queryVector1.ToVectorDto()!,
                             new[]
                             {
                                 new FoundDataPointDto(
@@ -106,7 +106,7 @@ namespace Vektonn.Tests.IndexShard
                                     Distance: 0),
                             }),
                         new SearchResultDto(
-                            QueryVector: queryVector2.ToVectorDto(),
+                            QueryVector: queryVector2.ToVectorDto()!,
                             new[]
                             {
                                 new FoundDataPointDto(
@@ -135,7 +135,7 @@ namespace Vektonn.Tests.IndexShard
                             })),
                 });
 
-            var searchQuery2 = new SearchQueryDto(SplitFilter: null, new[] {queryVector1.ToVectorDto()}, K: 2);
+            var searchQuery2 = new SearchQueryDto(SplitFilter: null, new[] {queryVector1.ToVectorDto()!}, K: 2, RetrieveVectors: true);
             var searchResults2 = indexHolder.ExecuteSearchQuery(searchQuery2);
 
             searchResults2
@@ -144,7 +144,7 @@ namespace Vektonn.Tests.IndexShard
                     new[]
                     {
                         new SearchResultDto(
-                            QueryVector: queryVector1.ToVectorDto(),
+                            QueryVector: queryVector1.ToVectorDto()!,
                             new[]
                             {
                                 new FoundDataPointDto(

@@ -168,7 +168,7 @@ namespace Vektonn.Tests.IndexShard
         private static List<byte[]> GenerateRandomByteArrays()
         {
             var items = new List<byte[]>();
-            var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+            using var rngCryptoServiceProvider = RandomNumberGenerator.Create();
             for (var idx = 0; idx < 1000; idx++)
             {
                 var item = new byte[64];

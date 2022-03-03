@@ -5,6 +5,7 @@ on:
     branches:
     - '**'
     tags:
+    - 'v[0-9]+.[0-9]+-pre*'
     - 'v[0-9]+.[0-9]+-release*'
     paths:
     - 'src/**'
@@ -29,6 +30,7 @@ jobs:
         working-directory: ./src
     outputs:
       nuget-package-version: ${{ steps.pack.outputs.nuget-package-version }}
+      publish-to-docker-hub: ${{ steps.pack.outputs.publish-to-docker-hub }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -43,6 +45,9 @@ jobs:
       run: |
         dotnet pack --configuration Release --no-build --output ${{ env.NUGET_PACKAGES_DIR }} ./Vektonn.sln
         echo "::set-output name=nuget-package-version::$NBGV_NuGetPackageVersion"
+        if [ "$NBGV_PrereleaseVersion" == "" ]; then PUBLISH_TO_DOCKER_HUB=true ; else PUBLISH_TO_DOCKER_HUB=false ; fi
+        echo "PUBLISH_TO_DOCKER_HUB: $PUBLISH_TO_DOCKER_HUB"
+        echo "::set-output name=publish-to-docker-hub::$PUBLISH_TO_DOCKER_HUB"
 
     - name: Store nuget packages as artifacts
       uses: actions/upload-artifact@v2
@@ -103,6 +108,7 @@ jobs:
         docker logout ghcr.io
 
     - name: Push docker images to DockerHub registry
+      if: needs.build-pack-and-test.outputs.publish-to-docker-hub == 'true'
       run: |
         echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login --username vektonn --password-stdin
         docker image tag $DOCKER_IMAGE_NAME_AND_TAG_API vektonn/api-service:latest

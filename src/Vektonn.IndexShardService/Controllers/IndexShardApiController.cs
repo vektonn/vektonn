@@ -33,7 +33,8 @@ namespace Vektonn.IndexShardService.Controllers
             var searchQuery = new SearchQueryDto(
                 SplitFilter: null,
                 QueryVectors: new[] {indexShardAccessor.ZeroVector},
-                K: k ?? 1);
+                K: k ?? 1,
+                RetrieveVectors: true);
 
             if (searchQuery.K <= 0)
                 return BadRequest(new ErrorDto(ErrorMessages: new[] {"searchQuery.K must be greater than 0"}));

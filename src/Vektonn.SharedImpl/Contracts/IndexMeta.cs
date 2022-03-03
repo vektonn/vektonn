@@ -26,27 +26,26 @@ namespace Vektonn.SharedImpl.Contracts
 
         public void ValidateConsistency()
         {
-            var untypedAttributes = DataSourceMeta.PermanentAttributes
-                .Union(DataSourceMeta.ShardAttributes)
-                .Union(IdAttributes)
-                .Union(SplitAttributes)
-                .Union(ShardAttributes)
-                .Except(DataSourceMeta.AttributeValueTypes.Keys)
-                .ToArray();
+            DataSourceMeta.ValidateConsistency();
+
+            var untypedAttributes = IdAttributes.Union(SplitAttributes).Union(ShardAttributes).Except(DataSourceMeta.AttributeValueTypes.Keys).ToArray();
             if (untypedAttributes.Any())
-                throw new InvalidOperationException($"There are attributes with unspecified value type ({string.Join(", ", untypedAttributes)}) for: {this}");
+                throw new InvalidOperationException($"There are attributes with unspecified value type ({string.Join(", ", untypedAttributes)}) for index: {this}");
 
-            var invalidDataSourceShardingAttributes = DataSourceMeta.ShardAttributes.Except(DataSourceMeta.PermanentAttributes).ToArray();
-            if (invalidDataSourceShardingAttributes.Any())
-                throw new InvalidOperationException($"There are data source sharding attributes ({string.Join(", ", invalidDataSourceShardingAttributes)}) which do not belong to permanent attributes for: {this}");
+            if (!IndexIdAttributes.Any())
+                throw new InvalidOperationException($"{nameof(IndexIdAttributes)} is empty for index: {this}");
 
-            var invalidIndexShardingAttributes = ShardAttributes.Except(DataSourceMeta.PermanentAttributes).ToArray();
-            if (invalidIndexShardingAttributes.Any())
-                throw new InvalidOperationException($"There are index sharding attributes ({string.Join(", ", invalidIndexShardingAttributes)}) which do not belong to permanent attributes for: {this}");
+            var invalidIdAttributes = IdAttributes.Except(DataSourceMeta.PermanentAttributes).ToArray();
+            if (invalidIdAttributes.Any())
+                throw new InvalidOperationException($"There are id attributes ({string.Join(", ", invalidIdAttributes)}) which do not belong to permanent attributes for index: {this}");
+
+            var invalidShardingAttributes = ShardAttributes.Except(DataSourceMeta.PermanentAttributes).ToArray();
+            if (invalidShardingAttributes.Any())
+                throw new InvalidOperationException($"There are sharding attributes ({string.Join(", ", invalidShardingAttributes)}) which do not belong to permanent attributes for index: {this}");
 
             var invalidSplitAttributes = SplitAttributes.Except(DataSourceMeta.PermanentAttributes).ToArray();
             if (invalidSplitAttributes.Any())
-                throw new InvalidOperationException($"There are split attributes ({string.Join(", ", invalidSplitAttributes)}) which do not belong to permanent attributes for: {this}");
+                throw new InvalidOperationException($"There are split attributes ({string.Join(", ", invalidSplitAttributes)}) which do not belong to permanent attributes for index: {this}");
 
             var vectorsAreSparse = AlgorithmTraits.VectorsAreSparse(IndexAlgorithm.Type);
             if (vectorsAreSparse ^ DataSourceMeta.VectorsAreSparse)

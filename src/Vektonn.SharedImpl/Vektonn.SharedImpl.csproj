@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -14,7 +14,7 @@
     <PackageReference Include="Farmhash.Sharp" Version="0.9.0" />
     <PackageReference Include="FluentValidation" Version="10.3.6" />
     <PackageReference Include="protobuf-net" Version="3.0.101" />
-    <PackageReference Include="Vektonn.Index" Version="0.4.5" />
+    <PackageReference Include="Vektonn.Index" Version="0.7.1" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" />
   </ItemGroup>
 

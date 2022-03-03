@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Confluent.Kafka;
 using Vektonn.SharedImpl.BinarySerialization;
 using Vektonn.SharedImpl.Contracts;
-using Vektonn.SharedImpl.Json;
 using Vostok.Logging.Abstractions;
 
 namespace Vektonn.DataSource.Kafka
@@ -73,14 +72,7 @@ namespace Vektonn.DataSource.Kafka
         {
             var permanentAttributeKeys = permanentAttributeKeysByDataSourceId.GetOrAdd(
                 dataSourceMeta.Id,
-                _ =>
-                {
-                    var permanentAttributes = dataSourceMeta.PermanentAttributes.OrderBy(x => x, StringComparer.InvariantCulture).ToArray();
-                    if (!permanentAttributes.Any())
-                        throw new InvalidOperationException($"{nameof(permanentAttributes)} is empty for dataSource: {dataSourceMeta.ToPrettyJson()}");
-
-                    return permanentAttributes;
-                });
+                _ => dataSourceMeta.GetPermanentAttributeKeysOrdered());
 
             var attributeValues = dataPointOrTombstone.GetAttributes();
 

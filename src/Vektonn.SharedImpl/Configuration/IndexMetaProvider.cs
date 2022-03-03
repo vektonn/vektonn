@@ -8,11 +8,12 @@ using Vektonn.SharedImpl.Contracts.Sharding;
 
 namespace Vektonn.SharedImpl.Configuration
 {
-    public class IndexMetaProvider : IIndexMetaProvider
+    public class IndexMetaProvider : IIndexMetaProvider, IIndexShardsTopologyProvider
     {
         private readonly IndexMetaYamlParser yamlParser = new(new AttributeValueHasher());
-        private readonly ConcurrentDictionary<IndexId, IndexMetaWithShardEndpoints> indexMetasById = new();
-        private readonly ConcurrentDictionary<DataSourceId, DataSourceMeta> dataSourceMetasById = new();
+        private readonly ConcurrentDictionary<IndexId, IndexMeta?> indexMetasById = new();
+        private readonly ConcurrentDictionary<DataSourceId, DataSourceMeta?> dataSourceMetasById = new();
+        private readonly ConcurrentDictionary<IndexId, Dictionary<string, DnsEndPoint>> indexShardEndpointsByIndexId = new();
 
         private readonly string configBaseDirectory;
 
@@ -21,28 +22,27 @@ namespace Vektonn.SharedImpl.Configuration
             this.configBaseDirectory = configBaseDirectory;
         }
 
-        public IndexMetaWithShardEndpoints? TryGetIndexMeta(IndexId indexId)
+        public IndexMeta? TryGetIndexMeta(IndexId indexId)
+        {
+            return indexMetasById.GetOrAdd(indexId, TryGetIndexMetaImpl);
+        }
+
+        public DataSourceMeta? TryGetDataSourceMeta(DataSourceId dataSourceId)
+        {
+            return dataSourceMetasById.GetOrAdd(dataSourceId, TryGetDataSourceMetaImpl);
+        }
+
+        public Dictionary<string, DnsEndPoint> GetEndpointsByShardIdForIndex(IndexId indexId)
+        {
+            return indexShardEndpointsByIndexId.GetOrAdd(indexId, GetEndpointsByShardIdForIndexImpl);
+        }
+
+        private IndexMeta? TryGetIndexMetaImpl(IndexId indexId)
         {
             var indexConfigFileName = FormatIndexConfigFileName(indexId);
             if (!File.Exists(indexConfigFileName))
                 return null;
 
-            var indexMeta = indexMetasById.GetOrAdd(indexId, _ => GetIndexMeta(indexId, indexConfigFileName));
-            return indexMeta;
-        }
-
-        public DataSourceMeta? TryGetDataSourceMeta(DataSourceId dataSourceId)
-        {
-            var dataSourceConfigFileName = FormatDataSourceConfigFileName(dataSourceId);
-            if (!File.Exists(dataSourceConfigFileName))
-                return null;
-
-            var dataSourceMeta = dataSourceMetasById.GetOrAdd(dataSourceId, _ => GetDataSourceMeta(dataSourceId, dataSourceConfigFileName));
-            return dataSourceMeta;
-        }
-
-        private IndexMetaWithShardEndpoints GetIndexMeta(IndexId indexId, string indexConfigFileName)
-        {
             var indexConfigYaml = ReadConfigYaml(indexConfigFileName);
             var dataSourceId = yamlParser.ParseDataSourceId(indexConfigYaml);
             var dataSourceYaml = ReadConfigYaml(FormatDataSourceConfigFileName(dataSourceId));
@@ -52,17 +52,20 @@ namespace Vektonn.SharedImpl.Configuration
 
             indexMeta.ValidateConsistency();
 
-            var endpointsByShardId = GetEndpointsByShardIdForIndex(indexMeta);
-            return new IndexMetaWithShardEndpoints(indexMeta, endpointsByShardId);
+            return indexMeta;
         }
 
-        private Dictionary<string, DnsEndPoint> GetEndpointsByShardIdForIndex(IndexMeta indexMeta)
+        private Dictionary<string, DnsEndPoint> GetEndpointsByShardIdForIndexImpl(IndexId indexId)
         {
+            var indexMeta = TryGetIndexMeta(indexId);
+            if (indexMeta == null)
+                throw new InvalidOperationException($"Failed to get indexMeta for indexId: {indexId}");
+
             var indexShardEndpointsYaml = ReadConfigYaml(Path.Combine(configBaseDirectory, "index-shards-topology.yaml"));
             var indexShardEndpoints = yamlParser.ParseIndexShardEndpoints(indexShardEndpointsYaml);
 
             if (!indexShardEndpoints.TryGetValue(indexMeta.Id, out var endpointsByShardId))
-                throw new InvalidOperationException($"Index shards topology is not defined for indexId: {indexMeta.Id}");
+                throw new InvalidOperationException($"Index shards topology is not defined for indexId: {indexId}");
 
             foreach (var shardId in indexMeta.IndexShardsMap.ShardsById.Keys)
             {
@@ -73,10 +76,17 @@ namespace Vektonn.SharedImpl.Configuration
             return endpointsByShardId;
         }
 
-        private DataSourceMeta GetDataSourceMeta(DataSourceId dataSourceId, string dataSourceConfigFileName)
+        private DataSourceMeta? TryGetDataSourceMetaImpl(DataSourceId dataSourceId)
         {
+            var dataSourceConfigFileName = FormatDataSourceConfigFileName(dataSourceId);
+            if (!File.Exists(dataSourceConfigFileName))
+                return null;
+
             var dataSourceYaml = ReadConfigYaml(dataSourceConfigFileName);
             var dataSourceMeta = yamlParser.ParseDataSourceMeta(dataSourceConfig: (dataSourceId, dataSourceYaml));
+
+            dataSourceMeta.ValidateConsistency();
+
             return dataSourceMeta;
         }
 

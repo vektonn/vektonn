@@ -23,7 +23,7 @@ namespace Vektonn.SharedImpl.Contracts
                 return DataPoint.Attributes;
 
             if (Tombstone != null)
-                return Tombstone.IdAttributes;
+                return Tombstone.PermanentAttributes;
 
             throw new InvalidOperationException($"{nameof(DataPoint)} == null && {nameof(Tombstone)} == null");
         }

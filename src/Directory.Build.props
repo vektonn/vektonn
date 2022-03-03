@@ -1,14 +1,14 @@
 <Project>
 
   <PropertyGroup>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Authors>Kontur ModelOps team</Authors>
-    <PackageTags>model-ops vector search knn</PackageTags>
+    <Authors>Vektonn Team</Authors>
+    <PackageTags>model-ops vector search knn aknn</PackageTags>
     <PackageDescription>Vektonn implementation</PackageDescription>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>

@@ -33,7 +33,7 @@ namespace Vektonn.DataSource.Kafka
             this.indexShardMeta = indexShardMeta;
             this.updateIndexShard = updateIndexShard;
 
-            permanentAttributeKeys = dataSourceMeta.PermanentAttributes.OrderBy(x => x, StringComparer.InvariantCulture).ToArray();
+            permanentAttributeKeys = dataSourceMeta.GetPermanentAttributeKeysOrdered();
 
             decodeVector = dataSourceMeta.VectorsAreSparse
                 ? inputDataPoint => (TVector)(IVector)new SparseVector(dataSourceMeta.VectorDimension, inputDataPoint.VectorCoordinates, inputDataPoint.VectorCoordinateIndices!)

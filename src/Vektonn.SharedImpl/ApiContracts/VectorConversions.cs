@@ -13,8 +13,9 @@ namespace Vektonn.SharedImpl.ApiContracts
             _ => throw new InvalidOperationException($"Invalid VectorDto type: {dto.GetType()}")
         };
 
-        public static VectorDto ToVectorDto(this IVector vector) => vector switch
+        public static VectorDto? ToVectorDto(this IVector? vector) => vector switch
         {
+            null => null,
             DenseVector denseVector => new DenseVectorDto(denseVector.Coordinates),
             SparseVector sparseVector => new SparseVectorDto(sparseVector.Coordinates, sparseVector.CoordinateIndices),
             _ => throw new InvalidOperationException($"Invalid Vector type: {vector.GetType()}")
