@@ -48,7 +48,8 @@ namespace Vektonn.DataSource.Kafka
                 EnableAutoCommit = false,
                 AutoCommitIntervalMs = 0,
                 AutoOffsetReset = AutoOffsetReset.Earliest,
-                FetchWaitMaxMs = (int)kafkaConsumerConfig.MaxFetchDelay.TotalMilliseconds
+                FetchWaitMaxMs = (int)kafkaConsumerConfig.MaxFetchDelay.TotalMilliseconds,
+                TopicMetadataRefreshIntervalMs = (int)kafkaConsumerConfig.TopicMetadataRefreshInterval.TotalMilliseconds
             };
 
             var consumerBuilder = new ConsumerBuilder<byte[], byte[]>(consumerConfig)

@@ -14,6 +14,7 @@ namespace Vektonn.DataSource.Kafka
         }
 
         public string[] BootstrapServers { get; }
+        public TimeSpan TopicMetadataRefreshInterval { get; set; } = TimeSpan.FromSeconds(10);
         public TimeSpan MaxFetchDelay { get; set; } = TimeSpan.FromMilliseconds(100);
         public TimeSpan MinRetryDelay { get; set; } = TimeSpan.FromMilliseconds(100);
         public TimeSpan MaxRetryDelay { get; set; } = TimeSpan.FromSeconds(10);
