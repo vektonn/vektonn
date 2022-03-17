@@ -4,21 +4,24 @@ title: Supported algorithms
 
 ### Dense vectors
 
-These algorithms are based on [Faiss library](https://github.com/facebookresearch/faiss/wiki/Faiss-indexes).
+These algorithms are based on [Faiss library](https://github.com/facebookresearch/faiss/wiki/Faiss-indexes):
 
-| Algorithm                                                        | Type and Params                                                 |
-|------------------------------------------------------------------|-----------------------------------------------------------------|
-| Exact Search for Inner Product                                   | `FaissIndex.IP`, no params                                      |
-| Exact Search for L2                                              | `FaissIndex.L2`, no params                                      |
-| HNSW <BR> (Hierarchical Navigable Small World graph exploration) | `FaissIndex.L2`, params: {"M", "efConstruction", "efSearch" }   |
+* `FaissIndex.L2` — squared Euclidean (L2) distance.
+* `FaissIndex.IP` — this is typically used for maximum inner product search. This is not by itself cosine similarity, unless the vectors are normalized.
 
-### Sparce vectors
+By default `FaissIndex`-es are constructed in `Flat` mode, i.e. they implement exhaustive (precise) search.
 
-These algorithms are derived from [PySparNN library](https://github.com/facebookresearch/pysparnn).
+To use Faiss implementation of [HNSW index](https://arxiv.org/abs/1603.09320)
+provide `Hnsw_M`, `Hnsw_EfConstruction`, and `Hnsw_EfSearch` parameters
+to `indexStoreFactory.Create<DenseVector>()` method through its optional `indexParams` parameter.
 
-| Algorithm                                                        | Type and Params                                                 |
-|------------------------------------------------------------------|-----------------------------------------------------------------|
-| Cosine Distance                                                  | `SparnnIndex.Cosine`, no params                                 |
-| Jaccard Distance for Binary Data                                 | `SparnnIndex.JaccardBinary`, no params                          |
+
+### Sparse vectors
+
+These algorithms are derived from [PySparNN library](https://github.com/facebookresearch/pysparnn):
+
+* `SparnnIndex.Cosine` — Cosine distance.
+* `SparnnIndex.JaccardBinary` — Jaccard distance for _binary_ vectors (i.e. vectors whose coordinates have the values 0 or 1).
 
 Where `distance = 1 - similarity`.
+
