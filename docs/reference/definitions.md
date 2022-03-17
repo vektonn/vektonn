@@ -95,9 +95,11 @@ IndexShard := Mapping[IdAttributes, DataPoint]
 
 ## Splitting
 
-**Splits** are an optional scheme of dividing (splitting) shards data within a single physical node. Splits are useful to speed up search when your data and request are naturally divided inside your domain.
+**Splits** are an optional scheme of dividing (splitting) shard's data within a _single_ physical node. Splits are useful to speed up search: it uses data only from requested splits, everything else is ignored. Your domain's data may be naturally divided: for example, when you always perform queries using the data within geographical regions.
 
-Defining a splitting scheme requires you to provide corresponding attributes on each search.
+To make use of index's splitting, you have to provide values for _every_ corresponding attribute from a splitting scheme on each search upon that index. Otherwise, the search will be conducted on all partially matched splits and merged afterwards.
+
+You may have several indices running upon the same data source — with different splitting schemes (including no splitting at all).
 
 
 ## Updating data
