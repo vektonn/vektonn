@@ -4,10 +4,10 @@ title: Overview
 
 # Overview
 
-**Vektonn** is a [high-performance](features.md#performance-and-scalability) battle-tested [kNN vector search](https://en.wikipedia.org/wiki/Nearest_neighbor_search#k-nearest_neighbors) engine for your data science applications. It helps you [manage vectors' lifecycle](features.md#vectors-lifecycle-management) and radically reduces time to market.
+**Vektonn** is a [high-performance](features.md#performance-and-scalability) battle-tested [kNN vector search](https://en.wikipedia.org/wiki/Nearest_neighbor_search#k-nearest_neighbors) engine for your data science applications. 
+It helps you [manage vectors' lifecycle](features.md#vectors-lifecycle-management) and radically reduces time to market.
 
-
-## Features
+Vektonn has the following features:
 
 - Support for both dense and sparse vectors
 - Precise and approximate kNN (AkNN) algorithms
@@ -30,7 +30,7 @@ A data from a single Data Source can be spread (sharded) over several Indices to
 A single Data Source may have several Indices defined on it with different metrics.
 
 
-## Repositories
+## GitHub repositories
 
 - [**vektonn**](https://github.com/vektonn/vektonn) is a main repository with implementations for the API, Index shards and Data Sources. It also contains sources for [Vektonn's .NET client](https://www.nuget.org/packages/Vektonn.ApiClient).
 - [**vektonn-index**](https://github.com/vektonn/vektonn-index) is a .NET library for finding nearest neighbors in vector space. It provides an implementation of basic functionality for Indices: vector storage and retrieval.

@@ -64,7 +64,6 @@ nav:
 - 'features.md'
 - 'quick-start.md'
 - 'Reference':
-    - 'reference/api.md'
-    - 'reference/definitions.md'
-    - 'reference/supported-algorithms.md'
-    - 'reference/roadmap.md'
+  - 'reference/api.md'
+  - 'reference/specification.md'
+  - 'reference/supported-algorithms.md'
