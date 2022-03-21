@@ -9,6 +9,7 @@ theme:
   custom_dir: docs/overrides
   features:
   - toc.integrate
+  - content.code.annotate
   icon:
     repo: fontawesome/brands/github
   logo: assets/vektonn-star-rounded-white.svg
@@ -32,6 +33,7 @@ theme:
 markdown_extensions:
   toc:
     permalink: true
+    toc_depth: '1-3'
   sane_lists: {}
   pymdownx.betterem: {}
   pymdownx.highlight:
@@ -59,5 +61,9 @@ extra:
 
 nav:
 - 'index.md'
+- 'features.md'
 - 'quick-start.md'
-- 'roadmap.md'
+- 'Reference':
+  - 'reference/api.md'
+  - 'reference/specification.md'
+  - 'reference/supported-algorithms.md'
