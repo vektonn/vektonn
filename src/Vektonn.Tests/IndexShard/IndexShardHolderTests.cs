@@ -11,7 +11,7 @@ using Vektonn.SharedImpl.Contracts.Sharding.DataSource;
 using Vektonn.SharedImpl.Contracts.Sharding.Index;
 using Vostok.Logging.Abstractions;
 using static Vektonn.Tests.SharedImpl.ApiContracts.AttributeDtoTestHelpers;
-using static Vektonn.Tests.IndexShard.AttributeValueTestHelpers;
+using static Vektonn.Tests.AttributeValueTestHelpers;
 
 namespace Vektonn.Tests.IndexShard
 {

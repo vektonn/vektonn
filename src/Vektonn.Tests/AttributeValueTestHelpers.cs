@@ -1,6 +1,6 @@
 using Vektonn.SharedImpl.Contracts;
 
-namespace Vektonn.Tests.IndexShard
+namespace Vektonn.Tests
 {
     public static class AttributeValueTestHelpers
     {

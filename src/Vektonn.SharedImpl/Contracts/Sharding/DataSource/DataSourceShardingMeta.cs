@@ -5,7 +5,6 @@ namespace Vektonn.SharedImpl.Contracts.Sharding.DataSource
 {
     public record DataSourceShardingMeta(Dictionary<string, IDataSourceAttributeValueSharder> ShardersByAttributeKey)
     {
-        // todo (andrew, 09.09.2021): test
         public Dictionary<string, ulong> GetDataSourceShardingCoordinates(Dictionary<string, AttributeValue> attributes)
         {
             var shardingCoordinatesByAttributeKey = new Dictionary<string, ulong>();

@@ -5,7 +5,6 @@ using Vektonn.SharedImpl.Contracts;
 
 namespace Vektonn.SharedImpl.BinarySerialization
 {
-    // todo (andrew, 25.09.2021): test
     public static class InputDataPointSerializer
     {
         static InputDataPointSerializer()
