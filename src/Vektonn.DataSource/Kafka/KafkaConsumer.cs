@@ -42,8 +42,8 @@ namespace Vektonn.DataSource.Kafka
             committedOffsets = new CommittedOffsets(this.log);
 
             var consumerConfig = new ConsumerConfig();
-            kafkaConsumerConfig.ConsumerConfigUserTuning(consumerConfig);
-            kafkaConsumerConfig.ConsumerConfigTuning(consumerConfig);
+            kafkaConsumerConfig.CustomizeConsumerConfig(consumerConfig);
+            kafkaConsumerConfig.CustomizeConsumerConfigInternal(consumerConfig);
 
             consumer = BuildConsumer(consumerConfig);
         }

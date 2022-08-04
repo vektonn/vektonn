@@ -21,9 +21,9 @@ namespace Vektonn.DataSource.Kafka
         public TimeSpan MaxRetryDelay { get; set; } = TimeSpan.FromSeconds(10);
         public TimeSpan WatermarkOffsetsQueryTimeout { get; set; } = TimeSpan.FromSeconds(1);
         public int ConsumeBatchSize { get; set; } = 10_000;
-        public Action<ConsumerConfig> ConsumerConfigUserTuning { get; set; } = config => {};
+        public Action<ConsumerConfig> CustomizeConsumerConfig { get; set; } = config => {};
 
-        public void ConsumerConfigTuning(ConsumerConfig consumerConfig)
+        internal void CustomizeConsumerConfigInternal(ConsumerConfig consumerConfig)
         {
             consumerConfig.BootstrapServers = string.Join(",", BootstrapServers);
             consumerConfig.GroupId = $"Vektonn-{Guid.NewGuid():N}";

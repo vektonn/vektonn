@@ -19,9 +19,9 @@ namespace Vektonn.DataSource.Kafka
         public KafkaTopicCreationConfig TopicCreationConfig { get; }
         public TimeSpan ProduceTimeout { get; set; } = TimeSpan.FromSeconds(10);
         public TimeSpan LingerDelay { get; set; } = TimeSpan.FromMilliseconds(10);
-        public Action<ProducerConfig> ProducerConfigUserTuning { get; set; } = config => {};
+        public Action<ProducerConfig> CustomizeProducerConfig { get; set; } = config => {};
 
-        public void ProducerConfigTuning(ProducerConfig producerConfig, TimeSpan topicMetadataRefreshInterval)
+        internal void CustomizeProducerConfigInternal(ProducerConfig producerConfig, TimeSpan topicMetadataRefreshInterval)
         {
             producerConfig.BootstrapServers = string.Join(",", BootstrapServers);
             producerConfig.Acks = Acks.All;
