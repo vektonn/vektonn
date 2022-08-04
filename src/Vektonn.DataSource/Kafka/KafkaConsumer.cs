@@ -76,7 +76,7 @@ namespace Vektonn.DataSource.Kafka
 
         private IConsumer<byte[], byte[]> BuildConsumer(ConsumerConfig consumerConfig)
         {
-            var consumerBuilder = new ConsumerBuilder<byte[], byte[]>(consumerConfig)
+            return new ConsumerBuilder<byte[], byte[]>(consumerConfig)
                 .SetKeyDeserializer(Deserializers.ByteArray)
                 .SetValueDeserializer(Deserializers.ByteArray)
                 .SetErrorHandler(
@@ -90,8 +90,8 @@ namespace Vektonn.DataSource.Kafka
                         LogExtensions.Info(this.log, $"Assigned {topicPartitions.Count} partitions with offsetsToConsumeFrom: {string.Join("; ", offsetsToConsumeFrom.Select(x => x.ToString()))}");
                         firstAssignmentSignal.Set();
                         return offsetsToConsumeFrom;
-                    });
-            return consumerBuilder.Build();
+                    })
+                .Build();
         }
 
         private async Task ConsumeLoopAsync(TaskCompletionSource initializationTcs, CancellationToken cancellationToken)
