@@ -19,10 +19,13 @@ namespace Vektonn.DataSource.Kafka
         public KafkaTopicCreationConfig TopicCreationConfig { get; }
         public TimeSpan ProduceTimeout { get; set; } = TimeSpan.FromSeconds(10);
         public TimeSpan LingerDelay { get; set; } = TimeSpan.FromMilliseconds(10);
-        public Action<ProducerConfig> CustomizeProducerConfig { get; set; } = config => {};
+        public Action<ProducerConfig> CustomizeConfluentProducerConfig { get; set; } = config => {};
 
-        internal void CustomizeProducerConfigInternal(ProducerConfig producerConfig, TimeSpan topicMetadataRefreshInterval)
+        internal ProducerConfig GetConfluentProducerConfig(TimeSpan topicMetadataRefreshInterval)
         {
+            var producerConfig = new ProducerConfig();
+            CustomizeConfluentProducerConfig(producerConfig);
+
             producerConfig.BootstrapServers = string.Join(",", BootstrapServers);
             producerConfig.Acks = Acks.All;
             producerConfig.MessageSendMaxRetries = 0;
@@ -31,6 +34,8 @@ namespace Vektonn.DataSource.Kafka
             producerConfig.MessageTimeoutMs = (int)ProduceTimeout.TotalMilliseconds;
             producerConfig.TopicMetadataPropagationMaxMs = (int)topicMetadataRefreshInterval.TotalMilliseconds;
             producerConfig.TopicMetadataRefreshIntervalMs = (int)topicMetadataRefreshInterval.TotalMilliseconds;
+
+            return producerConfig;
         }
     }
 }

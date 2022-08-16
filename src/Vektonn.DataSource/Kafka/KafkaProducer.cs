@@ -25,10 +25,7 @@ namespace Vektonn.DataSource.Kafka
 
             topicMetadataRefreshInterval = kafkaProducerConfig.ProduceTimeout.Multiply(0.3);
 
-            var producerConfig = new ProducerConfig();
-            kafkaProducerConfig.CustomizeProducerConfig(producerConfig);
-            kafkaProducerConfig.CustomizeProducerConfigInternal(producerConfig, topicMetadataRefreshInterval);
-
+            var producerConfig = kafkaProducerConfig.GetConfluentProducerConfig(topicMetadataRefreshInterval);
             producer = BuildProducer(producerConfig);
         }
 
