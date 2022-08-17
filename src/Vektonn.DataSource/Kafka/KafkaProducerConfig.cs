@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Confluent.Kafka;
 
 namespace Vektonn.DataSource.Kafka
 {
@@ -18,5 +19,23 @@ namespace Vektonn.DataSource.Kafka
         public KafkaTopicCreationConfig TopicCreationConfig { get; }
         public TimeSpan ProduceTimeout { get; set; } = TimeSpan.FromSeconds(10);
         public TimeSpan LingerDelay { get; set; } = TimeSpan.FromMilliseconds(10);
+        public Action<ProducerConfig> CustomizeConfluentProducerConfig { get; set; } = config => {};
+
+        internal ProducerConfig GetConfluentProducerConfig(TimeSpan topicMetadataRefreshInterval)
+        {
+            var producerConfig = new ProducerConfig();
+            CustomizeConfluentProducerConfig(producerConfig);
+
+            producerConfig.BootstrapServers = string.Join(",", BootstrapServers);
+            producerConfig.Acks = Acks.All;
+            producerConfig.MessageSendMaxRetries = 0;
+            producerConfig.LingerMs = LingerDelay.TotalMilliseconds;
+            producerConfig.RequestTimeoutMs = (int)ProduceTimeout.TotalMilliseconds;
+            producerConfig.MessageTimeoutMs = (int)ProduceTimeout.TotalMilliseconds;
+            producerConfig.TopicMetadataPropagationMaxMs = (int)topicMetadataRefreshInterval.TotalMilliseconds;
+            producerConfig.TopicMetadataRefreshIntervalMs = (int)topicMetadataRefreshInterval.TotalMilliseconds;
+
+            return producerConfig;
+        }
     }
 }

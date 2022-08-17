@@ -24,27 +24,9 @@ namespace Vektonn.DataSource.Kafka
             this.kafkaProducerConfig = kafkaProducerConfig;
 
             topicMetadataRefreshInterval = kafkaProducerConfig.ProduceTimeout.Multiply(0.3);
-            var producerConfig = new ProducerConfig
-            {
-                BootstrapServers = string.Join(",", kafkaProducerConfig.BootstrapServers),
-                Acks = Acks.All,
-                MessageSendMaxRetries = 0,
-                LingerMs = kafkaProducerConfig.LingerDelay.TotalMilliseconds,
-                RequestTimeoutMs = (int)kafkaProducerConfig.ProduceTimeout.TotalMilliseconds,
-                MessageTimeoutMs = (int)kafkaProducerConfig.ProduceTimeout.TotalMilliseconds,
-                TopicMetadataPropagationMaxMs = (int)topicMetadataRefreshInterval.TotalMilliseconds,
-                TopicMetadataRefreshIntervalMs = (int)topicMetadataRefreshInterval.TotalMilliseconds,
-            };
 
-            var producerBuilder = new ProducerBuilder<byte[], byte[]>(producerConfig)
-                .SetKeySerializer(Serializers.ByteArray)
-                .SetValueSerializer(Serializers.ByteArray)
-                .SetErrorHandler(
-                    (_, error) => this.log.Error($"ConfluentProducer error: {error.ToPrettyJson()}"))
-                .SetLogHandler(
-                    (_, logMessage) => this.log.Debug($"ConfluentProducer logMessage: {logMessage.ToPrettyJson()}"));
-
-            producer = producerBuilder.Build();
+            var producerConfig = kafkaProducerConfig.GetConfluentProducerConfig(topicMetadataRefreshInterval);
+            producer = BuildProducer(producerConfig);
         }
 
         public void Dispose()
@@ -69,6 +51,18 @@ namespace Vektonn.DataSource.Kafka
             await Task.Delay(topicMetadataRefreshInterval);
 
             await TryProduceAsync(topicName, messages, tolerateUnknownTopicError: false);
+        }
+
+        private IProducer<byte[], byte[]> BuildProducer(ProducerConfig producerConfig)
+        {
+            return new ProducerBuilder<byte[], byte[]>(producerConfig)
+                .SetKeySerializer(Serializers.ByteArray)
+                .SetValueSerializer(Serializers.ByteArray)
+                .SetErrorHandler(
+                    (_, error) => LogExtensions.Error(log, $"ConfluentProducer error: {error.ToPrettyJson()}"))
+                .SetLogHandler(
+                    (_, logMessage) => LogExtensions.Debug(log, $"ConfluentProducer logMessage: {logMessage.ToPrettyJson()}"))
+                .Build();
         }
 
         private async Task<bool> TryProduceAsync(string topicName, Message<byte[], byte[]>[] messages, bool tolerateUnknownTopicError)

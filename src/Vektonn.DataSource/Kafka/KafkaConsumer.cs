@@ -41,34 +41,8 @@ namespace Vektonn.DataSource.Kafka
 
             committedOffsets = new CommittedOffsets(this.log);
 
-            var consumerConfig = new ConsumerConfig
-            {
-                BootstrapServers = string.Join(",", kafkaConsumerConfig.BootstrapServers),
-                GroupId = $"Vektonn-{Guid.NewGuid():N}",
-                EnableAutoCommit = false,
-                AutoCommitIntervalMs = 0,
-                AutoOffsetReset = AutoOffsetReset.Earliest,
-                FetchWaitMaxMs = (int)kafkaConsumerConfig.MaxFetchDelay.TotalMilliseconds,
-                TopicMetadataRefreshIntervalMs = (int)kafkaConsumerConfig.TopicMetadataRefreshInterval.TotalMilliseconds
-            };
-
-            var consumerBuilder = new ConsumerBuilder<byte[], byte[]>(consumerConfig)
-                .SetKeyDeserializer(Deserializers.ByteArray)
-                .SetValueDeserializer(Deserializers.ByteArray)
-                .SetErrorHandler(
-                    (_, error) => this.log.Error($"ConfluentConsumer error: {error.ToPrettyJson()}"))
-                .SetLogHandler(
-                    (_, logMessage) => this.log.Debug($"ConfluentConsumer logMessage: {logMessage.ToPrettyJson()}"))
-                .SetPartitionsAssignedHandler(
-                    (_, topicPartitions) =>
-                    {
-                        var offsetsToConsumeFrom = committedOffsets.GetOffsetsToConsumeFrom(topicPartitions);
-                        this.log.Info($"Assigned {topicPartitions.Count} partitions with offsetsToConsumeFrom: {string.Join("; ", offsetsToConsumeFrom.Select(x => x.ToString()))}");
-                        firstAssignmentSignal.Set();
-                        return offsetsToConsumeFrom;
-                    });
-
-            consumer = consumerBuilder.Build();
+            var consumerConfig = kafkaConsumerConfig.GetConfluentConsumerConfig();
+            consumer = BuildConsumer(consumerConfig);
         }
 
         public void Dispose()
@@ -95,6 +69,26 @@ namespace Vektonn.DataSource.Kafka
             consumerLoopThread.Start();
 
             await initializationTcs.Task;
+        }
+
+        private IConsumer<byte[], byte[]> BuildConsumer(ConsumerConfig consumerConfig)
+        {
+            return new ConsumerBuilder<byte[], byte[]>(consumerConfig)
+                .SetKeyDeserializer(Deserializers.ByteArray)
+                .SetValueDeserializer(Deserializers.ByteArray)
+                .SetErrorHandler(
+                    (_, error) => LogExtensions.Error(this.log, $"ConfluentConsumer error: {error.ToPrettyJson()}"))
+                .SetLogHandler(
+                    (_, logMessage) => LogExtensions.Debug(this.log, $"ConfluentConsumer logMessage: {logMessage.ToPrettyJson()}"))
+                .SetPartitionsAssignedHandler(
+                    (_, topicPartitions) =>
+                    {
+                        var offsetsToConsumeFrom = committedOffsets.GetOffsetsToConsumeFrom(topicPartitions);
+                        LogExtensions.Info(this.log, $"Assigned {topicPartitions.Count} partitions with offsetsToConsumeFrom: {string.Join("; ", offsetsToConsumeFrom.Select(x => x.ToString()))}");
+                        firstAssignmentSignal.Set();
+                        return offsetsToConsumeFrom;
+                    })
+                .Build();
         }
 
         private async Task ConsumeLoopAsync(TaskCompletionSource initializationTcs, CancellationToken cancellationToken)
