@@ -59,7 +59,17 @@ namespace Vektonn.DataSource.Kafka
                 .SetKeySerializer(Serializers.ByteArray)
                 .SetValueSerializer(Serializers.ByteArray)
                 .SetErrorHandler(
-                    (_, error) => LogExtensions.Error(log, $"ConfluentProducer error: {error.ToPrettyJson()}"))
+                    (_, error) =>
+                    {
+                        if (error.IsFatal)
+                        {
+                            LogExtensions.Error(this.log, $"ConfluentProducer error: {error.ToPrettyJson()}");
+                        }
+                        else
+                        {
+                            LogExtensions.Warn(this.log, $"ConfluentProducer warn: {error.ToPrettyJson()}");
+                        }
+                    })
                 .SetLogHandler(
                     (_, logMessage) => LogExtensions.Debug(log, $"ConfluentProducer logMessage: {logMessage.ToPrettyJson()}"))
                 .Build();

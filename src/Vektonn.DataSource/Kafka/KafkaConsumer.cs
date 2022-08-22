@@ -77,7 +77,17 @@ namespace Vektonn.DataSource.Kafka
                 .SetKeyDeserializer(Deserializers.ByteArray)
                 .SetValueDeserializer(Deserializers.ByteArray)
                 .SetErrorHandler(
-                    (_, error) => LogExtensions.Error(this.log, $"ConfluentConsumer error: {error.ToPrettyJson()}"))
+                    (_, error) =>
+                    {
+                        if (error.IsFatal)
+                        {
+                            LogExtensions.Error(this.log, $"ConfluentConsumer error: {error.ToPrettyJson()}");
+                        }
+                        else
+                        {
+                            LogExtensions.Warn(this.log, $"ConfluentConsumer warn: {error.ToPrettyJson()}");
+                        }
+                    })
                 .SetLogHandler(
                     (_, logMessage) => LogExtensions.Debug(this.log, $"ConfluentConsumer logMessage: {logMessage.ToPrettyJson()}"))
                 .SetPartitionsAssignedHandler(
