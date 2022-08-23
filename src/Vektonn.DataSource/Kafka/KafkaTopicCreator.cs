@@ -33,15 +33,15 @@ namespace Vektonn.DataSource.Kafka
                     {
                         if (error.IsFatal)
                         {
-                            this.log.Error($"ConfluentAdminClient error: {error.ToPrettyJson()}");
+                            log.Error($"ConfluentAdminClient error: {error.ToPrettyJson()}");
                         }
                         else
                         {
-                            this.log.Warn($"ConfluentAdminClient warn: {error.ToPrettyJson()}");
+                            log.Warn($"ConfluentAdminClient warn: {error.ToPrettyJson()}");
                         }
                     })
                 .SetLogHandler(
-                    (_, logMessage) => this.log.Info($"ConfluentAdminClient log message: {logMessage.ToPrettyJson()}"))
+                    (_, logMessage) => log.Info($"ConfluentAdminClient log message: {logMessage.ToPrettyJson()}"))
                 .Build();
         }
 
