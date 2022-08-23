@@ -20,18 +20,29 @@ namespace Vektonn.DataSource.Kafka
             this.log = log;
             kafkaTopicCreationConfig = kafkaProducerConfig.TopicCreationConfig;
 
-            var adminClientConfig = new AdminClientConfig
-            {
-                BootstrapServers = string.Join(",", kafkaProducerConfig.BootstrapServers),
-            };
+            var adminClientConfig = kafkaTopicCreationConfig.GetAdminClientConfig(kafkaProducerConfig.BootstrapServers);
 
-            var adminClientBuilder = new AdminClientBuilder(adminClientConfig)
+            adminClient = BuildAdmin(adminClientConfig);
+        }
+
+        private IAdminClient BuildAdmin(AdminClientConfig adminClientConfig)
+        {
+            return new AdminClientBuilder(adminClientConfig)
                 .SetErrorHandler(
-                    (_, error) => log.Error($"ConfluentAdminClient error: {error.ToPrettyJson()}"))
+                    (_, error) =>
+                    {
+                        if (error.IsFatal)
+                        {
+                            LogExtensions.Error(log, $"ConfluentAdminClient error: {error.ToPrettyJson()}");
+                        }
+                        else
+                        {
+                            LogExtensions.Warn(log, $"ConfluentAdminClient warn: {error.ToPrettyJson()}");
+                        }
+                    })
                 .SetLogHandler(
-                    (_, logMessage) => log.Info($"ConfluentAdminClient log message: {logMessage.ToPrettyJson()}"));
-
-            adminClient = adminClientBuilder.Build();
+                    (_, logMessage) => LogExtensions.Info(log, $"ConfluentAdminClient log message: {logMessage.ToPrettyJson()}"))
+                .Build();
         }
 
         public void Dispose()

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Confluent.Kafka;
 using Confluent.Kafka.Admin;
 
 namespace Vektonn.DataSource.Kafka
@@ -15,6 +16,15 @@ namespace Vektonn.DataSource.Kafka
         public uint TopicSegmentBytes { get; set; } = 268_435_456;
         public double TopicMinCleanableDirtyRatio { get; set; } = 0.1;
         public TimeSpan TopicDeleteRetention { get; set; } = TimeSpan.FromDays(1);
+        public Action<AdminClientConfig> CustomizeAdminClientConfig { get; set; } = config => {};
+
+        internal AdminClientConfig GetAdminClientConfig(string[] bootstrapServers)
+        {
+            var adminClientConfig = new AdminClientConfig();
+            CustomizeAdminClientConfig(adminClientConfig);
+            adminClientConfig.BootstrapServers = string.Join(",", bootstrapServers);
+            return adminClientConfig;
+        }
 
         public TopicSpecification BuildTopicSpecification(string topicName)
         {
