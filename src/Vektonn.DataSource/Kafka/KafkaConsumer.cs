@@ -81,20 +81,20 @@ namespace Vektonn.DataSource.Kafka
                     {
                         if (error.IsFatal)
                         {
-                            LogExtensions.Error(this.log, $"ConfluentConsumer error: {error.ToPrettyJson()}");
+                            log.Error($"ConfluentConsumer error: {error.ToPrettyJson()}");
                         }
                         else
                         {
-                            LogExtensions.Warn(this.log, $"ConfluentConsumer warn: {error.ToPrettyJson()}");
+                            log.Warn($"ConfluentConsumer warn: {error.ToPrettyJson()}");
                         }
                     })
                 .SetLogHandler(
-                    (_, logMessage) => LogExtensions.Debug(this.log, $"ConfluentConsumer logMessage: {logMessage.ToPrettyJson()}"))
+                    (_, logMessage) => log.Debug($"ConfluentConsumer logMessage: {logMessage.ToPrettyJson()}"))
                 .SetPartitionsAssignedHandler(
                     (_, topicPartitions) =>
                     {
                         var offsetsToConsumeFrom = committedOffsets.GetOffsetsToConsumeFrom(topicPartitions);
-                        LogExtensions.Info(this.log, $"Assigned {topicPartitions.Count} partitions with offsetsToConsumeFrom: {string.Join("; ", offsetsToConsumeFrom.Select(x => x.ToString()))}");
+                        log.Info($"Assigned {topicPartitions.Count} partitions with offsetsToConsumeFrom: {string.Join("; ", offsetsToConsumeFrom.Select(x => x.ToString()))}");
                         firstAssignmentSignal.Set();
                         return offsetsToConsumeFrom;
                     })
