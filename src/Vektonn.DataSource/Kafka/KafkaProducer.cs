@@ -63,15 +63,15 @@ namespace Vektonn.DataSource.Kafka
                     {
                         if (error.IsFatal)
                         {
-                            LogExtensions.Error(this.log, $"ConfluentProducer error: {error.ToPrettyJson()}");
+                            this.log.Error($"ConfluentProducer error: {error.ToPrettyJson()}");
                         }
                         else
                         {
-                            LogExtensions.Warn(this.log, $"ConfluentProducer warn: {error.ToPrettyJson()}");
+                            this.log.Warn($"ConfluentProducer warn: {error.ToPrettyJson()}");
                         }
                     })
                 .SetLogHandler(
-                    (_, logMessage) => LogExtensions.Debug(log, $"ConfluentProducer logMessage: {logMessage.ToPrettyJson()}"))
+                    (_, logMessage) => this.log.Debug($"ConfluentProducer logMessage: {logMessage.ToPrettyJson()}"))
                 .Build();
         }
 
