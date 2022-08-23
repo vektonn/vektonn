@@ -22,10 +22,10 @@ namespace Vektonn.DataSource.Kafka
 
             var adminClientConfig = kafkaTopicCreationConfig.GetAdminClientConfig(kafkaProducerConfig.BootstrapServers);
 
-            adminClient = BuildAdmin(adminClientConfig);
+            adminClient = BuildAdminClient(adminClientConfig);
         }
 
-        private IAdminClient BuildAdmin(AdminClientConfig adminClientConfig)
+        private IAdminClient BuildAdminClient(AdminClientConfig adminClientConfig)
         {
             return new AdminClientBuilder(adminClientConfig)
                 .SetErrorHandler(
